@@ -1,0 +1,269 @@
+<div *ngIf="successmessage">
+    <app-component-card title="Success Alert">
+      <div>
+        <app-alert
+          variant="success"
+          title="Success Message"
+          [message]="successmessage"
+          [showLink]="false"
+          linkHref="/"
+          linkText="Learn more"
+        />
+      </div>      
+    </app-component-card>
+  </div>
+
+  <app-component-card>
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <div class="space-y-6">
+      <div>
+      <app-label>State</app-label>
+      <app-select
+        [options]="stateOptions"
+        placeholder="Select an option"
+        [value]="selectedOptionforState"
+        (valueChange)="handleStateSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+    </div>
+    <div>
+      <app-label>Status</app-label>
+      <app-select
+        [options]="statusOptions"
+        placeholder="Select an option"
+        [value]="selectedOptionforStatus"
+        (valueChange)="handleStatusSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+    </div>
+    </div>
+    <div class="space-y-6">
+      <div *ngIf="datePickerdefaultDate">
+      <app-date-picker
+        id="date-pickersd"
+        label="Start Date"
+        placeholder="Select a date"
+        (dateChange)="handleStartDateChange($event)"
+      />
+    </div>
+    <div *ngIf="datePickerdefaultDate">
+      <app-date-picker
+        id="date-pickered"
+        label="End Date"
+        placeholder="Select a date"
+        (dateChange)="handleEndDateChange($event)"
+      />
+    </div>
+    </div>
+    
+    </div>
+    <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">        
+        <app-button size="sm" (btnClick)="clearForm()" variant="outline">Reset</app-button>
+        <app-button size="sm"  (btnClick)="onFilterSubmit()">Search</app-button>
+      </div>
+  </app-component-card>
+
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  
+  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        Programmes
+      </h3>
+    </div>
+    <div class="flex flex-wrap items-center gap-8" *ngIf="dataRow.length">
+    <button (click)="exportExcel()" style="color:green;" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+    Export to Excel
+    </button>
+    </div>
+  </div>
+
+  
+  
+
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
+      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                 S.No
+                </span>
+              </div>
+            </div>
+          </th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme ID</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Agency</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Venue</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">State</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">StartDate</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">EndDate</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participants</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Cumulative Feedback</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"></th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"></th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Comment</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of dataRow; track $index) {
+        <tr>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  {{ $index+1 }}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">
+              <!-- <app-avatar-text 
+                 [name]="row.user.name" 
+                class="w-10 h-10"/> -->
+              <div>
+                <a [routerLink]="['/programmedetail']" [queryParams]="{ batchid: row.batchNo }" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                  {{ row.batchNo }}
+                    
+                </a>
+                <!-- <span class="text-gray-500 text-theme-sm dark:text-gray-400">
+                  {{ row.user.email }}
+                </span> -->
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.firstName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.qpName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.venueName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.stateName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.strStartDate }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.strEndDate }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.noc }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.noc }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <app-badge
+              variant="light"
+              [color]="getStatusBadgeColor(row.status)"
+              size="sm"
+            >
+              {{ getStatusString(row.status) }}
+            </app-badge>
+            
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
+            <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+              Accept</a>
+              <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+              Reject</a>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.noc }}
+                
+            </p>
+          </td>
+          
+        </tr>
+        }
+      </tbody>
+    </table>
+    <app-datanotfound *ngIf="(dataRow.length == 0 && dataLoadProgress == false)"> </app-datanotfound>
+    <app-dataloadinprogress *ngIf="dataLoadProgress"></app-dataloadinprogress>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [isOpen]="isOpen"
+  (close)="closeModal()"
+  className="max-w-[700px] m-4"
+>
+  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[600px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+    <div class="px-2 pr-14">
+      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+        Comment
+      </h4>      
+    </div>
+    <form class="flex flex-col" (ngSubmit)="handleSave()">
+      <div class="custom-scrollbar h-[250px] overflow-y-auto px-2 pb-3">
+        <div>
+          <!-- <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+            Social Links
+          </h5> -->
+          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+            <div>
+              
+              <app-text-area [error]="commenterror" [hint]="commenthind" (valueChange)="commentValueChange($event)" [value]="comment"></app-text-area>
+            </div>
+            <div>
+              
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+        <!-- <app-button
+          size="sm"
+          variant="outline"
+          (btnClick)="closeModal()"
+        >
+          Close
+        </app-button> -->
+        <app-button
+          size="sm"
+          (btnClick)="handleSave()"
+        >
+          Reject
+        </app-button>
+      </div>
+    </form>
+  </div>
+</app-modal>

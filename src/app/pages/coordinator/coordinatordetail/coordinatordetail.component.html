@@ -1,0 +1,103 @@
+
+<div *ngIf="errormessage">
+    <app-component-card>      
+      <div>
+        <app-alert
+          variant="error"
+          title="Error Message"
+          [message]="errormessage"
+          [showLink]="false"
+        />
+      </div>
+    </app-component-card>
+  </div>
+
+  <div *ngIf="successmessage">
+    <app-component-card>      
+      <div>
+        <app-alert
+          variant="success"
+          title="Success Message"
+          [message]="successmessage"
+          [showLink]="false"
+        />
+      </div>
+    </app-component-card>
+  </div>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="detailForm" class="space-y-6">
+<app-component-card title="Coordinator Details">
+  <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+
+    <div>
+      <app-label>Coordinator Name:<span class="text-error-500">*</span></app-label>
+      <input formControlName="FirstName" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      <p *ngIf="detailForm.get('FirstName')?.invalid && (detailForm.get('FirstName')?.touched || detailForm.get('FirstName')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Name.</p>
+    </div>
+
+    <div>
+      <app-label>Mobile Number:<span class="text-error-500">*</span></app-label>
+      <input formControlName="phoneno" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      <p *ngIf="detailForm.get('phoneno')?.invalid && (detailForm.get('phoneno')?.touched || detailForm.get('phoneno')?.dirty)" class="mt-1.5 text-xs text-error-500">Phone must be exactly 10 digits.</p>
+    </div>
+
+    <div class="lg:col-span-2">
+      <app-label>Authorized Person Email ID:<span class="text-error-500">*</span></app-label>
+      <input formControlName="email" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      <p *ngIf="detailForm.get('email')?.invalid && (detailForm.get('email')?.touched || detailForm.get('email')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Authorized Person Email.</p>
+    </div>
+
+    <div>
+      <app-label>State:<span class="text-error-500">*</span></app-label>
+      <app-select
+        [options]="stateOptions"
+        placeholder="Select an option"
+        [value]="selectedStateOption"
+        (valueChange)="handleStateSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+      <p *ngIf="detailForm.get('StateName')?.invalid && (detailForm.get('StateName')?.touched || detailForm.get('StateName')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Select State.</p>
+    </div>
+
+    <div>
+      <app-label>District:<span class="text-error-500">*</span></app-label>
+      <app-select
+        [options]="districtOptions"
+        placeholder="Select an option"
+        [value]="selectedDistrictOption"
+        (valueChange)="handleDistrictSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+      <p *ngIf="detailForm.get('districtname')?.invalid && (detailForm.get('districtname')?.touched || detailForm.get('districtname')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Select District.</p>
+    </div>
+
+    <div>
+      <app-label>Pin Code:<span class="text-error-500">*</span></app-label>
+      <input formControlName="PinCode" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      <p *ngIf="detailForm.get('PinCode')?.invalid && (detailForm.get('PinCode')?.touched || detailForm.get('PinCode')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Pincode.</p>
+    </div>
+
+    <div>
+      <app-label>Aadhar No. of Coordinator:</app-label>
+      <input formControlName="AdhaarNo" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+    </div>
+
+    <div class="lg:col-span-2">
+      <app-label>Address:</app-label>
+      <textarea formControlName="address" rows="3" class="form-control w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 resize-none"></textarea>
+    </div>
+
+    <div class="lg:col-span-2 flex items-center gap-3 mt-2 lg:justify-end">
+      <ng-container *ngIf="!id">
+        <app-button size="md" (btnClick)="clearForm()" variant="outline">Clear</app-button>
+        <app-button size="md" (btnClick)="onSubmit()">Save Changes</app-button>
+      </ng-container>
+      <ng-container *ngIf="id">
+        <app-button size="md" (btnClick)="cancelUpdate()" variant="outline">Cancel</app-button>
+        <app-button size="md" (btnClick)="onUpdate()">Update</app-button>
+      </ng-container>
+    </div>
+
+  </div>
+</app-component-card>
+</form>

@@ -1,0 +1,384 @@
+import { Routes } from '@angular/router';
+import { EcommerceComponent } from './pages/dashboard/ecommerce/ecommerce.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { FormElementsComponent } from './pages/forms/form-elements/form-elements.component';
+import { BasicTablesComponent } from './pages/tables/basic-tables/basic-tables.component';
+import { BlankComponent } from './pages/blank/blank.component';
+import { NotFoundComponent } from './pages/other-page/not-found/not-found.component';
+import { AppLayoutComponent } from './shared/layout/app-layout/app-layout.component';
+import { InvoicesComponent } from './pages/invoices/invoices.component';
+import { LineChartComponent } from './pages/charts/line-chart/line-chart.component';
+import { BarChartComponent } from './pages/charts/bar-chart/bar-chart.component';
+import { AlertsComponent } from './pages/ui-elements/alerts/alerts.component';
+import { AvatarElementComponent } from './pages/ui-elements/avatar-element/avatar-element.component';
+import { BadgesComponent } from './pages/ui-elements/badges/badges.component';
+import { ButtonsComponent } from './pages/ui-elements/buttons/buttons.component';
+import { ImagesComponent } from './pages/ui-elements/images/images.component';
+import { VideosComponent } from './pages/ui-elements/videos/videos.component';
+import { SignInComponent } from './pages/auth-pages/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/auth-pages/sign-up/sign-up.component';
+import { CalenderComponent } from './pages/calender/calender.component';
+import { DashboardComponent } from './pages/dashboard/dashboard/dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AgencylistComponent } from './pages/Agencies/agencylist/agencylist.component';
+import { AgencydetailComponent } from './pages/Agencies/agencydetail/agencydetail.component';
+import { FullScreenModalComponent } from './shared/components/ui-example/modal-example/full-screen-modal/full-screen-modal.component';
+import { CurriculumlistComponent } from './pages/curriculum/curriculumlist/curriculumlist.component';
+import { ProgrammeListComponent } from './pages/programme/programme-list/programme-list.component';
+import { NewprogrammeComponent } from './pages/programme/newprogramme/newprogramme.component';
+import { CoordinatorlistComponent } from './pages/coordinator/coordinatorlist/coordinatorlist.component';
+import { CoordinatordetailComponent } from './pages/coordinator/coordinatordetail/coordinatordetail.component';
+import { OrganisingPartnersComponent } from './pages/OrganisingPartner/organising-partners/organising-partners.component';
+import { ChangepasswordComponent } from './pages/user/changepassword/changepassword.component';
+import { SessionlistComponent } from './pages/curriculum/sessionlist/sessionlist.component';
+import { TopiclistComponent } from './pages/curriculum/topiclist/topiclist.component';
+import { QcapprovallistComponent } from './pages/qcapproval/qcapprovallist/qcapprovallist.component';
+import { ViewreportComponent } from './pages/report/viewreport/viewreport.component';
+import { SummaryreportComponent } from './pages/report/summaryreport/summaryreport.component';
+import { ZedfacultyComponent } from './pages/faculty/zedfaculty/zedfaculty.component';
+import { NewfacultyComponent } from './pages/faculty/newfaculty/newfaculty.component';
+import { FacultyallotmentComponent } from './pages/faculty/facultyallotment/facultyallotment.component';
+import { FacultydetailComponent } from './pages/faculty/facultydetail/facultydetail.component';
+import { RegisterComponent } from './shared/components/auth/register/register.component';
+import { MasterRegisterComponent } from './pages/auth-pages/master-register/master-register.component';
+import { TrainingprogrammesComponent } from './pages/user/trainingprogrammes/trainingprogrammes.component';
+import { TrainerlistComponent } from './pages/trainers/trainerlist/trainerlist.component';
+import { RegisterDetailComponent } from './pages/auth-pages/register-detail/register-detail.component';
+import { CertificateslistComponent } from './pages/Certificates/certificateslist/certificateslist.component';
+import { QmpdashboardComponent } from './pages/dashboard/qmpdashboard/qmpdashboard.component';
+import { AssessordashboardComponent } from './pages/dashboard/assessordashboard/assessordashboard.component';
+import { ProgrammedetailComponent } from './pages/programme/programmedetail/programmedetail.component';
+import { ProgrammeDetailComponent } from './pages/programme/programme-detail/programme-detail.component';
+import { BatchVenueComponent } from './pages/programme/programme-detail/batch-venue/batch-venue.component';
+import { BatchParticipantsComponent } from './pages/programme/programme-detail/batch-participants/batch-participants.component';
+import { AdminProgrammListComponent } from './pages/programme/admin-programm-list/admin-programm-list.component';
+
+export const routes: Routes = [
+  {
+    path:'',
+    component:AppLayoutComponent,
+    canActivate:[AuthGuard],
+    children:[
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        pathMatch: 'full',
+        title:'Zed Training Solution',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'prodashboard',
+        component: EcommerceComponent,
+        pathMatch: 'full',
+        title:'Zed Training Solution',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'qmpdashboard',
+        component: QmpdashboardComponent,
+        pathMatch: 'full',
+        title:'Zed Training Solution',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'assessordashboard',
+        component: AssessordashboardComponent,
+        pathMatch: 'full',
+        title:'Zed Training Solution',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'agencies',
+        component: AgencylistComponent,
+        pathMatch: 'full',
+        title:'Agencies',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'agenciesdetail',
+        component: AgencydetailComponent,
+        pathMatch: 'full',
+        title:'Agency Detail',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'agenciesdetail/:id',
+        component: AgencydetailComponent,
+        pathMatch: 'full',
+        title:'Agency Detail',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'curriculum',
+        component: CurriculumlistComponent,
+        pathMatch: 'full',
+        title:'Agencies',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'sessions',
+        component: SessionlistComponent,
+        pathMatch: 'full',
+        title:'Session',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'topics',
+        component: TopiclistComponent,
+        pathMatch: 'full',
+        title:'Topics',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'coordinators',
+        component: CoordinatorlistComponent,
+        pathMatch: 'full',
+        title:'Coordinators',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'newcoordinator',
+        component: CoordinatordetailComponent,
+        pathMatch: 'full',
+        title:'New Coordinator',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'organisingpartners',
+        component: OrganisingPartnersComponent,
+        pathMatch: 'full',
+        title:'OrganisingPartners',
+        canActivate:[AuthGuard]
+      },
+
+      {
+        path: 'programme',
+        component: ProgrammeListComponent,
+        pathMatch: 'full',
+        title:'Programmes',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'adminprogramme',
+        component: AdminProgrammListComponent,
+        pathMatch: 'full',
+        title:'Programmes',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'qcapproval',
+        component: QcapprovallistComponent,
+        pathMatch: 'full',
+        title:'QC Approval',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'viewreport',
+        component: ViewreportComponent,
+        pathMatch: 'full',
+        title:'View Report',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'summaryreport',
+        component: SummaryreportComponent,
+        pathMatch: 'full',
+        title:'Summary Report',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'mtatcttrainer',
+        component: TrainerlistComponent,
+        pathMatch: 'full',
+        title:'MTCTAT',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'certificates',
+        component: CertificateslistComponent,
+        pathMatch: 'full',
+        title:'Certificates',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'zedfaculty',
+        component: ZedfacultyComponent,
+        pathMatch: 'full',
+        title:'Zed Faculty',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'addfaculty',
+        component: NewfacultyComponent,
+        pathMatch: 'full',
+        title:'New Faculty',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'facultydetail/:id',
+        component: FacultydetailComponent,
+        pathMatch: 'full',
+        title:'Faculty Detail',
+       canActivate:[AuthGuard]
+      },
+      {
+        path: 'allocatefaculty/:id',
+        component: FacultyallotmentComponent,
+        pathMatch: 'full',
+        title:'Allot Faculty',
+       canActivate:[AuthGuard]
+      },
+      {
+        path:'changepassword',
+        component:ChangepasswordComponent,
+        pathMatch: 'full',
+        title:'Password Reset | Zed-Traning',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'newprogramme',
+        component: NewprogrammeComponent,
+        pathMatch: 'full',
+        title:'New Programmes',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'programmedetail',
+        component: ProgrammeDetailComponent,
+        pathMatch: 'full',
+        title:'Programme Detail',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'bvenue',
+        component: BatchVenueComponent,
+        pathMatch: 'full',
+        title:'Programme Venue',
+        canActivate:[AuthGuard]
+      },
+            {
+        path: 'bparti',
+        component: BatchParticipantsComponent,
+        pathMatch: 'full',
+        title:'Programme Participiants',
+        canActivate:[AuthGuard]
+      },
+      {
+        path: 'ecommerce',
+        component: EcommerceComponent,
+        pathMatch: 'full',
+        title:
+          'Zed Training Dashboard',//'Angular Ecommerce Dashboard | Zed-Traning',
+      },
+      {
+        path:'calendar',
+        component:CalenderComponent,
+        title:'Angular Calender | Zed-Traning'
+      },
+      {
+        path:'profile',
+        component:ProfileComponent,
+        title:'Angular Profile Dashboard | Zed-Traning'
+      },
+      {
+        path:'form-elements',
+        component:FormElementsComponent,
+        title:'Angular Form Elements Dashboard | Zed-Traning'
+      },
+      {
+        path:'basic-tables',
+        component:BasicTablesComponent,
+        title:'Angular Basic Tables Dashboard | Zed-Traning'
+      },
+      {
+        path:'blank',
+        component:BlankComponent,
+        title:'Angular Blank Dashboard | Zed-Traning'
+      },
+      // support tickets
+      {
+        path:'invoice',
+        component:InvoicesComponent,
+        title:'Angular Invoice Details Dashboard | Zed-Traning'
+      },
+      {
+        path:'line-chart',
+        component:LineChartComponent,
+        title:'Angular Line Chart Dashboard | Zed-Traning'
+      },
+      {
+        path:'bar-chart',
+        component:BarChartComponent,
+        title:'Angular Bar Chart Dashboard | Zed-Traning'
+      },
+      {
+        path:'alerts',
+        component:AlertsComponent,
+        title:'Angular Alerts Dashboard | Zed-Traning'
+      },
+      {
+        path:'avatars',
+        component:AvatarElementComponent,
+        title:'Angular Avatars Dashboard | Zed-Traning'
+      },
+      {
+        path:'badge',
+        component:BadgesComponent,
+        title:'Angular Badges Dashboard | Zed-Traning'
+      },
+      {
+        path:'buttons',
+        component:ButtonsComponent,
+        title:'Angular Buttons Dashboard | Zed-Traning'
+      },
+      {
+        path:'images',
+        component:ImagesComponent,
+        title:'Angular Images Dashboard | Zed-Traning'
+      },
+      {
+        path:'videos',
+        component:VideosComponent,
+        title:'Angular Videos Dashboard | Zed-Traning'
+      },
+      {
+        path:'model',
+        component:FullScreenModalComponent,
+        title:'Angular Videos Dashboard | Zed-Traning'
+      },
+    ]
+  },
+  // auth pages
+  
+  {
+    path:'signin',
+    component:SignInComponent,
+    title:'Sign In | Zed-Traning'
+  },
+  {
+    path:'signup',
+    component:SignUpComponent,
+    title:'Sign Up | Zed-Traning'
+  },
+  {
+    path:'register',
+    component:MasterRegisterComponent,
+    title:'Register | Zed-Traning'
+  },
+  {
+    path:'registerdetail/:id',
+    component:RegisterDetailComponent,
+    title:'Register | Zed-Traning'
+  },
+  {
+    path:'trainingprogramme',
+    component:TrainingprogrammesComponent,
+    title:'Training | Zed-Traning'
+  },
+  // error pages
+  {
+    path:'**',
+    component:NotFoundComponent,
+    title:'Angular NotFound Dashboard | Zed-Traning'
+  },
+];

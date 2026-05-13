@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\AZED\\\\AngularTemplate\\\\zedFrontEndApp\\\\src\\\\app\" -Recurse -Filter \"*.component.ts\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Measure-Object -Line)"
+    ]
+  }
+}

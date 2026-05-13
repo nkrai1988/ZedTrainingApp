@@ -1,0 +1,230 @@
+
+
+
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  
+  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        6. Additional Qualification and Work Experience (as per <a href="assets/pdffiles/ZED Trainings_Professional's_Criteria.pdf" target="_blank" download="ZED Trainings_Professional's_Criteria.pdf" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">ZED TRAINING PROFESSIONAL CRITERIA, SECTION 2</a>):<span class="text-error-500">*</span>
+      </h3>
+    </div>
+    <div class="space-y-6">
+        <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end" *ngIf="!this.experienceList.length">
+    <app-button size="sm" (btnClick)="addnewUser()" >Add New Experience</app-button>    
+</div>
+  </div>
+  </div>
+  
+  
+
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                 S.No
+                </span>
+              </div>
+            </div>
+          </th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">QUALIFICATION</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">TYPE OF EXPERIENCE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Training/Certification Name
+Organization Name</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Roles And Resposibilities</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Duration
+(YY-MM-DD)</th>
+          <!-- <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Proofs</th> -->
+                   
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>          
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of dataRow; track $index) {
+        <tr>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  {{ $index+1 }}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <a  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                  {{ row.knowledge }}
+            </a>
+            <!-- <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.trainerName }}
+            </p> -->
+          </td>
+          
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.experience }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.organizationname }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.role }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.durationyear }}-{{ row.durationmonth }}-{{ row.durationday }}
+                
+            </p>
+          </td>
+          <!-- <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.proof?.name }}
+                
+            </p>
+          </td> -->
+          
+          <td *ngIf="!viewOnly" class="px-4 sm:px-6 py-3.5">
+            <a (click)="changeStatus(row,'true')" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                Remove
+            </a>
+          </td>
+          <td *ngIf="viewOnly" class="px-4 sm:px-6 py-3.5">
+            <a (click)="helper.downloadFile(row.proof,'experienceproof'+($index+1))" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                Download
+            </a>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [isOpen]="isOpen"
+  (close)="closeModal()"
+  className="max-w-[700px] m-4"
+>
+  <div *ngIf="isOpen" class="no-scrollbar relative w-full max-w-[800px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+    <div class="px-2 pr-14">
+      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+        Additional Qualification and Work Experience
+      </h4>      
+    </div>
+    <form class="flex flex-col" [formGroup]="qualificationForm" (ngSubmit)="handleSave()">
+      <div class="custom-scrollbar h-[650px] overflow-y-auto px-2 pb-3">
+        <div>
+          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+            <!-- {{modelItem.programCode}} -->
+          </h5>
+          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2"> 
+            <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+      Qualification:<span class="text-error-500">*</span>
+      </h3>
+    </div>
+    <div class="flex flex-wrap items-center gap-8">
+    <app-radio [id]="'Model 1'" [name]="'group1'" [value]="'Active'" [checked]="checkedValue === 'Model 1'"
+      [label]="'Qualified Lead Auditor Certification in Quality Management Systems or any other ISO Management Systems, as relevant'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 1')"/>
+    <app-radio [id]="'Model 2'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Model 2'"
+      [label]="'A qualified ZED Assessor under the erstwhile “Financial Support to MSMEs in ZED Certification Scheme'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 2')"/>
+    <app-radio [id]="'Model 3'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Model 3'"
+      [label]="'Any Other'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 3')"/>
+      <p *ngIf="qualificationForm.get('knowledge')?.invalid && (qualificationForm.get('knowledge')?.touched || qualificationForm.get('knowledge')?.dirty)" class="mt-1.5 text-xs text-error-500">Area of knowledge and expertise is required.</p>
+  </div>
+
+              <div>
+              <app-label>Type of Experience:<span class="text-error-500">*</span></app-label>
+                <app-select
+                    [options]="experiencecOption"
+                    placeholder="Select an option"
+                    [value]="yearselect"
+                    (valueChange)="handleTypeofExperienceSelectChange($event)"
+                    className="dark:bg-dark-900"
+                ></app-select>
+                <p *ngIf="qualificationForm.get('experience')?.invalid && (qualificationForm.get('experience')?.touched || qualificationForm.get('experience')?.dirty)" class="mt-1.5 text-xs text-error-500">Experience is required.</p>
+            </div>      
+            <div>
+              <label>Training/Certification Name:</label><br/>              
+                <div class="relative">
+              <input formControlName="trainingname" name="modelpt" maxlength="2000"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+              
+              </div>
+            </div>
+            <div>
+              <label>Organization Name:</label><br/>              
+                <div class="relative">
+              <input formControlName="organizationname" name="modelpt" maxlength="2000"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+              
+              </div>
+            </div>
+            <div>
+              <label>Roles and Responsibilities:</label><br/>              
+                <div class="relative">
+              <input formControlName="role" name="modelpt" maxlength="2000"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+              
+              </div>
+            </div>
+            <div>
+              <app-label>Duration Years:<span class="text-error-500">*</span></app-label>
+                <app-select
+                    [options]="yearOptions"
+                    placeholder="Select an option"
+                    [value]="yearselect"
+                    (valueChange)="handleYearSelectChange($event)"
+                    className="dark:bg-dark-900"
+                ></app-select>
+                <p *ngIf="qualificationForm.get('durationyear')?.invalid && (qualificationForm.get('durationyear')?.touched || qualificationForm.get('durationyear')?.dirty)" class="mt-1.5 text-xs text-error-500">Experience Year is required.</p>
+            </div>
+            <div>
+              <app-label>Duration Months:</app-label>
+                <app-select
+                    [options]="monthOptions"
+                    placeholder="Select an option"
+                    [value]="monthselect"
+                    (valueChange)="handleMonthSelectChange($event)"
+                    className="dark:bg-dark-900"
+                ></app-select>
+            </div>
+            <div>
+              <app-label>Duration Days:</app-label>
+                <app-select
+                    [options]="dayOptions"
+                    placeholder="Select an option"
+                    [value]="dayselect"
+                    (valueChange)="handleDaysSelectChange($event)"
+                    className="dark:bg-dark-900"
+                ></app-select>
+            </div> 
+            <div>
+              <app-label>Proofs (pdf, jpg, jpeg, png)File should not exceed 2000 KB:<span class="text-error-500">*</span></app-label>
+             <app-file-input (change)="handleFileChange($event)" className="custom-class"></app-file-input>  
+             <p *ngIf="qualificationForm.get('proof')?.invalid && (qualificationForm.get('proof')?.touched || qualificationForm.get('proof')?.dirty)" class="mt-1.5 text-xs text-error-500">Proof is required.</p>
+            </div> 
+          </div>
+        </div>        
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+        <app-button
+          size="sm"          
+          (btnClick)="handleSave()"
+        >
+          Add
+        </app-button>        
+      </div>
+    </form>
+  </div>
+</app-modal>

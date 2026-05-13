@@ -1,0 +1,52 @@
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+@for (row of dataRow; track $index) {
+<app-component-card [title]="'Trainer'+($index+1)" [desc]="row.addedOn">
+    
+  <div class="space-y-6">
+    <div>
+      <app-label>Trainer Name</app-label>      
+       <div class="relative">
+        {{row.trainerName}}
+        </div>
+    </div>
+    <div>
+      <app-label>Trainer Engagement</app-label>      
+       <div class="relative">
+        {{row.trainerEngagement}}
+        </div>
+    </div> 
+    <div>
+      <app-label>No. of years Experience</app-label>      
+       <div class="relative">
+        {{row.experienceInYears}}
+        </div>
+    </div>  
+    <div>
+      <app-label>Qualification</app-label>      
+       <div class="relative">
+        {{row.qualification}}
+        </div>
+    </div>  
+    <div>
+      <app-label>Email ID</app-label>      
+       <div class="relative">
+        {{row.eMailId}}
+        </div>
+    </div>  
+    <div>
+      <app-label>Contact No</app-label>      
+       <div class="relative">
+        {{row.contactNo}}
+        </div>
+    </div>  
+    <div>
+      <app-label>Aadhaar No</app-label>      
+       <div class="relative">
+        {{row.adhaarNo}}
+        </div>
+    </div>  
+  </div>  
+</app-component-card>
+}
+
+</div>

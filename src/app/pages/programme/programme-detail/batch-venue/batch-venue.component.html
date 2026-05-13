@@ -1,0 +1,82 @@
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+<app-component-card>
+  <div class="space-y-6">
+    <div>
+      <app-label for="input">Programme</app-label>      
+       <div class="relative">
+        {{batchDetail ? batchDetail.qpName :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Venue</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.venueName :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">State</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.stateName :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">District</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.districtname :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Pin Code</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.zip :''}}
+        </div>
+    </div>
+      
+  </div>
+  
+</app-component-card>
+<app-component-card>
+  <div class="space-y-6">
+    <div>
+      <app-label for="input">Agency</app-label>      
+       <div class="relative">
+        {{batchDetail ? batchDetail.agency :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Coordinator</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.firstname :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Email ID</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.email :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Mobile No</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.phoneno :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">Start Date</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.startDate :''}}
+        </div>
+    </div>
+    <div>
+      <app-label for="input">End Date</app-label>
+      <div class="relative">
+        {{batchDetail ? batchDetail.endDate :''}}
+        </div>
+    </div>
+      
+  </div>
+  
+</app-component-card>
+
+</div>

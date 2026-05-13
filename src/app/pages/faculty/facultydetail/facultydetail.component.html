@@ -1,0 +1,317 @@
+<div *ngIf="successmessage">
+    <app-component-card title="Success Alert">
+      <div>
+        <app-alert
+          variant="success"
+          title="Success Message"
+          [message]="successmessage"
+          [showLink]="false"
+          linkHref="/"
+          linkText="Learn more"
+        />
+      </div>      
+    </app-component-card>
+  </div>
+
+
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  
+  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        Trainer Details
+      </h3>
+    </div>
+    <div class="space-y-6">
+        <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+    <p>{{trainerDetail ? (trainerDetail.createdDate | date:'dd MMM yyyy'):''}}</p>    
+</div>
+  </div>
+  </div>
+  
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full" *ngIf="trainerDetail">
+      
+      <tbody>        
+        <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Trainer Name
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.trainerName:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr> 
+        <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Trainer Engagement
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.trainerEngagement:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr>    
+        <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              No. of years Experience
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.experienceInYears:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr> 
+            <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Qualification
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.qualification:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr> 
+            <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Email ID
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.eMailId:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr>
+            <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Contact No
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.contactNo:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr> 
+            <tr>          
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              Aadhaar No
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{trainerDetail ? trainerDetail.adhaarNo:''}}
+            </p>            
+              </div>
+            </div>
+          </td>          
+        </tr> 
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+      Conducted Programmes({{dataRow.length}})
+      </h3>
+    </div>
+  </div>
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                 S.No
+                </span>
+              </div>
+            </div>
+          </th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme ID</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Agency Name</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Venue</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Start Date</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">End Date</th>
+                   
+                   
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of dataRow; track $index) {
+        <tr>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  {{ $index+1 }}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            
+            <a class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                  {{ row.batchNo }}
+                    
+                </a>   
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.firstName }}
+            </p>            
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.qpName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.venueName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.strStartDate }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.strEndDate }}
+            </p>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-modal
+  [isOpen]="isOpen"
+  (close)="closeModal()"
+  className="max-w-[700px] m-4"
+>
+  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+    <div class="px-2 pr-14">
+      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+        <!-- {{modelItem.firstName}} -->
+      </h4>      
+    </div>
+    <form class="flex flex-col" (ngSubmit)="handleSave()">
+      <div class="custom-scrollbar h-[250px] overflow-y-auto px-2 pb-3">
+        <div>
+          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+            <!-- {{modelItem.programCode}} -->
+          </h5>
+          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">  
+            <div>
+              <label>Programme ID:</label><br/>              
+              <div><app-badge variant="light" color="primary"> {{modelItem.batchNo}} </app-badge></div>
+              
+            </div>
+            <div>
+              <label>Programme Name:</label><br/>              
+              <div><app-badge variant="light" color="primary"> {{modelItem.qpName}} </app-badge></div>
+              
+            </div>           
+            <div>
+              <label>Comments:</label><br/>              
+                <div class="relative">
+              <input [(ngModel)]="rejectcomment" name="modelpt" maxlength="2000"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+              <p *ngIf="!rejectcomment && rejectcommentbtnclick" class="mt-1.5 text-xs text-error-500">Comment is required.</p>
+              </div>
+            </div>          
+          </div>
+        </div>        
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+        <app-button
+          size="sm"          
+          (btnClick)="handleSave()"
+        >
+          Reject
+        </app-button>        
+      </div>
+    </form>
+  </div>
+</app-modal>

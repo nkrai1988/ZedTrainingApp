@@ -1,0 +1,113 @@
+<div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                 S.No
+                </span>
+              </div>
+            </div>
+          </th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Date</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Session</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Topic</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Photo</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Trainer</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">SME</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Observant</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Comments</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of dataRow; track $index) {
+        <tr>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  {{ $index+1 }}
+                </span>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">
+              
+              <div>
+                <a  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                  {{ row.createdDate }}
+                    
+                </a>
+                
+              </div>
+            </div>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.nosName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.pcName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              -Image Name-
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.trainerName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.smeName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.observantName }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.comments }}
+                
+            </p>
+          </td>
+          <!-- <td class="px-4 sm:px-6 py-3.5">
+            <app-badge
+              variant="light"
+              [color]="getStatusBadgeColor(row.status)"
+              size="sm"
+            >
+              {{ getStatusString(row.status) }}
+            </app-badge>
+            
+          </td> -->
+
+          <!-- <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
+            <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+              Accept</a>
+              <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+              Reject</a>
+          </td> -->
+        </tr>
+        }
+      </tbody>
+    </table>
+    
+  </div>

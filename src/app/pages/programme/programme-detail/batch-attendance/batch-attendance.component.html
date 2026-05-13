@@ -1,0 +1,698 @@
+<div class="max-w-full overflow-x-auto">
+    <table class="min-w-full">
+      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                 S.No
+                </span>
+              </div>
+            </div>
+          </th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant Id</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant Name</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">1</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">2</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">3</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">4</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">5</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">6</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">7</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">8</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">9</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">10</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">11</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">12</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">13</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">14</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">15</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">16</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">17</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">18</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">19</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">20</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">21</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">22</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">23</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">24</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">25</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">26</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">27</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">28</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">29</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">30</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">31</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="dataRow.length">
+        @for (row of dataRow; track $index) {
+        <tr>
+          <td class="px-4 sm:px-6 py-3.5">
+            <div class="flex items-center gap-3">              
+              <div>
+                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
+                  {{ $index+1 }}
+                </span>
+              </div>
+            </div>
+          </td>
+          
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.candidateId }}
+                
+            </p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ row.candidateName }}                
+            </p>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day1 !== null">
+            <ng-content *ngIf="row.day1">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day1">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day2 !== null">
+            <ng-content *ngIf="row.day2">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day2">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day3 !== null">
+            <ng-content *ngIf="row.day3">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day3">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day4 !== null">
+            <ng-content *ngIf="row.day4">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day4">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day5 !== null">
+            <ng-content *ngIf="row.day5">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day5">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day6 !== null">
+            <ng-content *ngIf="row.day6">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day6">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day7 !== null">
+            <ng-content *ngIf="row.day7">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day7">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day8 !== null">
+            <ng-content *ngIf="row.day8">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day8">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day9 !== null">
+            <ng-content *ngIf="row.day9">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day9">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day10 !== null">
+            <ng-content *ngIf="row.day10">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day10">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day11 !== null">
+            <ng-content *ngIf="row.day11">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day11">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day12 !== null">
+            <ng-content *ngIf="row.day12">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day12">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day13 !== null">
+            <ng-content *ngIf="row.day13">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day13">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day14 !== null">
+            <ng-content *ngIf="row.day14">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day14">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day15 !== null">
+            <ng-content *ngIf="row.day15">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day15">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day16 !== null">
+            <ng-content *ngIf="row.day16">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day16">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day17 !== null">
+            <ng-content *ngIf="row.day17">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day17">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day18 !== null">
+            <ng-content *ngIf="row.day18">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day18">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day19 !== null">
+            <ng-content *ngIf="row.day19">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day19">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day20 !== null">
+            <ng-content *ngIf="row.day20">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day20">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day21 !== null">
+            <ng-content *ngIf="row.day21">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day21">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day22 !== null">
+            <ng-content *ngIf="row.day22">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day22">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day23 !== null">
+            <ng-content *ngIf="row.day23">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day23">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day24 !== null">
+            <ng-content *ngIf="row.day24">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day24">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day25 !== null">
+            <ng-content *ngIf="row.day25">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day25">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day26 !== null">
+            <ng-content *ngIf="row.day26">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day26">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day27 !== null">
+            <ng-content *ngIf="row.day27">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day27">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day28 !== null">
+            <ng-content *ngIf="row.day28">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day28">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day29 !== null">
+            <ng-content *ngIf="row.day29">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day29">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day30 !== null">
+            <ng-content *ngIf="row.day30">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day30">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+
+          <td class="px-4 sm:px-6 py-3.5">            
+          <ng-content *ngIf="row.day31 !== null">
+            <ng-content *ngIf="row.day31">
+            <svg width="1em" height="1em" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1em" height="1em" fill="white" fill-opacity="0.01"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 24L9 19L19 29L39 9L44 14L19 39L4 24Z" fill="green" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>          
+            </ng-content>
+            <ng-content *ngIf="!row.day31">
+            <svg width="1em" height="1em" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 511.999 511.999" style="enable-background:new 0 0 511.999 511.999;" xml:space="preserve">
+            <path style="fill:#FF6465;" d="M384.955,256l120.28-120.28c9.019-9.019,9.019-23.642,0-32.66L408.94,6.765
+              c-9.019-9.019-23.642-9.019-32.66,0l-120.28,120.28L135.718,6.765c-9.019-9.019-23.642-9.019-32.66,0L6.764,103.058
+              c-9.019,9.019-9.019,23.642,0,32.66l120.28,120.28L6.764,376.28c-9.019,9.019-9.019,23.642,0,32.66l96.295,96.294
+              c9.019,9.019,23.642,9.019,32.66,0l120.28-120.28l120.28,120.28c9.019,9.019,23.642,9.019,32.66,0l96.295-96.294
+              c9.019-9.019,9.019-23.642,0-32.66L384.955,256z"/>
+            </svg>
+            </ng-content>
+          </ng-content>
+          </td>
+          
+        </tr>
+        }
+      </tbody>
+    </table>
+    
+  </div>

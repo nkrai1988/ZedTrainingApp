@@ -1,0 +1,63 @@
+<div class="grid grid-cols-12 gap-4 md:gap-6">
+  <div class="col-span-6">
+    <div>
+      <app-label>Select State</app-label>
+      <app-select
+        [options]="allstates"
+        placeholder="Select Option"
+        [value]="stateSelectedValue"
+        (valueChange)="handleStateSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+    </div>
+  </div>
+  <div class="col-span-6" *ngIf="tempuser.userId === 1">
+    <div>
+      <app-label>Select Type</app-label>
+      <app-select
+        [options]="programeType"
+        placeholder="Select Option"
+        [value]="selectedValue"
+        (valueChange)="handleProgrammeSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+    </div>
+  </div>
+  <div class="col-span-6" *ngIf="tempuser.userId != 1">
+    <div>
+      <app-label>Programme</app-label>
+      <app-select
+        [options]="programeType"
+        placeholder="Select Option"
+        [value]="selectedQPValue"
+        (valueChange)="handleQPProgrammeSelectChange($event)"
+        className="dark:bg-dark-900"
+      ></app-select>
+    </div>
+  </div>
+  <div class="col-span-12">
+    <div><app-ecommerce-metrics [dataLoadProgress]="dataLoadProgress" [programmeCount]="ProgrammeNumber" [participantCount]="ParticipantNumber" /></div>
+
+    <!-- <div><app-monthly-sales-chart /></div> -->
+  </div>
+
+  <!-- <div class="col-span-12 xl:col-span-5">
+    <app-monthly-target />
+  </div> -->
+
+  <!-- <div class="col-span-12">
+    <app-statics-chart />
+  </div> -->
+
+  <div class="col-span-12" *ngIf="loadMap">
+    <app-demographic-card  [allLocation]="locationData"/>
+  </div>
+
+  <!-- <div class="col-span-12 xl:col-span-5">
+    <app-demographic-card />
+  </div> -->
+
+  <!-- <div class="col-span-12 xl:col-span-7">
+    <app-recent-orders/>
+  </div> -->
+</div>

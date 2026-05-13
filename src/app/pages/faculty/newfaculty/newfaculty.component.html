@@ -1,0 +1,114 @@
+
+<div *ngIf="errormessage">
+    <app-component-card>      
+      <div>
+        <app-alert
+          variant="error"
+          title="Error Message"
+          [message]="errormessage"
+          [showLink]="false"
+        />
+      </div>
+    </app-component-card>
+  </div>
+
+  <div *ngIf="successmessage">
+    <app-component-card>      
+      <div>
+        <app-alert
+          variant="success"
+          title="Success Message"
+          [message]="successmessage"
+          [showLink]="false"
+        />
+      </div>
+    </app-component-card>
+  </div>
+<form (ngSubmit)="onSubmit()" [formGroup]="detailForm">
+  <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+    <!-- Card 1 -->
+    <app-component-card title="Faculty Details">
+      <div class="space-y-6">
+
+        <div>
+          <app-label>Name:<span class="text-error-500">*</span></app-label>
+          <div class="relative">
+            <input formControlName="name" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <p *ngIf="detailForm.get('name')?.invalid && (detailForm.get('name')?.touched || detailForm.get('name')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Name.</p>
+          </div>
+        </div>
+
+        <div>
+          <app-label>Trainer Engagement:<span class="text-error-500">*</span></app-label>
+          <div class="flex flex-wrap items-center gap-6 mt-2.5">
+            <app-radio [id]="'Active'" [name]="'group1'" [value]="'Full Time'" [checked]="checkedValue === 'Full Time'"
+              [label]="'Full Time'" [disabled]="false" (valueChange)="handleRadioChange('Full Time')"/>
+            <app-radio [id]="'Part Time'" [name]="'group1'" [value]="'Part Time'" [checked]="checkedValue === 'Part Time'"
+              [label]="'Part Time'" [disabled]="false" (valueChange)="handleRadioChange('Part Time')"/>
+          </div>
+          <p *ngIf="detailForm.get('engagement')?.invalid && (detailForm.get('engagement')?.touched || detailForm.get('engagement')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Check Engagement.</p>
+        </div>
+
+        <div>
+          <app-label>Qualification:</app-label>
+          <div class="relative">
+            <input formControlName="qualification" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <!-- <p *ngIf="detailForm.get('qualification')?.invalid && (detailForm.get('qualification')?.touched || detailForm.get('qualification')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter valid Qualification.</p> -->
+          </div>
+        </div>
+
+        <div>
+          <app-label>No. of years Experience:<span class="text-error-500">*</span></app-label>
+          <div class="relative">
+            <input formControlName="experience" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <p *ngIf="detailForm.get('experience')?.invalid && (detailForm.get('experience')?.touched || detailForm.get('experience')?.dirty)" class="mt-1.5 text-xs text-error-500">Enter Valid Experience.</p>
+          </div>
+        </div>
+
+      </div>
+    </app-component-card>
+
+    <!-- Card 2 -->
+    <app-component-card title="Contact & Documents">
+      <div class="space-y-6">
+
+        <div>
+          <app-label>Email Id:<span class="text-error-500">*</span></app-label>
+          <div class="relative">
+            <input formControlName="email" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <p *ngIf="detailForm.get('email')?.invalid && (detailForm.get('email')?.touched || detailForm.get('email')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Email.</p>
+          </div>
+        </div>
+
+        <div>
+          <app-label>Contact Number:<span class="text-error-500">*</span></app-label>
+          <div class="relative">
+            <input formControlName="phoneno" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <p *ngIf="detailForm.get('phoneno')?.invalid && (detailForm.get('phoneno')?.touched || detailForm.get('phoneno')?.dirty)" class="mt-1.5 text-xs text-error-500">Phone must be exactly 10 digits.</p>
+          </div>
+        </div>
+
+        <div>
+          <app-label>Aadhar Number:</app-label>
+          <div class="relative">
+            <input formControlName="adhaarNo" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+            <p *ngIf="detailForm.get('AdhaarNo')?.invalid && (detailForm.get('AdhaarNo')?.touched || detailForm.get('AdhaarNo')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Adhaar Number.</p>
+          </div>
+        </div>
+
+        <div>
+          <app-label>Upload Resume</app-label>
+          <app-file-input (change)="handleFileChange($event)" className="custom-class"></app-file-input>
+        </div>
+
+      </div>
+    </app-component-card>
+
+  </div>
+
+  <div class="flex items-center gap-3 px-2 mt-6 justify-end">
+    <app-button size="md" (btnClick)="clearForm()" variant="outline">Clear</app-button>
+    <app-button size="md" (btnClick)="onSubmit()">Save Changes</app-button>
+  </div>
+</form>

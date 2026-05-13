@@ -1,0 +1,70 @@
+
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  
+  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+        Programmes Details - {{programmeId}}
+      </h3>
+    </div>
+    
+  </div>
+
+
+<div class="flex items-center gap-0.5 rounded-lg bg-gray-100 p-0.5 dark:bg-gray-900">
+  <button
+    (click)="setSelected('Venue')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Venue')"
+  >
+    Venue
+  </button>
+
+  <button
+    (click)="setSelected('Participants')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Participants')"
+  >
+    Participants
+  </button>
+
+  <button
+    (click)="setSelected('Monitoring')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Monitoring')"
+  >
+    Monitoring
+  </button>
+  <button
+    (click)="setSelected('Attendance')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Attendance')"
+  >
+    Attendance
+  </button>
+  <button
+    (click)="setSelected('Trainers')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Trainers')"
+  >
+    Trainers
+  </button>
+  <button
+    (click)="setSelected('Feedback')"
+    class="px-3 py-2 font-medium w-full rounded-md text-theme-sm hover:text-gray-900 dark:hover:text-white"
+    [ngClass]="getButtonClass('Feedback')"
+  >
+    Feedback
+  </button>
+</div>
+<div *ngIf="selected=='Venue'">
+<app-batch-venue [batchId]="programmeId" > </app-batch-venue>
+</div>
+<div *ngIf="selected=='Participants'">
+<app-batch-participants > </app-batch-participants>
+</div>
+
+<app-batch-monitoring [batchId]="programmeId" *ngIf="selected=='Monitoring'"> </app-batch-monitoring>
+<app-batch-attendance [batchId]="programmeId" *ngIf="selected=='Attendance'"> </app-batch-attendance>
+<app-batch-trainers [batchId]="programmeId" *ngIf="selected=='Trainers'"> </app-batch-trainers>
+<app-batch-feedback [batchId]="programmeId" *ngIf="selected=='Feedback'"> </app-batch-feedback>

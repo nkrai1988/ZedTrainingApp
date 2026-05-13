@@ -1,0 +1,38 @@
+<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] {{ className }}">
+
+  <!-- Card Header -->
+  @if (title) {
+  <div class="flex items-center justify-between px-6 py-5 {{headerclsName}}">
+    <div>
+      <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ title }}</h3>
+      @if (desc) {
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ desc }}</p>
+      }
+    </div>
+    @if (backUrl) {
+    <a [routerLink]="backUrl" class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
+      {{ backLabel }}
+    </a>
+    }
+    @if (showBack && !backUrl) {
+    <button (click)="backClick.emit()" class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
+      {{ backLabel }}
+    </button>
+    }
+  </div>
+  }
+
+  <!-- Card Body -->
+  <div class="p-4 sm:p-6" [class.border-t]="!!title" [class.border-gray-100]="!!title" [class.dark:border-gray-800]="!!title">
+    <div class="space-y-6">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+</div>
