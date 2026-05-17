@@ -89,6 +89,14 @@ export class HelperService{
         return false;
     }
 
+    IsAgency():boolean{
+        var role = this.getUserRole();
+        if(role &&  role == '3'){
+            return true;
+        }
+        return false;
+    }
+
     IsAssessor():boolean{
         var role = this.getUserRole();
         if(role &&  role == '5'){

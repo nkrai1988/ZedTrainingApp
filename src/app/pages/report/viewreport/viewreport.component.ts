@@ -95,7 +95,7 @@ handleAgencyChange(value: string) {
       this.getProgrammes();
       this.loadAgencies();
       this.userRole = this.helperService.getUserRole();
-      alert(this.userRole);
+      
     }
 
     rejectProgramme(row:any,status:any){

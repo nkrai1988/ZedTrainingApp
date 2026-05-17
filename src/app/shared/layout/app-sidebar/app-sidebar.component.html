@@ -169,6 +169,7 @@
                 >
                   <ul class="mt-2 space-y-1 ml-9">
                     @for (subItem of nav.subItems; track $index) {
+                      @if(subItem.roleaccess && subItem.roleaccess.includes(userrole)){
                     <li>
                       <a
                         [routerLink]="subItem.path"
@@ -215,6 +216,7 @@
                         </span>
                       </a>
                     </li>
+                  }
                     }
                   </ul>
                 </div>

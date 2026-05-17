@@ -79,8 +79,14 @@ private helperService = inject(HelperService);
       this.btntext='Processing...';
        this.authService.postLoginData(this.signinForm.value).subscribe({
       next: (response:any) => { 
-        this.helperService.storeLoginData(response);  
-        this.router.navigate(['/dashboard']);     
+        this.helperService.storeLoginData(response); 
+        if(this.helperService.IsAgency()){
+         this.router.navigate(['/coordinators']);     
+        } 
+        else{
+          this.router.navigate(['/dashboard']);     
+        }
+        
       // Redirect
       // if(this.helperService.IsSuperAdmin()){
       //     this.helperService.setPortal('training');
