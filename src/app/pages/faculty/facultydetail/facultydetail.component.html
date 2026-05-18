@@ -221,7 +221,7 @@
           </td>
           <td class="px-4 sm:px-6 py-3.5">
             
-            <a class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+            <a [routerLink]="['/programmedetail']" [queryParams]="{ batchid:row.batchNo }" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
                   {{ row.batchNo }}
                     
                 </a>   
