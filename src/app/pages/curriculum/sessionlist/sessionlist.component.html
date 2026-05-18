@@ -28,8 +28,8 @@
     </app-component-card>
   </div>
 
-  <app-component-card title="New Session" backUrl="/curriculum" backLabel="Back to Curriculum">
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+  <app-component-card title="New Session" backUrl="/curriculum" backLabel="Back to Curriculum" >
+    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2" *ngIf="helperService.IsSuperAdmin()">
     <div class="space-y-6">    
       <div>
       <app-label>Session Name:</app-label>
@@ -74,7 +74,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Session Name</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Topic Code</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Topic Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start" *ngIf="helperService.IsSuperAdmin()">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -94,12 +94,12 @@
             <div class="flex items-center gap-3">
               
               <div>
-                <a (click)="gotoTopics(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+                <a *ngIf="helperService.IsSuperAdmin()" (click)="gotoTopics(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
                   {{row.nosCode}}                  
                 </a>
-                <!-- <span class="text-gray-500 text-theme-sm dark:text-gray-400">
+                <span *ngIf="!helperService.IsSuperAdmin()" class="text-gray-500 text-theme-sm dark:text-gray-400">
                   {{row.nosCode }}
-                </span> -->
+                </span>
               </div>
             </div>
           </td>
@@ -120,7 +120,7 @@
           </td>
           
           
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-4 sm:px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
             @if (row.nosId) {            
             <!-- <a title="Edit" (click)="openModal(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               Edit</a> -->

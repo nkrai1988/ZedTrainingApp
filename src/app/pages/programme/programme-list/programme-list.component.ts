@@ -50,7 +50,7 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
   styleUrl: './programme-list.component.css',
 })
 export class ProgrammeListComponent {
-  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,private helperService:HelperService){
+  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService){
       
     }
 

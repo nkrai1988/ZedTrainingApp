@@ -24,7 +24,7 @@
   </app-component-card>
 </div>
 
-<app-component-card>
+<app-component-card *ngIf="helperService.IsSuperAdmin()">
   <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
     <div>
       <app-label>Programme Type:</app-label>
@@ -36,7 +36,7 @@
       ></app-select>
       <p *ngIf="newProgrammeclicked && (programmetype == '')" class="mt-1.5 text-xs text-error-500">Programme Type is required.</p>
     </div>
-    <div class="space-y-5">
+    <div class="space-y-5" >
       <div>
         <app-label>Programme Name:</app-label>
         <div class="relative">
@@ -55,7 +55,7 @@
 <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
   <div class="flex flex-col items-start gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
     <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Curriculum</h3>
-    <div class="flex flex-wrap items-center gap-4">
+    <div class="flex flex-wrap items-center gap-4" *ngIf="helperService.IsSuperAdmin()">
       <app-radio [id]="'Active'" [name]="'group1'" [value]="'Active'" [checked]="checkedValue === 'Active'"
         [label]="'Active Curriculum'" [disabled]="false" (valueChange)="handleRadioChange('Active')"/>
       <app-radio [id]="'Blocked'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Blocked'"
@@ -72,7 +72,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme Code</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme Name</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Status</th>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -99,7 +99,7 @@
               {{ row.isActive ? 'Active' : 'Blocked' }}
             </app-badge>
           </td>
-          <td class="px-6 py-3.5">
+          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
             @if (row.id) {
             <div class="inline-flex items-center gap-2">
               <button

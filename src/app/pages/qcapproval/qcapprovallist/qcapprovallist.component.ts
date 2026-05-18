@@ -99,6 +99,7 @@ handleAgencyChange(value: string) {
     programmeList:any=[];
     successmessage='';
     rejectcommentbtnclick=false;
+    
     ngOnInit(){
       this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
       this.loadProgrammeType();

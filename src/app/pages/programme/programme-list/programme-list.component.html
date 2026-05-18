@@ -102,7 +102,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">EndDate</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participants</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Status</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start" *ngIf="helperService.IsSuperAdmin()">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -179,30 +179,16 @@
             </app-badge>
             
           </td>
-
+          <ng-container *ngIf="helperService.IsSuperAdmin()">
           <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
             <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               Accept</a>
               <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               Reject</a>
           </td>
+          </ng-container>
           
           
-          <!-- <td class="px-4 sm:px-6 py-3.5">
-            @if (row.id) {
-            <button [title]="row.isActive ? 'Block User' : 'Un-Block User'" (click)="changeUserStatus(row)">
-              
-             <ng-content *ngIf="row.isActive">
-               <svg width="1em"  height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>
-               </ng-content>
-               <ng-content *ngIf="!row.isActive">
-              <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-              </ng-content>
-            </button>:
-            <a title="Edit" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400" [routerLink]="['/agenciesdetail', row.email]">
-              Edit</a>
-            }
-          </td> -->
         </tr>
         }
       </tbody>

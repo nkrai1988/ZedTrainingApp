@@ -135,6 +135,15 @@ export class HelperService{
     }
 
     userTrainingProgrammeDefaultValue(){
+            if(this.getLoggedUserProgramme() == AppProgrammeTypes.tp){
+              return  AppProgrammeTypes.tpValue
+            }
+            else{
+                return AppProgrammeTypes.iapValue;
+            }
+    }
+
+    userProgrammeDefaultValue(){
             if(this.IsSuperAdmin()){
                 return AppProgrammeTypes.iapValue;
             }
@@ -145,37 +154,30 @@ export class HelperService{
 
     getUserTraingProgrammes():any{
         let tp:any=[];
-        if(this.IsSuperAdmin()){
-            tp.push(AppProgrammeTypes.iap);
-            tp.push(AppProgrammeTypes.tp);
-        }
-        else{
         if(this.getLoggedUserProgramme() == AppProgrammeTypes.tp){
             tp.push(AppProgrammeTypes.tp);
-        }
-
-        if(this.getLoggedUserProgramme() == AppProgrammeTypes.iap){
+        } else if(this.getLoggedUserProgramme() == AppProgrammeTypes.iap){
             tp.push(AppProgrammeTypes.iap);
+        } else if(this.IsSuperAdmin()){
+            tp.push(AppProgrammeTypes.iap);
+            tp.push(AppProgrammeTypes.tp);
         }
-    }
+    
     return tp;
 }
 
     getUserTraingProgrammeswithValue():any{
         let tp:any=[];
-        if(this.IsSuperAdmin()){
+        if(this.getLoggedUserProgramme() == AppProgrammeTypes.tp){
+            tp.push({qpName:AppProgrammeTypes.tp,qpCode:AppProgrammeTypes.tpValue}); 
+        } 
+        else if(this.getLoggedUserProgramme() == AppProgrammeTypes.iap){
+            tp.push({qpName:AppProgrammeTypes.iap,qpCode:AppProgrammeTypes.iapValue});
+        }
+        else if(this.IsSuperAdmin()){
             tp.push({qpName:AppProgrammeTypes.iap,qpCode:AppProgrammeTypes.iapValue});
             tp.push({qpName:AppProgrammeTypes.tp,qpCode:AppProgrammeTypes.tpValue});            
         }
-        else{
-        if(this.getLoggedUserProgramme() == AppProgrammeTypes.tp){
-            tp.push({qpName:AppProgrammeTypes.tp,qpCode:AppProgrammeTypes.tpValue}); 
-        }
-
-        if(this.getLoggedUserProgramme() == AppProgrammeTypes.iap){
-            tp.push({qpName:AppProgrammeTypes.iap,qpCode:AppProgrammeTypes.iapValue});
-        }
-    }
     return tp;
 }
 

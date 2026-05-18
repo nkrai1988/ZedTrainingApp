@@ -45,7 +45,7 @@ import { SessionsService } from '../../../services/sessions.service';
   styleUrl: './sessionlist.component.css',
 })
 export class SessionlistComponent {
-  constructor(private service:SessionsService,public modal: ModalService,private helperService:HelperService,private activeroute:ActivatedRoute,private route:Router){
+  constructor(private service:SessionsService,public modal: ModalService,public helperService:HelperService,private activeroute:ActivatedRoute,private route:Router){
       
     }
 

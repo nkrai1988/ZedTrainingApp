@@ -22,7 +22,7 @@
         ZED Faculty
       </h3>
     </div>
-    <div class="space-y-6">
+    <div class="space-y-6" *ngIf="helperService.IsSuperAdmin()">
         <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
     <app-button size="sm" (btnClick)="addnewUser()" >Add New</app-button>    
 </div>

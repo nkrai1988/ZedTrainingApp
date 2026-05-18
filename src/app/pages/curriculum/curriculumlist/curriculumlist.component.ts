@@ -48,7 +48,7 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   styleUrl: './curriculumlist.component.css',
 })
 export class CurriculumlistComponent {
-  constructor(private service:CurriculumService,public modal: ModalService,private helperService:HelperService,private router:Router){
+  constructor(private service:CurriculumService,public modal: ModalService,public helperService:HelperService,private router:Router){
       
     }
       options = [

@@ -62,7 +62,7 @@ import { DataloadinprogressComponent } from '../../../shared/components/common/d
   styleUrl: './zedfaculty.component.css',
 })
 export class ZedfacultyComponent {
-  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,private helperService:HelperService,private router: Router){
+  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,public helperService:HelperService,private router: Router){
       
     }
 

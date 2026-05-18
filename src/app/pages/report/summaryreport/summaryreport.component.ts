@@ -66,8 +66,7 @@ export class SummaryreportComponent {
       
     }
 
-    filterForm!: FormGroup;
-
+filterForm!: FormGroup;
   dataLoadProgress=false;
   agenciesOptions:any=[];
   programmetypeOptions:any=[];
@@ -76,7 +75,7 @@ export class SummaryreportComponent {
   selectedStatedOptions:any=[];
   selectedStated='';
   curriculumnOption:any=[];
-  curriculumnselect='';
+  curriculumnselect='All';
 
 handleProgrammetypeChange(value: string) {
     this.selectedOptionforprogrammetype = value;
@@ -159,7 +158,7 @@ handleStateChange(value: string) {
     this.reportservice.getSummaryReport().subscribe({
       next:(response:any[])=>{ 
         this.programmeList = response;
-        this.filterMainData();;
+        this.filterMainData();
         
         this.dataLoadProgress=false;
       },
