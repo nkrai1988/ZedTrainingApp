@@ -85,9 +85,9 @@ export class AgencylistComponent {
   exportExcel(){
     
     this.agencyservice.exportToExcel(this.checkedValue).subscribe({
-      next:(response : any)=>{     
+      next:(response : any)=>{
         console.log({'response':response});
-        const blob = response.body as Blob;
+        const blob = new Blob([response.body as Blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         let fileName = 'report.xlsx';
       const contentDisposition = response.headers.get('Content-Disposition');
 

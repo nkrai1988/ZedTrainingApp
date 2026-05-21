@@ -1,0 +1,58 @@
+<app-component-card>
+  <div class="p-4">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+        Participants Upload
+        @if (batchNo) {
+          <span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">— Batch: {{ batchNo }}</span>
+        }
+      </h2>
+      <a
+        routerLink="/uploadbatches"
+        class="rounded bg-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200"
+      >
+        &laquo; Back to Batches
+      </a>
+    </div>
+
+    @if (successMessage) {
+      <div class="mb-4 rounded border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-700">
+        {{ successMessage }}
+      </div>
+    }
+
+    @if (errorMessage) {
+      <div class="mb-4 rounded border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <div class="mb-3 rounded bg-blue-50 px-4 py-3 text-sm text-blue-700 dark:bg-blue-900 dark:text-blue-200">
+      <strong>File format (.csv or .xlsx):</strong> The file must have exactly <strong>11 columns</strong> in this order:
+      FirstName, LastName, MobileNo, EmailId, OrganizationName, UDYAMnumber, SocialCategory, SpecialCategory, Address, TypeOfMSME, Designation.
+      Maximum <strong>200 participants</strong> per upload.
+    </div>
+
+    <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+      <div class="flex-1">
+        <label for="participantFile" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Participants Excel File <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="participantFile"
+          type="file"
+          accept=".csv,.xlsx"
+          (change)="onFileChange($event)"
+          class="block w-full cursor-pointer rounded border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 file:mr-3 file:rounded file:border-0 file:bg-blue-600 file:px-3 file:py-1 file:text-xs file:font-medium file:text-white hover:file:bg-blue-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300"
+        />
+      </div>
+      <button
+        (click)="onUpload()"
+        [disabled]="uploading || !selectedFile"
+        class="rounded bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {{ uploading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </div>
+  </div>
+</app-component-card>

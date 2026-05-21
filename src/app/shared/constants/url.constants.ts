@@ -9,6 +9,7 @@
   dashboardCountLocation:'dashboard/batches',
   agencylist:'agency/list',
   agencyexport:'exporttoexcel/user',
+  agencynewexport:'exporttoexcel/agencies',
   programmeexport:'exporttoexcel/programmes',
   vewreportexport:'exporttoexcel/viewreportexcel',
   summaryexport:'exporttoexcel/summary',
@@ -67,4 +68,6 @@
   certificateslist:'certificate/list',
   participantslist:'certificate/programmeparticipants',
   certificatedetail:'certificate/getCertificate',
+  participantUploadBatches:'participant/uploadbatches',
+  participantUpload:'participant/upload',
 }

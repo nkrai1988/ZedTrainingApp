@@ -13,57 +13,73 @@
     </app-component-card>
   </div>
 
-  <app-component-card>
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-    <div class="space-y-6">
+  <app-component-card >
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 overflow-x-hidden">
+      <!-- Row 1 -->
       <div>
-      <app-label>State</app-label>
-      <app-select
-        [options]="stateOptions"
+        <app-label>Type:</app-label>
+        <app-select
+        [options]="programmetypeOptions"
         placeholder="Select an option"
-        [value]="selectedOptionforState"
-        (valueChange)="handleStateSelectChange($event)"
-        className="dark:bg-dark-900"
+        [value]="programmetype"
+        
       ></app-select>
-    </div>
-    <div>
-      <app-label>Status</app-label>
-      <app-select
-        [options]="statusOptions"
-        placeholder="Select an option"
-        [value]="selectedOptionforStatus"
-        (valueChange)="handleStatusSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-    </div>
-    <div class="space-y-6">
-      <div *ngIf="datePickerdefaultDate">
-      <app-date-picker
-        id="date-pickersd"
-        label="Start Date"
-        placeholder="Select a date"
-        (dateChange)="handleStartDateChange($event)"
-      />
-    </div>
-    <div *ngIf="datePickerdefaultDate">
-      <app-date-picker
-        id="date-pickered"
-        label="End Date"
-        placeholder="Select a date"
-        (dateChange)="handleEndDateChange($event)"
-      />
-    </div>
-    </div>
-    
-    </div>
-    <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">        
-        <app-button size="sm" (btnClick)="clearForm()" variant="outline">Reset</app-button>
-        <app-button size="sm"  (btnClick)="onFilterSubmit()">Search</app-button>
       </div>
+      <div>
+        <app-label>Agency</app-label>
+        <app-select
+        [options]="agenciesOptions"
+        placeholder="Select an option"
+        [value]="selectedOptionagency"
+        
+        className="dark:bg-dark-900"
+      ></app-select>
+      </div>
+      <div>
+        <app-label>State</app-label>
+        <app-select
+          [options]="stateOptions"
+          placeholder="Select an option"
+          [value]="selectedOptionforState"
+          (valueChange)="handleStateSelectChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
+      <div>
+        <app-label>Status</app-label>
+        <app-select
+          [options]="statusOptions"
+          placeholder="Select an option"
+          [value]="selectedOptionforStatus"
+          (valueChange)="handleStatusSelectChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
+      <!-- Row 2 -->
+      <div *ngIf="datePickerdefaultDate">
+        <app-date-picker
+          id="date-pickersd"
+          label="Start Date"
+          placeholder="Select a date"
+          (dateChange)="handleStartDateChange($event)"
+        />
+      </div>
+      <div *ngIf="datePickerdefaultDate">
+        <app-date-picker
+          id="date-pickered"
+          label="End Date"
+          placeholder="Select a date"
+          (dateChange)="handleEndDateChange($event)"
+        />
+      </div>
+      <div class="col-span-2 flex items-end justify-end gap-2">
+        <app-button size="sm" (btnClick)="clearForm()" variant="outline">Reset</app-button>
+        <app-button size="sm" (btnClick)="onFilterSubmit()">Search</app-button>
+      </div>
+    </div>
   </app-component-card>
 
-<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+<div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
   
   <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
@@ -81,37 +97,29 @@
   
   
 
-  <div class="max-w-full overflow-x-auto">
+  <div class="max-w-full overflow-auto flex-1 min-h-0 max-h-[600px]">
     <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+      <thead class="border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
-                </span>
-              </div>
-            </div>
-          </th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme ID</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Agency</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Programme</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Venue</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">State</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">StartDate</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">EndDate</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participants</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Cumulative Feedback</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"></th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start"></th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Comment</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S.No</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Prog. ID</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Agency</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Venue</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">State</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Start</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">End</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Part.</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Feedback</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Status</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th class="px-3 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Comment</th>
         </tr>
       </thead>
       <tbody>
         @for (row of dataRow; track $index) {
         <tr>
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <div class="flex items-center gap-3">              
               <div>
                 <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
@@ -120,7 +128,7 @@
               </div>
             </div>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <div class="flex items-center gap-3">
               <!-- <app-avatar-text 
                  [name]="row.user.name" 
@@ -136,55 +144,49 @@
               </div>
             </div>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5 max-w-[100px]">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 truncate" [title]="row.firstName">
               {{ row.firstName }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5 max-w-[100px]">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 truncate" [title]="row.qpName">
               {{ row.qpName }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5 max-w-[100px]">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 truncate" [title]="row.venueName">
               {{ row.venueName }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5 max-w-[100px]">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 truncate" [title]="row.stateName">
               {{ row.stateName }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 whitespace-nowrap">
               {{ row.strStartDate }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+          <td class="px-3 py-2.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400 whitespace-nowrap">
               {{ row.strEndDate }}
-                
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
               {{ row.noc }}
                 
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
               {{ row.noc }}
                 
             </p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <app-badge
               variant="light"
               [color]="getStatusBadgeColor(row.status)"
@@ -195,14 +197,14 @@
             
           </td>
 
-          <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
+          <td class="px-3 py-2.5" *ngIf="row.status == '0'">
             <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               Accept</a>
               <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
               Reject</a>
           </td>
 
-          <td class="px-4 sm:px-6 py-3.5">
+          <td class="px-3 py-2.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
               {{ row.noc }}
                 

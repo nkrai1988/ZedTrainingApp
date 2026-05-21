@@ -195,14 +195,14 @@ handleStateChange(value: string) {
     //this.selectedOptionforprogrammetype,this.statusvalue,this.selectedOptionagency
     var filters={
       Type:this.selectedOptionforprogrammetype,
-      State:this.statusvalue,
+      State:this.selectedStated,
       Agency:this.selectedOptionagency,
       QpCode:this.selectedOptionagency,
     }
 
     this.reportservice.exportToExcel(filters).subscribe({
       next:(response : any)=>{     
-        console.log({'response':response});
+        
         const blob = response.body as Blob;
         let fileName = 'report.xlsx';
       const contentDisposition = response.headers.get('Content-Disposition');

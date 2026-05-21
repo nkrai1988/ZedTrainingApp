@@ -39,9 +39,16 @@ export class ApiService {
   }
 
   getTestFile(url: string):Observable<HttpResponse<Blob>>{
-    
-   return this.http.get(url, {observe: 'response', responseType: 'blob' });
-  
+    let token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token });
+    return this.http.get(`${this.baseUrl}/${url}`, { observe: 'response', responseType: 'blob', headers });
+  }
+
+  getExceltFileWithFilterPost(url: string,filter:any):Observable<HttpResponse<Blob>>{
+    let token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token });
+    return this.http.post(`${this.baseUrl}/${url}`,filter ,{ observe: 'response', responseType: 'blob', headers });
+   // return this.http.get(`${this.baseUrl}/${url}`, { observe: 'response', responseType: 'blob', headers });
   }
 
   postTestFile(url: string,data:any):Observable<HttpResponse<Blob>>{

@@ -52,6 +52,8 @@ import { ProgrammeDetailComponent } from './pages/programme/programme-detail/pro
 import { BatchVenueComponent } from './pages/programme/programme-detail/batch-venue/batch-venue.component';
 import { BatchParticipantsComponent } from './pages/programme/programme-detail/batch-participants/batch-participants.component';
 import { AdminProgrammListComponent } from './pages/programme/admin-programm-list/admin-programm-list.component';
+import { UploadParticipantsBatchesComponent } from './pages/participants/upload-participants-batches/upload-participants-batches.component';
+import { UploadParticipantsComponent } from './pages/participants/upload-participants/upload-participants.component';
 
 export const routes: Routes = [
   {
@@ -262,6 +264,20 @@ export const routes: Routes = [
         pathMatch: 'full',
         title:'Programme Participiants',
         canActivate:[AuthGuard]
+      },
+      {
+        path: 'uploadbatches',
+        component: UploadParticipantsBatchesComponent,
+        pathMatch: 'full',
+        title: 'Upload Participants',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'uploadparticipants/:id',
+        component: UploadParticipantsComponent,
+        pathMatch: 'full',
+        title: 'Upload Participants',
+        canActivate: [AuthGuard]
       },
       {
         path: 'ecommerce',

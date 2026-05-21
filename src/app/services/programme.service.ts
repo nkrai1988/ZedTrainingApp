@@ -62,7 +62,11 @@ getQCApprovalList(ptype:string,status:string,agency:string){
   }
 
   exportToExcel(filters:any){    
-    return this.api.postTestFile(APPURLs.programmeexport,filters);
+    return this.api.getExceltFileWithFilterPost(APPURLs.programmeexport,filters);
+}
+
+  programmeexportToExcel(filters:any){    
+    return this.api.getExceltFileWithFilterPost(APPURLs.programmeexport,filters);
 }
 
   exportToExcelViewReport(ptype:string,agency:string){  

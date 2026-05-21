@@ -66,7 +66,7 @@ getSummaryReport(){//(ptype:string,state:string,agency:string,curriculum:string)
   }
 
     exportToExcel(filters:any){    
-      return this.api.postTestFile(APPURLs.summaryexport,filters);
+      return this.api.getExceltFileWithFilterPost(APPURLs.summaryexport,filters);
   }
 
 

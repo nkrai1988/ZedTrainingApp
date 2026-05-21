@@ -20,7 +20,7 @@ getAgencyList(status:string){
 exportToExcel(activeorblocked:string){
     let query='?isactive='+(activeorblocked =='Active' ? true:false);
     //return this.api.getSimpleFile(APPURLs.agencyexport+query);
-    return this.api.getTestFile(APPURLs.agencyexport+query);
+    return this.api.getTestFile(APPURLs.agencynewexport+query);
 }
 
   getAgencyDetail(userid:string){

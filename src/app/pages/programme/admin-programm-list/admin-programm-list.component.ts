@@ -59,6 +59,8 @@ export class AdminProgrammListComponent {
 
     filterForm!: FormGroup;
     dataLoadProgress=false;
+    agenciesOptions:any=[];
+    selectedOptionagency = 'All';
     options = [
     { value: 'marketing', label: 'Marketing' },
     { value: 'template', label: 'Template' },
@@ -70,12 +72,22 @@ export class AdminProgrammListComponent {
   selectedOptionforStatus = '';
   dateValue: any;
   datePickerdefaultDate=true;
+  programmetypeOptions:any=[];
+  programmetype='';
 
 handleStateSelectChange(value: string) {
     this.selectedOptionforState = value;
     console.log('Selected value:', value);
     this.filterForm.controls['StateName'].setValue(value)
 }
+
+  loadProgrammeType(){
+    let programmeTypes= this.helperService.getUserTraingProgrammeswithValue();
+    console.log({'programmeTypes':programmeTypes});
+    programmeTypes.forEach((element:any) => {
+      this.programmetypeOptions.push({value:element.qpCode,label:element.qpName});
+    });
+  }
 
 handleStatusSelectChange(value: string) {
     this.selectedOptionforStatus = value;
@@ -119,8 +131,24 @@ handleStatusSelectChange(value: string) {
       this.loadStatus();      
       this.getProgrammesFromServer();
       this.loadStates();
+      this.loadProgrammeType();
+      this.loadAgencies();
       
     }
+
+    loadAgencies(){
+    this.agenciesOptions=[];
+    this.programmeservice.getActiveAgencyList().subscribe({
+        next:(response:any)=>{
+          response.forEach((element:any) => {
+            this.agenciesOptions.push({value:element.userId,label: element.firstName});
+          });
+          this.agenciesOptions.unshift({value:'All',label:'All'});
+        },
+        error: (error:any) => {console.error('Error:', error)
+      }
+    });
+  }
 
     getProgrammesFromServer(){
       if(this.helperService.IsSuperAdmin()){

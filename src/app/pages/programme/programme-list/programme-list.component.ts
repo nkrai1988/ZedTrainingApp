@@ -193,7 +193,7 @@ handleStatusSelectChange(value: string) {
 
     console.log({'filters':filters});
     
-    this.programmeservice.exportToExcel(filters).subscribe({
+    this.programmeservice.programmeexportToExcel(filters).subscribe({
       next:(response : any)=>{     
         console.log({'response':response});
         const blob = response.body as Blob;

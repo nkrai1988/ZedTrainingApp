@@ -45,7 +45,6 @@ import { SelectComponent } from '../../../shared/components/form/select/select.c
 import { DatePickerComponent } from '../../../shared/components/form/date-picker/date-picker.component';
 import { HelperService } from '../../../services/helper.service';
 import { FacultyService } from '../../../services/faculty.service';
-import { TableDropdownComponent } from '../../../shared/components/common/table-dropdown/table-dropdown.component';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
 
@@ -67,7 +66,6 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
     ButtonComponent,
     RouterModule,
     DatePickerComponent,
-    TableDropdownComponent,
     DataloadinprogressComponent,
     DatanotfoundComponent
     
@@ -155,6 +153,7 @@ handleAgencyChange(value: string) {
       this.dataLoadProgress=true;
       this.dataRow=[];
       this.allData = [];
+      this.selectedRowIndex = null;
       this.facultyservice.getRegistrationList(this.statusvalue).subscribe({
         next:(res:any[])=>{          
           this.dataRow = res;
@@ -237,6 +236,12 @@ handleAgencyChange(value: string) {
 
   
 
+
+  selectedRowIndex: number | null = null;
+
+  toggleRowActions(index: number) {
+    this.selectedRowIndex = this.selectedRowIndex === index ? null : index;
+  }
 
   selectedRows: string[] = [];
   selectAll: boolean = false;

@@ -51,7 +51,6 @@
             </div>
           </th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">TO</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Applying For</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">CalendarProgrammeID</th>
@@ -65,7 +64,7 @@
       </thead>
       <tbody>
         @for (row of dataRow; track $index) {
-        <tr>
+        <tr class="cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.02]" (click)="toggleRowActions($index)">
           
           <td class="px-4 sm:px-6 py-3.5">
             <div class="flex items-center gap-3">              
@@ -84,53 +83,6 @@
               {{ row.trainerName }}
             </p> -->
           </td>
-          <td class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400">
-              <div class="relative inline-block">
-                <app-table-dropdown>
-                  <div dropdown-button>
-                    <button class="text-gray-500 dark:text-gray-400">
-                      <svg
-                        class="fill-current"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M5.99902 10.245C6.96552 10.245 7.74902 11.0285 7.74902 11.995V12.005C7.74902 12.9715 6.96552 13.755 5.99902 13.755C5.03253 13.755 4.24902 12.9715 4.24902 12.005V11.995C4.24902 11.0285 5.03253 10.245 5.99902 10.245ZM17.999 10.245C18.9655 10.245 19.749 11.0285 19.749 11.995V12.005C19.749 12.9715 18.9655 13.755 17.999 13.755C17.0325 13.755 16.249 12.9715 16.249 12.005V11.995C16.249 11.0285 17.0325 10.245 17.999 10.245ZM13.749 11.995C13.749 11.0285 12.9655 10.245 11.999 10.245C11.0325 10.245 10.249 11.0285 10.249 11.995V12.005C10.249 12.9715 11.0325 13.755 11.999 13.755C12.9655 13.755 13.749 12.9715 13.749 12.005V11.995Z"
-                          fill=""
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                  <div dropdown-content>
-                    <button (click)="openModal(row,'REJECT')"
-                      class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                    >
-                      REJECT
-                    </button>
-                    <button (click)="updateStatus(row,'APPROVED','')"
-                      class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                    >
-                      APPROVED
-                    </button>
-                    <button  (click)="updateStatus(row,'SHORTLISTED','')"
-                      class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                    >
-                      SHORTLISTED
-                    </button>
-                    <button (click)="openModal(row,'HOLD')"
-                      class="text-xs flex w-full rounded-lg px-3 py-2 text-left font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-                    >
-                      HOLD
-                    </button>
-                  </div>
-                </app-table-dropdown>
-              </div>
-            </td>
           <td >
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
               {{ row.agencyName }}
@@ -175,13 +127,30 @@
             </p>
           </td>
         </tr>
-        <tr>
-          <td colspan="2" class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400"></td>
-          <td colspan="2" class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400"></td>
-          <td colspan="2" class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400"></td>
-          <td colspan="2" class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400"></td>
-          <td colspan="2" class="px-4 py-4 text-gray-700 text-theme-sm dark:text-gray-400"></td>
+        @if (selectedRowIndex === $index) {
+        <tr class="bg-gray-50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/[0.05]">
+          <td colspan="10" class="px-6 py-2" (click)="$event.stopPropagation()">
+            <div class="flex items-center gap-3">
+              <button (click)="openModal(row,'REJECT')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD' || row.status == 'SHORTLISTED')"
+                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-red-500 hover:bg-red-600">
+                REJECT
+              </button>
+              <button (click)="updateStatus(row,'APPROVED','')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD' || row.status == 'SHORTLISTED')"
+                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-green-500 hover:bg-green-600">
+                APPROVED
+              </button>
+              <button (click)="updateStatus(row,'SHORTLISTED','')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD')"
+                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-blue-500 hover:bg-blue-600">
+                SHORTLISTED
+              </button>
+              <button (click)="openModal(row,'HOLD')" *ngIf="(row.status == 'NEW' || row.status == 'REJECTED')"
+                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-yellow-500 hover:bg-yellow-600">
+                HOLD
+              </button>
+            </div>
+          </td>
         </tr>
+        }
         }
       </tbody>
     </table>
