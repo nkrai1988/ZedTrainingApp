@@ -42,18 +42,18 @@ layer(base);
   --color-white: #ffffff;
   --color-black: #101828;
 
-  --color-brand-25: #f2f7ff;
-  --color-brand-50: #ecf3ff;
-  --color-brand-100: #dde9ff;
-  --color-brand-200: #c2d6ff;
-  --color-brand-300: #9cb9ff;
-  --color-brand-400: #7592ff;
-  --color-brand-500: #465fff;
-  --color-brand-600: #3641f5;
-  --color-brand-700: #2a31d8;
-  --color-brand-800: #252dae;
-  --color-brand-900: #262e89;
-  --color-brand-950: #161950;
+  --color-brand-25: #f0fbfd;
+  --color-brand-50: #e0f7fb;
+  --color-brand-100: #b8edf6;
+  --color-brand-200: #78daf0;
+  --color-brand-300: #38c7e8;
+  --color-brand-400: #0eb4d9;
+  --color-brand-500: #009bbd;
+  --color-brand-600: #0082a0;
+  --color-brand-700: #006882;
+  --color-brand-800: #005266;
+  --color-brand-900: #003e4d;
+  --color-brand-950: #002a34;
 
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
@@ -148,7 +148,7 @@ layer(base);
   --shadow-theme-xl: 0px 20px 24px -4px rgba(16, 24, 40, 0.08),
     0px 8px 8px -4px rgba(16, 24, 40, 0.03);
   --shadow-datepicker: -5px 0 0 #262d3c, 5px 0 0 #262d3c;
-  --shadow-focus-ring: 0px 0px 0px 4px rgba(70, 95, 255, 0.12);
+  --shadow-focus-ring: 0px 0px 0px 4px rgba(0, 155, 189, 0.12);
   --shadow-slider-navigation: 0px 1px 2px 0px rgba(16, 24, 40, 0.1),
     0px 1px 3px 0px rgba(16, 24, 40, 0.1);
   --shadow-tooltip: 0px 4px 6px -2px rgba(16, 24, 40, 0.05),
@@ -537,13 +537,13 @@ span.flatpickr-weekday,
 .flatpickr-day.selected.nextMonthDay,
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
-  background: #465fff;
+  background: #009bbd;
   @apply !border-brand-500 !bg-brand-500 hover:!border-brand-500 hover:!bg-brand-500;
 }
 .flatpickr-day.selected.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.startRange.startRange + .endRange:not(:nth-child(7n + 1)),
 .flatpickr-day.endRange.startRange + .endRange:not(:nth-child(7n + 1)) {
-  box-shadow: -10px 0 0 #465fff;
+  box-shadow: -10px 0 0 #009bbd;
 }
 
 .flatpickr-months .flatpickr-prev-month svg,
@@ -867,22 +867,22 @@ pre[class*="language-"].line-numbers {
 }
 
 .bg-brand-950 {
-    background-color: #165022;
+    background-color: #002a34;
 }
 
 /* Sign Button */
 .btn-primary-bg {
-  background-color: #165022 !important;
-  border-color: #165022 !important;
-  
+  background-color: #009bbd !important;
+  border-color: #009bbd !important;
+
   &:hover {
-    background-color: #0b5ed7 !important;
-    border-color: #0a58ca !important;
+    background-color: #0082a0 !important;
+    border-color: #0082a0 !important;
   }
-  
+
   &:active, &.active {
-    background-color: #0a58ca !important;
-    border-color: #0a58ca !important;
+    background-color: #006882 !important;
+    border-color: #006882 !important;
   }
 }
 

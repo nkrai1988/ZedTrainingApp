@@ -38,7 +38,7 @@
   <div>
     <div class="mb-5 sm:mb-8">
       <span class="text-gray-800 dark:text-white/90">
-      Application Form for ZED Master Trainer/Assessor/Consultant Training
+      Application Form for Master Trainer/Assessor/Consultant Training
       </span>
       <p class="text-sm text-gray-500 dark:text-gray-400">
          (To refer to the eligibility criteria, <a routerLink="/signup" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
@@ -112,7 +112,7 @@
               <!-- ZED Assessor<span class="text-error-500">*</span> -->
             </app-label>
             <app-radio [id]="'Assessor'" [name]="'group1'" [value]="'Full Time'" [checked]="checkedValue === 'Assessor'"
-      [label]="'ZED Assessor'" [disabled]="false" (valueChange)="handleRadioChange('Assessor')"/>
+      [label]="'Assessor'" [disabled]="false" (valueChange)="handleRadioChange('Assessor')"/>
       <p *ngIf="checkInForm.get('applyfor')?.invalid && (checkInForm.get('applyfor')?.touched || checkInForm.get('applyfor')?.dirty)" class="mt-1.5 text-xs text-error-500">Select One.</p>
           </div>
           <!-- Last Name -->
@@ -121,7 +121,7 @@
               Last Name<span class="text-error-500">*</span>
             </app-label> -->
                   <app-radio [id]="'Consultant'" [name]="'group1'" [value]="'Full Time'" [checked]="checkedValue === 'Consultant'"
-      [label]="'ZED Consultant'" [disabled]="false" (valueChange)="handleRadioChange('Consultant')"/>
+      [label]="'Consultant'" [disabled]="false" (valueChange)="handleRadioChange('Consultant')"/>
           </div>
         </div>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">

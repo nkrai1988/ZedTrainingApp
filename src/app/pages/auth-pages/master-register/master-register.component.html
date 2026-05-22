@@ -9,7 +9,7 @@
   
 <div class="mx-auto w-full max-w-[630px] text-center">
       <h3 class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
-        Application Form for ZED Master Trainer/Assessor/Consultant Training
+        Application Form for Master Trainer/Assessor/Consultant Training
       </h3>
 
       <p class="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
@@ -34,9 +34,9 @@
     <!-- <app-radio [id]="'option1'" [name]="'group1'" [value]="'Master Trainer'" [checked]="selectedRole === 'Master Trainer'"
       [label]="'Master Trainer'" [disabled]="false" (valueChange)="handleRadioChange('Master Trainer')"/> -->
     <app-radio [id]="'option2'" [name]="'group1'" [value]="'Assessor'" [checked]="selectedRole === 'Assessor'"
-      [label]="'Zed Assessor'" [disabled]="false" (valueChange)="handleRadioChange('Assessor')"/>
+      [label]="'Assessor'" [disabled]="false" (valueChange)="handleRadioChange('Assessor')"/>
     <app-radio [id]="'option3'" [name]="'group1'" [value]="'ZEDConsultant'" [checked]="selectedRole === 'ZEDConsultant'"
-      [label]="'Zed Consultant'" [disabled]="false" (valueChange)="handleRadioChange('ZEDConsultant')"/>
+      [label]="'Consultant'" [disabled]="false" (valueChange)="handleRadioChange('ZEDConsultant')"/>
       <p *ngIf="registerForm.get('role')?.invalid && (registerForm.get('role')?.touched || registerForm.get('role')?.dirty)" class="mt-1.5 text-xs text-error-500">Applying for is Required. </p>
   </div>
     <div>
@@ -99,10 +99,10 @@
     <app-component-card>
     <div class="flex flex-wrap items-center gap-8">
       <ng-container *ngIf="selectedRole == 'Assessor'">
-      Nominated through (only for ZED Assessors Training applicants):<span class="text-error-500">*</span>
+      Nominated through (only for Assessors Training applicants):<span class="text-error-500">*</span>
       </ng-container>
       <ng-container *ngIf="selectedRole == 'ZEDConsultant'">
-      Associated with (only for ZED Consultants Training applicants):<span class="text-error-500">*</span>
+      Associated with (only for Consultants Training applicants):<span class="text-error-500">*</span>
       </ng-container>
 
       <ng-container *ngIf="selectedRole == 'Assessor'">
@@ -115,7 +115,7 @@
       </ng-container>
       <ng-container *ngIf="selectedRole == 'ZEDConsultant'">
       <app-radio [id]="'option55'" [name]="'group2'" [value]="'ZED Consultant'" [checked]="selectedNomination === 'ZED Consultant'"
-      [label]="'ZED Consultant'" [disabled]="false" (valueChange)="handleNominationRadioChange('ZED Consultant')"/>
+      [label]="'Consultant'" [disabled]="false" (valueChange)="handleNominationRadioChange('ZED Consultant')"/>
       </ng-container>
 
     <app-radio [id]="'option44'" [name]="'group2'" [value]="'Freelancer'" [checked]="selectedNomination === 'Freelancer'"

@@ -14,6 +14,6 @@ import { AlertComponent } from './shared/components/ui/alert/alert.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Zed-Admin';
+  title = 'Training';
   
 }

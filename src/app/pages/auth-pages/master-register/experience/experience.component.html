@@ -136,15 +136,15 @@ Organization Name</th>
       Qualification:<span class="text-error-500">*</span>
       </h3>
     </div>
-    <div class="flex flex-wrap items-center gap-8">
-    <app-radio [id]="'Model 1'" [name]="'group1'" [value]="'Active'" [checked]="checkedValue === 'Model 1'"
-      [label]="'Qualified Lead Auditor Certification in Quality Management Systems or any other ISO Management Systems, as relevant'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 1')"/>
-    <app-radio [id]="'Model 2'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Model 2'"
-      [label]="'A qualified ZED Assessor under the erstwhile “Financial Support to MSMEs in ZED Certification Scheme'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 2')"/>
-    <app-radio [id]="'Model 3'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Model 3'"
-      [label]="'Any Other'" [disabled]="false" (valueChange)="handleKnowledgeRadioChange('Model 3')"/>
-      <p *ngIf="qualificationForm.get('knowledge')?.invalid && (qualificationForm.get('knowledge')?.touched || qualificationForm.get('knowledge')?.dirty)" class="mt-1.5 text-xs text-error-500">Area of knowledge and expertise is required.</p>
-  </div>
+    <!-- <div class=”flex flex-wrap items-center gap-8”>
+    <app-radio [id]=”'Model 1'” [name]=”'group1'” [value]=”'Active'” [checked]=”checkedValue === 'Model 1'”
+      [label]=”'Qualified Lead Auditor Certification in Quality Management Systems or any other ISO Management Systems, as relevant'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 1')”/>
+    <app-radio [id]=”'Model 2'” [name]=”'group1'” [value]=”'Blocked'” [checked]=”checkedValue === 'Model 2'”
+      [label]=”'A qualified ZED Assessor under the erstwhile Financial Support to MSMEs in ZED Certification Scheme'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 2')”/>
+    <app-radio [id]=”'Model 3'” [name]=”'group1'” [value]=”'Blocked'” [checked]=”checkedValue === 'Model 3'”
+      [label]=”'Any Other'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 3')”/>
+      <div *ngIf=”qualificationForm.get('knowledge')?.invalid && (qualificationForm.get('knowledge')?.touched || qualificationForm.get('knowledge')?.dirty)” class=”mt-1.5 text-xs text-error-500”>Area of knowledge and expertise is required.</div>
+  </div> -->
 
               <div>
               <app-label>Type of Experience:<span class="text-error-500">*</span></app-label>

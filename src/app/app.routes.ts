@@ -69,28 +69,28 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         pathMatch: 'full',
-        title:'Zed Training Solution',
+        title:'Training Solution',
         canActivate:[AuthGuard]
       },
       {
         path: 'prodashboard',
         component: EcommerceComponent,
         pathMatch: 'full',
-        title:'Zed Training Solution',
+        title:'Training Solution',
         canActivate:[AuthGuard]
       },
       {
         path: 'qmpdashboard',
         component: QmpdashboardComponent,
         pathMatch: 'full',
-        title:'Zed Training Solution',
+        title:'Training Solution',
         canActivate:[AuthGuard]
       },
       {
         path: 'assessordashboard',
         component: AssessordashboardComponent,
         pathMatch: 'full',
-        title:'Zed Training Solution',
+        title:'Training Solution',
         canActivate:[AuthGuard]
       },
       {
@@ -210,7 +210,7 @@ export const routes: Routes = [
         path: 'zedfaculty',
         component: ZedfacultyComponent,
         pathMatch: 'full',
-        title:'Zed Faculty',
+        title:'Faculty',
        canActivate:[AuthGuard]
       },
       {
@@ -238,7 +238,7 @@ export const routes: Routes = [
         path:'changepassword',
         component:ChangepasswordComponent,
         pathMatch: 'full',
-        title:'Password Reset | Zed-Traning',
+        title:'Password Reset',
         canActivate:[AuthGuard]
       },
       {
@@ -266,7 +266,7 @@ export const routes: Routes = [
         path: 'bparti',
         component: BatchParticipantsComponent,
         pathMatch: 'full',
-        title:'Programme Participiants',
+        title:'Programme Participants',
         canActivate:[AuthGuard]
       },
       {
@@ -287,84 +287,83 @@ export const routes: Routes = [
         path: 'ecommerce',
         component: EcommerceComponent,
         pathMatch: 'full',
-        title:
-          'Zed Training Dashboard',//'Angular Ecommerce Dashboard | Zed-Traning',
+        title: 'Training Dashboard',
       },
       {
         path:'calendar',
         component:CalenderComponent,
-        title:'Angular Calender | Zed-Traning'
+        title:'Calendar'
       },
       {
         path:'profile',
         component:ProfileComponent,
-        title:'Angular Profile Dashboard | Zed-Traning'
+        title:'Profile'
       },
       {
         path:'form-elements',
         component:FormElementsComponent,
-        title:'Angular Form Elements Dashboard | Zed-Traning'
+        title:'Form Elements'
       },
       {
         path:'basic-tables',
         component:BasicTablesComponent,
-        title:'Angular Basic Tables Dashboard | Zed-Traning'
+        title:'Basic Tables'
       },
       {
         path:'blank',
         component:BlankComponent,
-        title:'Angular Blank Dashboard | Zed-Traning'
+        title:'Blank'
       },
       // support tickets
       {
         path:'invoice',
         component:InvoicesComponent,
-        title:'Angular Invoice Details Dashboard | Zed-Traning'
+        title:'Invoice'
       },
       {
         path:'line-chart',
         component:LineChartComponent,
-        title:'Angular Line Chart Dashboard | Zed-Traning'
+        title:'Line Chart'
       },
       {
         path:'bar-chart',
         component:BarChartComponent,
-        title:'Angular Bar Chart Dashboard | Zed-Traning'
+        title:'Bar Chart'
       },
       {
         path:'alerts',
         component:AlertsComponent,
-        title:'Angular Alerts Dashboard | Zed-Traning'
+        title:'Alerts'
       },
       {
         path:'avatars',
         component:AvatarElementComponent,
-        title:'Angular Avatars Dashboard | Zed-Traning'
+        title:'Avatars'
       },
       {
         path:'badge',
         component:BadgesComponent,
-        title:'Angular Badges Dashboard | Zed-Traning'
+        title:'Badges'
       },
       {
         path:'buttons',
         component:ButtonsComponent,
-        title:'Angular Buttons Dashboard | Zed-Traning'
+        title:'Buttons'
       },
       {
         path:'images',
         component:ImagesComponent,
-        title:'Angular Images Dashboard | Zed-Traning'
+        title:'Images'
       },
       {
         path:'videos',
         component:VideosComponent,
-        title:'Angular Videos Dashboard | Zed-Traning'
+        title:'Videos'
       },
       {
         path:'model',
         component:FullScreenModalComponent,
-        title:'Angular Videos Dashboard | Zed-Traning'
+        title:'Modal'
       },
     ]
   },
@@ -378,7 +377,7 @@ export const routes: Routes = [
         path: 'participantdashboard',
         component: ParticipantDashboardComponent,
         pathMatch: 'full',
-        title: 'My Training | Zed Training Solution',
+        title: 'My Training',
         canActivate: [AuthGuard]
       },
     ]
@@ -389,42 +388,42 @@ export const routes: Routes = [
   {
     path:'signin',
     component:SignInComponent,
-    title:'Sign In | Zed-Traning'
+    title:'Sign In'
   },
   {
     path:'signup',
     component:SignUpComponent,
-    title:'Sign Up | Zed-Traning'
+    title:'Sign Up'
   },
   {
     path:'participant/signin',
     component:ParticipantSignInComponent,
-    title:'Participant Sign In | Zed-Training'
+    title:'Participant Sign In'
   },
   {
     path:'participant/signup',
     component:ParticipantSignUpComponent,
-    title:'Participant Register | Zed-Training'
+    title:'Participant Register'
   },
   {
     path:'register',
     component:MasterRegisterComponent,
-    title:'Register | Zed-Traning'
+    title:'Register'
   },
   {
     path:'registerdetail/:id',
     component:RegisterDetailComponent,
-    title:'Register | Zed-Traning'
+    title:'Register'
   },
   {
     path:'trainingprogramme',
     component:TrainingprogrammesComponent,
-    title:'Training | Zed-Traning'
+    title:'Training'
   },
   // error pages
   {
     path:'**',
     component:NotFoundComponent,
-    title:'Angular NotFound Dashboard | Zed-Traning'
+    title:'Not Found'
   },
 ];

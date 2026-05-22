@@ -20,10 +20,21 @@
   >
     <a routerLink="/participantdashboard">
       @if ((isExpanded$ | async) || (isHovered$ | async) || (isMobileOpen$ | async)) {
-        <img class="dark:hidden" src="/images/logo/zed-new-logo.png" alt="ZED Logo" width="150" height="40" />
-        <img class="hidden dark:block" src="/images/logo/zed-new-logo.png" alt="ZED Logo" width="150" height="40" />
+        <div class="flex items-center gap-2">
+          <img
+            src="/images/logo/ndie-logo.png"
+            alt="NDIE"
+            class="h-9 w-auto object-contain"
+          />
+          <div class="w-px h-7 bg-gray-200 dark:bg-gray-700"></div>
+          <img
+            src="/images/logo/qci-logo.png"
+            alt="QCI"
+            class="h-8 w-auto object-contain"
+          />
+        </div>
       } @else {
-        <img src="/images/logo/logo-icon.svg" alt="ZED" width="32" height="32" />
+        <img src="/images/logo/ndie-logo.png" alt="NDIE" class="h-10 w-auto object-contain" />
       }
     </a>
   </div>

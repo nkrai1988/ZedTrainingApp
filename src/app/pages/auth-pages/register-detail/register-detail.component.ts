@@ -220,7 +220,7 @@ export class RegisterDetailComponent {
     this.authservice.postRegisterData(allData).subscribe({
       next:(res:any)=>{
         console.log({'res':res});
-        this.successmessage= "We appreciate your time in filling up the application for the ZED Training Program.Your application will be shortly processed. Please note that participation is  based on fulfilling the Eligibility Criteria and subjected to the availability of seat in the preferred Training Program. We will soon get back to you, once your application gets shortlisted. Your registered email id is "+this.registerForm.value.Email+"."
+        this.successmessage= "We appreciate your time in filling up the application for the Training Program.Your application will be shortly processed. Please note that participation is  based on fulfilling the Eligibility Criteria and subjected to the availability of seat in the preferred Training Program. We will soon get back to you, once your application gets shortlisted. Your registered email id is "+this.registerForm.value.Email+"."
       },
       error:(err)=>{  
         //console.log({'err':err})
@@ -250,30 +250,30 @@ export class RegisterDetailComponent {
 
    validateDisciplines(){
       if(this.selectedRole == "ZEDConsultant" && this.selectedNomination == 'Freelancer' && this.skillsCollection.length < 10){
-          this.setErrorMessage("Please select at least 10 ZED Disciplines.");
+          this.setErrorMessage("Please select at least 10 Disciplines.");
         return;
       }
       else if(this.skillsCollection.length < 3){
-          this.setErrorMessage("Please select at least 3 ZED Disciplines.");
+          this.setErrorMessage("Please select at least 3 Disciplines.");
         return;
       }
 
     //Check Group
         var groupA= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'A');
         if(!groupA){
-          this.setErrorMessage("Please select at least 1 ZED Discipline from Group A.");
+          this.setErrorMessage("Please select at least 1 Discipline from Group A.");
            return;
         }
 
         var groupB= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'B');
         if(!groupB){
-          this.setErrorMessage("Please select at least 1 ZED Discipline from Group B.");
+          this.setErrorMessage("Please select at least 1 Discipline from Group B.");
            return;
         }
 
         var groupC= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'C');
         if(!groupC){
-          this.setErrorMessage("Please select at least 1 ZED Discipline from Group C.");
+          this.setErrorMessage("Please select at least 1 Discipline from Group C.");
            return;
         }
    }
