@@ -70,4 +70,6 @@
   certificatedetail:'certificate/getCertificate',
   participantUploadBatches:'participant/uploadbatches',
   participantUpload:'participant/upload',
+  participantRegister:'participant/register',
+  participantMyProgrammes:'participant/myprogrammes',
 }

@@ -105,6 +105,14 @@ export class HelperService{
         return false;
     }
 
+    IsParticipant():boolean{
+        var role = this.getUserRole();
+        if(role &&  role == '7'){
+            return true;
+        }
+        return false;
+    }
+
     IsAdmin():boolean{
         var user = this.getUser();
         if(user && user.userId && user.userId == '1'){

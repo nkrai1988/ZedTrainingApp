@@ -54,6 +54,10 @@ import { BatchParticipantsComponent } from './pages/programme/programme-detail/b
 import { AdminProgrammListComponent } from './pages/programme/admin-programm-list/admin-programm-list.component';
 import { UploadParticipantsBatchesComponent } from './pages/participants/upload-participants-batches/upload-participants-batches.component';
 import { UploadParticipantsComponent } from './pages/participants/upload-participants/upload-participants.component';
+import { ParticipantSignInComponent } from './pages/auth-pages/participant-sign-in/participant-sign-in.component';
+import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-up/participant-sign-up.component';
+import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
+import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
 
 export const routes: Routes = [
   {
@@ -364,8 +368,24 @@ export const routes: Routes = [
       },
     ]
   },
+  // participant layout
+  {
+    path: '',
+    component: ParticipantLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'participantdashboard',
+        component: ParticipantDashboardComponent,
+        pathMatch: 'full',
+        title: 'My Training | Zed Training Solution',
+        canActivate: [AuthGuard]
+      },
+    ]
+  },
+
   // auth pages
-  
+
   {
     path:'signin',
     component:SignInComponent,
@@ -375,6 +395,16 @@ export const routes: Routes = [
     path:'signup',
     component:SignUpComponent,
     title:'Sign Up | Zed-Traning'
+  },
+  {
+    path:'participant/signin',
+    component:ParticipantSignInComponent,
+    title:'Participant Sign In | Zed-Training'
+  },
+  {
+    path:'participant/signup',
+    component:ParticipantSignUpComponent,
+    title:'Participant Register | Zed-Training'
   },
   {
     path:'register',

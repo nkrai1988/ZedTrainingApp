@@ -1,0 +1,85 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { SidebarService } from '../../services/sidebar.service';
+import { HelperService } from '../../../services/helper.service';
+
+type ParticipantNavItem = {
+  name: string;
+  path: string;
+  icon: string;
+  temp?: boolean;
+};
+
+@Component({
+  selector: 'app-participant-sidebar',
+  imports: [CommonModule, RouterModule],
+  templateUrl: './participant-sidebar.component.html',
+})
+export class ParticipantSidebarComponent {
+
+  readonly isExpanded$;
+  readonly isMobileOpen$;
+  readonly isHovered$;
+
+  navItems: ParticipantNavItem[] = [
+    {
+      name: 'My Dashboard',
+      path: '/participantdashboard',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z" fill="currentColor"></path></svg>`,
+    },
+    {
+      name: 'My Programmes',
+      path: '/participant/programmes',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor"></path></svg>`,
+      temp: true,
+    },
+    {
+      name: 'Attendance',
+      path: '/participant/attendance',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6 3.75C4.75736 3.75 3.75 4.75736 3.75 6V18C3.75 19.2426 4.75736 20.25 6 20.25H18C19.2426 20.25 20.25 19.2426 20.25 18V6C20.25 4.75736 19.2426 3.75 18 3.75H6ZM2.25 6C2.25 3.92893 3.92893 2.25 6 2.25H18C20.0711 2.25 21.75 3.92893 21.75 6V18C21.75 20.0711 20.0711 21.75 18 21.75H6C3.92893 21.75 2.25 20.0711 2.25 18V6ZM16.0303 9.46967C16.3232 9.76256 16.3232 10.2374 16.0303 10.5303L11.0303 15.5303C10.7374 15.8232 10.2626 15.8232 9.96967 15.5303L7.96967 13.5303C7.67678 13.2374 7.67678 12.7626 7.96967 12.4697C8.26256 12.1768 8.73744 12.1768 9.03033 12.4697L10.5 13.9393L14.9697 9.46967C15.2626 9.17678 15.7374 9.17678 16.0303 9.46967Z" fill="currentColor"></path></svg>`,
+      temp: true,
+    },
+    {
+      name: 'My Certificates',
+      path: '/participant/certificates',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 5.5C4.25 4.25736 5.25736 3.25 6.5 3.25H17.5C18.7426 3.25 19.75 4.25736 19.75 5.5V13.5C19.75 14.7426 18.7426 15.75 17.5 15.75H14.3107L14.9053 18.3295C15.0343 18.8793 14.8099 19.4512 14.3388 19.7634L12.5528 20.9106C12.2177 21.1298 11.7823 21.1298 11.4472 20.9106L9.66116 19.7634C9.19007 19.4512 8.96573 18.8793 9.09473 18.3295L9.68927 15.75H6.5C5.25736 15.75 4.25 14.7426 4.25 13.5V5.5ZM6.5 4.75C6.08579 4.75 5.75 5.08579 5.75 5.5V13.5C5.75 13.9142 6.08579 14.25 6.5 14.25H17.5C17.9142 14.25 18.25 13.9142 18.25 13.5V5.5C18.25 5.08579 17.9142 4.75 17.5 4.75H6.5ZM11.1907 15.75L10.5561 18.5138L12 19.3863L13.4439 18.5138L12.8093 15.75H11.1907Z" fill="currentColor"></path></svg>`,
+      temp: true,
+    },
+    {
+      name: 'My Profile',
+      path: '/participant/profile',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path></svg>`,
+      temp: true,
+    },
+    {
+      name: 'Change Password',
+      path: '/changepassword',
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.6532 10.3818 21.2374 10.9645C22.25 11.9742 22.25 13.5828 22.25 16.8C22.25 20.0172 22.25 21.6258 21.2374 22.6355C20.2248 23.6452 18.6116 23.6452 15.3853 23.6452H8.61469C5.38836 23.6452 3.77519 23.6452 2.76256 22.6355C1.75 21.6258 1.75 20.0172 1.75 16.8C1.75 13.5828 1.75 11.9742 2.76256 10.9645C3.34684 10.3818 4.13517 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8ZM12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25Z" fill="currentColor"></path></svg>`,
+    },
+  ];
+
+  constructor(public sidebarService: SidebarService, private helper: HelperService, private router: Router) {
+    this.isExpanded$ = this.sidebarService.isExpanded$;
+    this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
+    this.isHovered$ = this.sidebarService.isHovered$;
+  }
+
+  onSidebarMouseEnter() {
+    if (!(this.sidebarService as any).isExpandedSubject?.value) {
+      this.sidebarService.setHovered(true);
+    }
+  }
+
+  isActive(path: string): boolean {
+    return this.router.url === path;
+  }
+
+  logout() {
+    this.helper.userLogOut();
+  }
+
+  onMobileClose() {
+    this.sidebarService.setMobileOpen(false);
+  }
+}

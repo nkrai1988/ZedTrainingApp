@@ -1,0 +1,125 @@
+<div class="p-4 md:p-6 space-y-6">
+
+  <!-- Header -->
+  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800 dark:text-white/90">My Training Dashboard</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400" *ngIf="userName">
+        Welcome back, <span class="font-medium text-gray-700 dark:text-gray-200">{{ userName }}</span>
+      </p>
+    </div>
+    <button
+      (click)="logout()"
+      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10 transition-colors"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 3.75C16.5 3.33579 16.8358 3 17.25 3H20.25C21.4926 3 22.5 4.00736 22.5 5.25V18.75C22.5 19.9926 21.4926 21 20.25 21H17.25C16.8358 21 16.5 20.6642 16.5 20.25C16.5 19.8358 16.8358 19.5 17.25 19.5H20.25C20.6642 19.5 21 19.1642 21 18.75V5.25C21 4.83579 20.6642 4.5 20.25 4.5H17.25C16.8358 4.5 16.5 4.16421 16.5 3.75ZM10.7197 6.2197C11.0126 5.9268 11.4874 5.9268 11.7803 6.2197L15.5303 9.9697C15.8232 10.2626 15.8232 10.7374 15.5303 11.0303L11.7803 14.7803C11.4874 15.0732 11.0126 15.0732 10.7197 14.7803C10.4268 14.4874 10.4268 14.0126 10.7197 13.7197L13.1893 11.25H3.75C3.33579 11.25 3 10.9142 3 10.5C3 10.0858 3.33579 9.75 3.75 9.75H13.1893L10.7197 7.2803C10.4268 6.9874 10.4268 6.5126 10.7197 6.2197Z"></path>
+      </svg>
+      Sign Out
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Total Enrolled</p>
+      <p class="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ programmes.length }}</p>
+    </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Completed</p>
+      <p class="mt-1 text-2xl font-semibold text-success-600 dark:text-success-400">
+        {{ completedCount }}
+      </p>
+    </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Ongoing</p>
+      <p class="mt-1 text-2xl font-semibold text-brand-600 dark:text-brand-400">
+        {{ ongoingCount }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Programmes List -->
+  <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
+    <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800">
+      <h2 class="text-base font-semibold text-gray-800 dark:text-white/90">My Enrolled Programmes</h2>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex items-center justify-center py-16">
+      <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+        <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        <span class="text-sm">Loading your programmes...</span>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="!isLoading && hasError" class="px-5 py-12 text-center">
+      <svg class="mx-auto mb-3 w-10 h-10 text-gray-300 dark:text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16C12.5523 16 13 15.5523 13 15C13 14.4477 12.5523 14 12 14C11.4477 14 11 14.4477 11 15C11 15.5523 11.4477 16 12 16Z" fill="currentColor"></path>
+      </svg>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Failed to load programmes. Please try again.</p>
+      <button (click)="loadMyProgrammes()" class="mt-3 text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">Retry</button>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!isLoading && !hasError && programmes.length === 0" class="px-5 py-12 text-center">
+      <svg class="mx-auto mb-3 w-10 h-10 text-gray-300 dark:text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor" opacity="0.2"></path>
+      </svg>
+      <p class="text-sm text-gray-500 dark:text-gray-400">You are not enrolled in any programmes yet.</p>
+    </div>
+
+    <!-- Programmes Table -->
+    <div *ngIf="!isLoading && !hasError && programmes.length > 0" class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-white/[0.03]">
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">#</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Programme Name</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Type</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Start Date</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">End Date</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Location</th>
+            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let p of programmes; let i = index"
+            class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
+          >
+            <td class="px-5 py-4 text-gray-500 dark:text-gray-400">{{ i + 1 }}</td>
+            <td class="px-5 py-4 font-medium text-gray-800 dark:text-white/90">
+              {{ p.programmeName || p.name || '—' }}
+            </td>
+            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
+              {{ p.programmeType || p.type || '—' }}
+            </td>
+            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
+              {{ p.startDate ? (p.startDate | date: 'dd MMM yyyy') : '—' }}
+            </td>
+            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
+              {{ p.endDate ? (p.endDate | date: 'dd MMM yyyy') : '—' }}
+            </td>
+            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
+              {{ p.location || p.venue || p.city || '—' }}
+            </td>
+            <td class="px-5 py-4">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                [ngClass]="getStatusClass(p.status)"
+              >
+                {{ p.status || 'N/A' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

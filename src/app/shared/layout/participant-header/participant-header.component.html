@@ -1,0 +1,120 @@
+<header class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 xl:border-b">
+  <div class="flex items-center justify-between w-full px-4 py-3 xl:px-6 lg:py-4">
+
+    <!-- Left: hamburger + portal label -->
+    <div class="flex items-center gap-3">
+      <!-- Hamburger -->
+      <button
+        (click)="handleToggle()"
+        class="flex items-center justify-center w-10 h-10 text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
+        aria-label="Toggle sidebar"
+      >
+        @if (isMobileOpen$ | async) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M6.21967 7.28131C5.92678 6.98841 5.92678 6.51354 6.21967 6.22065C6.51256 5.92775 6.98744 5.92775 7.28033 6.22065L11.999 10.9393L16.7176 6.22078C17.0105 5.92789 17.4854 5.92788 17.7782 6.22078C18.0711 6.51367 18.0711 6.98855 17.7782 7.28144L13.0597 12L17.7782 16.7186C18.0711 17.0115 18.0711 17.4863 17.7782 17.7792C17.4854 18.0721 17.0105 18.0721 16.7176 17.7792L11.999 13.0607L7.28033 17.7794C6.98744 18.0722 6.51256 18.0722 6.21967 17.7794C5.92678 17.4865 5.92678 17.0116 6.21967 16.7187L10.9384 12L6.21967 7.28131Z"
+              fill="currentColor" />
+          </svg>
+        } @else {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M3 6.75C3 6.33579 3.33579 6 3.75 6H20.25C20.6642 6 21 6.33579 21 6.75C21 7.16421 20.6642 7.5 20.25 7.5H3.75C3.33579 7.5 3 7.16421 3 6.75ZM3 12C3 11.5858 3.33579 11.25 3.75 11.25H20.25C20.6642 11.25 21 11.5858 21 12C21 12.4142 20.6642 12.75 20.25 12.75H3.75C3.33579 12.75 3 12.4142 3 12ZM3.75 16.5C3.33579 16.5 3 16.8358 3 17.25C3 17.6642 3.33579 18 3.75 18H12.75C13.1642 18 13.5 17.6642 13.5 17.25C13.5 16.8358 13.1642 16.5 12.75 16.5H3.75Z"
+              fill="currentColor" />
+          </svg>
+        }
+      </button>
+
+      <!-- Portal label — hidden on mobile -->
+      <div class="hidden sm:flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" class="fill-current">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path>
+          </svg>
+          Participant Portal
+        </span>
+      </div>
+    </div>
+
+    <!-- Right: user info + dropdown -->
+    <div class="relative">
+      <button
+        (click)="toggleDropdown()"
+        class="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      >
+        <!-- Avatar initial -->
+        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-brand-500 text-white text-sm font-semibold select-none">
+          {{ userInitial }}
+        </span>
+        <!-- Name (hidden on xs) -->
+        <div class="hidden sm:block text-left">
+          <p class="text-sm font-medium text-gray-700 dark:text-gray-200 leading-tight">{{ userName }}</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 leading-tight">{{ userEmail }}</p>
+        </div>
+        <!-- Chevron -->
+        <svg
+          [ngClass]="{ 'rotate-180': isDropdownOpen }"
+          class="w-4 h-4 text-gray-400 transition-transform duration-200"
+          viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <!-- Dropdown panel -->
+      @if (isDropdownOpen) {
+        <!-- Backdrop to close -->
+        <div class="fixed inset-0 z-10" (click)="closeDropdown()"></div>
+
+        <div class="absolute right-0 mt-2 w-60 z-20 rounded-2xl border border-gray-200 bg-white shadow-theme-lg dark:border-gray-800 dark:bg-gray-900 p-3">
+          <!-- User info -->
+          <div class="px-1 pb-3 border-b border-gray-100 dark:border-gray-800 mb-2">
+            <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ userName }}</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ userEmail }}</p>
+          </div>
+
+          <!-- Menu items -->
+          <ul class="space-y-0.5">
+            <li>
+              <a
+                routerLink="/participant/profile"
+                (click)="closeDropdown()"
+                class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="fill-current shrink-0">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path>
+                </svg>
+                My Profile
+              </a>
+            </li>
+            <li>
+              <a
+                routerLink="/changepassword"
+                (click)="closeDropdown()"
+                class="flex items-center gap-3 px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-200 transition-colors"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="fill-current shrink-0">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.6532 10.3818 21.2374 10.9645C22.25 11.9742 22.25 13.5828 22.25 16.8C22.25 20.0172 22.25 21.6258 21.2374 22.6355C20.2248 23.6452 18.6116 23.6452 15.3853 23.6452H8.61469C5.38836 23.6452 3.77519 23.6452 2.76256 22.6355C1.75 21.6258 1.75 20.0172 1.75 16.8C1.75 13.5828 1.75 11.9742 2.76256 10.9645C3.34684 10.3818 4.13517 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8ZM12 14.25C12.4142 14.25 12.75 14.5858 12.75 15V18C12.75 18.4142 12.4142 18.75 12 18.75C11.5858 18.75 11.25 18.4142 11.25 18V15C11.25 14.5858 11.5858 14.25 12 14.25Z" fill="currentColor"></path>
+                </svg>
+                Change Password
+              </a>
+            </li>
+          </ul>
+
+          <!-- Sign out -->
+          <div class="mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button
+              (click)="logout()"
+              class="flex items-center gap-3 w-full px-3 py-2 text-sm text-error-600 rounded-lg hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-500/10 transition-colors"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="fill-current shrink-0">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 3.75C16.5 3.33579 16.8358 3 17.25 3H20.25C21.4926 3 22.5 4.00736 22.5 5.25V18.75C22.5 19.9926 21.4926 21 20.25 21H17.25C16.8358 21 16.5 20.6642 16.5 20.25C16.5 19.8358 16.8358 19.5 17.25 19.5H20.25C20.6642 19.5 21 19.1642 21 18.75V5.25C21 4.83579 20.6642 4.5 20.25 4.5H17.25C16.8358 4.5 16.5 4.16421 16.5 3.75ZM10.7197 6.2197C11.0126 5.9268 11.4874 5.9268 11.7803 6.2197L15.5303 9.9697C15.8232 10.2626 15.8232 10.7374 15.5303 11.0303L11.7803 14.7803C11.4874 15.0732 11.0126 15.0732 10.7197 14.7803C10.4268 14.4874 10.4268 14.0126 10.7197 13.7197L13.1893 11.25H3.75C3.33579 11.25 3 10.9142 3 10.5C3 10.0858 3.33579 9.75 3.75 9.75H13.1893L10.7197 7.2803C10.4268 6.9874 10.4268 6.5126 10.7197 6.2197Z" fill="currentColor"></path>
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</header>

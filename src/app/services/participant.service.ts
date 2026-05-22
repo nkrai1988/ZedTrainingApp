@@ -17,4 +17,8 @@ export class ParticipantService {
   uploadParticipants(batchNo: string, file: File): Observable<any> {
     return this.api.postWithFile(`${APPURLs.participantUpload}/${batchNo}`, {}, file, 'file');
   }
+
+  getMyEnrolledProgrammes(): Observable<any[]> {
+    return this.api.getSimple(APPURLs.participantMyProgrammes);
+  }
 }

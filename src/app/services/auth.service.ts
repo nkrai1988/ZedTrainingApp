@@ -35,6 +35,10 @@ postRegisterData(body:any) {
    return this.api.postSimple(APPURLs.register,body)
 }
 
+postParticipantRegister(body:any) {
+   return this.api.postSimple(APPURLs.participantRegister, body);
+}
+
 getRegisterDetailData(id:string){
    var query = "?id="+id;
    return this.api.getSimple(APPURLs.registrationdetail+query);
