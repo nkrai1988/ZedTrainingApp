@@ -281,13 +281,16 @@ export class AppSidebarComponent {
     // Subscribe to router events    
     this.subscription = this.helper.data$.subscribe(val => {
      // this.message = val;
+     
      this.navItems=[];
      if(val=='training'){
       this.navItems= this.getTrainingLinks();
+      console.log({'this.navItems':this.navItems});
      }
     });
 
-    this.userrole = this.helper.getUserRole();    
+    this.userrole = this.helper.getUserRole();  
+    console.log({'this.userrole88888':this.userrole});  
     this.subscription.add(
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {

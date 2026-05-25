@@ -41,7 +41,7 @@ export class ParticipantSignupFormComponent {
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       mobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(64)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
   }
@@ -82,12 +82,18 @@ export class ParticipantSignupFormComponent {
     };
 
     this.authService.postParticipantRegister(payload).subscribe({
-      next: () => {
-        this.successMessage = 'Registration successful! You can now sign in.';
+      next: (msg: any) => {
+        console.log({'msg':msg});
+        // this.successMessage = typeof msg === 'string'
+        //   ? msg
+        //   : 'Registration successful! Please check your email and click the verification link to activate your account.';
+        this.successMessage ='Registration successful! Please check your email and click the verification link to activate your account.';
         this.btntext = 'Register';
-        setTimeout(() => this.router.navigate(['/participant/signin']), 2000);
+        this.submitted = false;
+        this.signupForm.reset();
       },
       error: (error) => {
+        console.log({'error':error});
         this.btntext = 'Register';
         this.errormessage = (error.error) ? error.error : 'Registration failed. Please try again.';
       }

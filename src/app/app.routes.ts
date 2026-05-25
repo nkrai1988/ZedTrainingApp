@@ -56,6 +56,7 @@ import { UploadParticipantsBatchesComponent } from './pages/participants/upload-
 import { UploadParticipantsComponent } from './pages/participants/upload-participants/upload-participants.component';
 import { ParticipantSignInComponent } from './pages/auth-pages/participant-sign-in/participant-sign-in.component';
 import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-up/participant-sign-up.component';
+import { ParticipantVerifyEmailComponent } from './pages/auth-pages/participant-verify-email/participant-verify-email.component';
 import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
 import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
 
@@ -404,6 +405,11 @@ export const routes: Routes = [
     path:'participant/signup',
     component:ParticipantSignUpComponent,
     title:'Participant Register'
+  },
+  {
+    path:'participant/verifyemail',
+    component:ParticipantVerifyEmailComponent,
+    title:'Verify Email'
   },
   {
     path:'register',

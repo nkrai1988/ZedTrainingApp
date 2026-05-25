@@ -55,16 +55,10 @@ export class ParticipantSigninFormComponent {
     if (this.signinForm.invalid) return;
 
     this.btntext = 'Processing...';
-    this.authService.postLoginData(this.signinForm.value).subscribe({
+    this.authService.postParticipantSignIn(this.signinForm.value).subscribe({
       next: (response: any) => {
         this.helperService.storeLoginData(response);
-        if (this.helperService.IsParticipant()) {
-          this.router.navigate(['/participantdashboard']);
-        } else {
-          this.helperService.userLogOut();
-          this.errormessage = 'Access denied. This portal is for participants only.';
-          this.btntext = 'Sign in';
-        }
+        this.router.navigate(['/participantdashboard']);
       },
       error: (error) => {
         this.btntext = 'Sign in';

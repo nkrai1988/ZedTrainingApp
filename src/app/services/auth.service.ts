@@ -39,6 +39,14 @@ postParticipantRegister(body:any) {
    return this.api.postSimple(APPURLs.participantRegister, body);
 }
 
+postParticipantSignIn(body:any) {
+   return this.api.postSimple(APPURLs.participantSignin, body);
+}
+
+verifyParticipantEmail(token: string) {
+   return this.api.getSimple(APPURLs.participantVerifyEmail + '?token=' + token);
+}
+
 getRegisterDetailData(id:string){
    var query = "?id="+id;
    return this.api.getSimple(APPURLs.registrationdetail+query);

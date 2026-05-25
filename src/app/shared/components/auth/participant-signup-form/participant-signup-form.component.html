@@ -87,7 +87,7 @@
           <input
             formControlName="password"
             [type]="showPassword ? 'text' : 'password'"
-            placeholder="Min. 6 characters"
+            placeholder="Exactly 6 characters"
             class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
           />
           <span (click)="togglePasswordVisibility()" class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2">
@@ -99,7 +99,7 @@
           </span>
         </div>
         <p *ngIf="f['password'].errors?.['required'] && (f['password'].touched || submitted)" class="mt-1.5 text-xs text-error-500">Password is required</p>
-        <p *ngIf="f['password'].errors?.['minlength'] && f['password'].touched" class="mt-1.5 text-xs text-error-500">Password must be at least 6 characters</p>
+        <p *ngIf="(f['password'].errors?.['minlength'] || f['password'].errors?.['maxlength']) && f['password'].touched" class="mt-1.5 text-xs text-error-500">Password must be exactly 6 characters</p>
       </div>
 
       <div>

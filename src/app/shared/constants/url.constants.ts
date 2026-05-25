@@ -71,5 +71,7 @@
   participantUploadBatches:'participant/uploadbatches',
   participantUpload:'participant/upload',
   participantRegister:'participant/register',
+  participantSignin:'participant/signin',
+  participantVerifyEmail:'participant/verifyemail',
   participantMyProgrammes:'participant/myprogrammes',
 }
