@@ -39,7 +39,7 @@ export class ParticipantSigninFormComponent {
   ngOnInit() {
     this.errormessage = '';
     this.signinForm = this.fb.group({
-      email: ['', [Validators.required, Validators.maxLength(64)]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       password: ['', [Validators.required, Validators.maxLength(64)]]
     });
   }

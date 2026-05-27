@@ -24,6 +24,8 @@ import { AuthService } from '../../../../services/auth.service';
 })
 export class ParticipantSignupFormComponent {
 
+  currentStep = 1;
+  categories: any[] = [];
   showPassword = false;
   showConfirmPassword = false;
   btntext = 'Register';
@@ -37,13 +39,41 @@ export class ParticipantSignupFormComponent {
 
   ngOnInit() {
     this.signupForm = this.fb.group({
+      orgCategory: ['', [Validators.required]],
+      orgSubCategory: ['', [Validators.required]],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       mobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
+
+    this.authService.getParticipantCategories().subscribe({
+      next: (data: any) => this.categories = data,
+      error: () => {}
+    });
+  }
+
+  get filteredSubCategories(): any[] {
+    const selected = this.f['orgCategory'].value;
+    return this.categories.find(c => c.value === selected)?.subCategories ?? [];
+  }
+
+  onCategoryChange() {
+    this.f['orgSubCategory'].setValue('');
+  }
+
+  nextStep() {
+    this.submitted = true;
+    if (this.f['orgCategory'].invalid || this.f['orgSubCategory'].invalid) return;
+    this.submitted = false;
+    this.currentStep = 2;
+  }
+
+  prevStep() {
+    this.currentStep = 1;
+    this.submitted = false;
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -74,6 +104,8 @@ export class ParticipantSignupFormComponent {
 
     this.btntext = 'Processing...';
     const payload = {
+      orgCategory: this.f['orgCategory'].value,
+      orgSubCategory: this.f['orgSubCategory'].value,
       firstName: this.f['firstName'].value,
       lastName: this.f['lastName'].value,
       email: this.f['email'].value,

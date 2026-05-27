@@ -74,4 +74,5 @@
   participantSignin:'participant/signin',
   participantVerifyEmail:'participant/verifyemail',
   participantMyProgrammes:'participant/myprogrammes',
+  participantCategories:'participant/categories',
 }

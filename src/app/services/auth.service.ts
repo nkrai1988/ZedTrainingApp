@@ -47,6 +47,10 @@ verifyParticipantEmail(token: string) {
    return this.api.getSimple(APPURLs.participantVerifyEmail + '?token=' + token);
 }
 
+getParticipantCategories() {
+   return this.api.getSimple(APPURLs.participantCategories);
+}
+
 getRegisterDetailData(id:string){
    var query = "?id="+id;
    return this.api.getSimple(APPURLs.registrationdetail+query);

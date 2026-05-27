@@ -32,19 +32,16 @@
 
     <form (ngSubmit)="onSignIn()" [formGroup]="signinForm" class="space-y-6">
       <div>
-        <app-label>Username / Email <span class="text-error-500">*</span></app-label>
-        <div class="relative">
-          <input
-            type="text"
-            formControlName="email"
-            name="email"
-            placeholder="Enter your email"
-            class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
-          />
-          <p *ngIf="f['email'].invalid && (f['email'].touched || submitted)" class="mt-1.5 text-xs text-error-500">
-            Username is required
-          </p>
-        </div>
+        <app-label>Email <span class="text-error-500">*</span></app-label>
+        <input
+          type="email"
+          formControlName="email"
+          name="email"
+          placeholder="Enter your email"
+          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
+        />
+        <p *ngIf="f['email'].errors?.['required'] && (f['email'].touched || submitted)" class="mt-1.5 text-xs text-error-500">Email is required</p>
+        <p *ngIf="f['email'].errors?.['email'] && f['email'].touched" class="mt-1.5 text-xs text-error-500">Enter a valid email</p>
       </div>
 
       <div>
