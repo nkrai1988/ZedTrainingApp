@@ -1,0 +1,72 @@
+<div *ngIf="errormessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<div *ngIf="successmessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="subCategoryForm" class="space-y-6">
+
+  <app-component-card title="Add Sub Category">
+    <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+
+      <!-- Category Selector -->
+      <div class="lg:col-span-2">
+        <app-label>Select Category <span class="text-error-500">*</span></app-label>
+        <app-select
+          [options]="categoryOptions"
+          placeholder="Select a category"
+          [value]="selectedCategoryId"
+          (valueChange)="handleCategoryChange($event)"
+        ></app-select>
+        <p *ngIf="subCategoryForm.get('categoryId')?.invalid && subCategoryForm.get('categoryId')?.touched"
+           class="mt-1.5 text-xs text-error-500">Please select a category.</p>
+      </div>
+
+      <!-- Sub Category Value -->
+      <div>
+        <app-label for="value">Sub Category Value <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="value"
+          type="text"
+          placeholder="e.g. Assessor"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="subCategoryForm.get('value')?.invalid && subCategoryForm.get('value')?.touched"
+           class="mt-1.5 text-xs text-error-500">Sub category value is required.</p>
+      </div>
+
+      <!-- Sub Category Label -->
+      <div>
+        <app-label for="label">Display Label <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="label"
+          type="text"
+          placeholder="e.g. Assessor"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="subCategoryForm.get('label')?.invalid && subCategoryForm.get('label')?.touched"
+           class="mt-1.5 text-xs text-error-500">Display label is required.</p>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 mt-6 lg:justify-end">
+      <app-button size="md" variant="outline" (btnClick)="clearForm()">Clear</app-button>
+      <app-button size="md" variant="outline" (btnClick)="cancel()">Cancel</app-button>
+      <app-button size="md" (btnClick)="onSubmit()">Add Sub Category</app-button>
+    </div>
+
+  </app-component-card>
+
+</form>

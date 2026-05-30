@@ -59,6 +59,14 @@ import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-
 import { ParticipantVerifyEmailComponent } from './pages/auth-pages/participant-verify-email/participant-verify-email.component';
 import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
 import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
+import { AssessmentComponent } from './pages/assessment/assessment.component';
+import { CandidatesListComponent } from './pages/participants/candidates-list/candidates-list.component';
+import { QuestionnaireComponent } from './pages/questionnaire/questionnaire.component';
+import { CategoryListComponent } from './pages/org-categories/category-list/category-list.component';
+import { CategoryFormComponent } from './pages/org-categories/category-form/category-form.component';
+import { AddSubcategoryComponent } from './pages/org-categories/add-subcategory/add-subcategory.component';
+import { CategoryAdminListComponent } from './pages/category-admin/category-admin-list/category-admin-list.component';
+import { CategoryAdminFormComponent } from './pages/category-admin/category-admin-form/category-admin-form.component';
 
 export const routes: Routes = [
   {
@@ -278,10 +286,59 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'candidates',
+        component: CandidatesListComponent,
+        pathMatch: 'full',
+        title: 'Candidates',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'questionnaire',
+        component: QuestionnaireComponent,
+        pathMatch: 'full',
+        title: 'Questionnaire',
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'uploadparticipants/:id',
         component: UploadParticipantsComponent,
         pathMatch: 'full',
         title: 'Upload Participants',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'orgcategories',
+        component: CategoryListComponent,
+        pathMatch: 'full',
+        title: 'Org Categories',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'neworgcategory',
+        component: CategoryFormComponent,
+        pathMatch: 'full',
+        title: 'New Org Category',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'addsubcategory',
+        component: AddSubcategoryComponent,
+        pathMatch: 'full',
+        title: 'Add Sub Category',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'categoryadmins',
+        component: CategoryAdminListComponent,
+        pathMatch: 'full',
+        title: 'Category Admins',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'newcategoryadmin',
+        component: CategoryAdminFormComponent,
+        pathMatch: 'full',
+        title: 'New Category Admin',
         canActivate: [AuthGuard]
       },
       {
@@ -425,6 +482,11 @@ export const routes: Routes = [
     path:'trainingprogramme',
     component:TrainingprogrammesComponent,
     title:'Training'
+  },
+  {
+    path: 'assessment',
+    component: AssessmentComponent,
+    title: 'Self Assessment'
   },
   // error pages
   {

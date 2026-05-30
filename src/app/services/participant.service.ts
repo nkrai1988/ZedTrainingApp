@@ -3,6 +3,47 @@ import { Observable } from 'rxjs';
 import { ApiService } from '../shared/services/api.service';
 import { APPURLs } from '../shared/constants/url.constants';
 
+// ── Models ───────────────────────────────────────────────────────────────────
+
+export interface MyProgramme {
+  programmeName: string;
+  batchNo: string;
+  qpCode: string;
+  startDate: string;
+  endDate: string;
+  venueName: string;
+  location: string;
+  status: 'completed' | 'ongoing' | 'upcoming';
+}
+
+export interface UploadBatch {
+  batchNo: string;
+  qpName: string;
+  venueName: string;
+  strStartDate: string;
+  strEndDate: string;
+  qpCode: string;
+  started: number;
+}
+
+export interface CandidatesFilter {
+  applyingFor: string;
+  orgPartnerId: string;
+  isBlocked: boolean;
+  searchText: string;
+  page: number;
+  pageSize: number;
+}
+
+export interface CandidatesResult {
+  data: Record<string, any>[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+}
+
+// ── Service ──────────────────────────────────────────────────────────────────
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,15 +51,19 @@ export class ParticipantService {
 
   constructor(private api: ApiService) {}
 
-  getUploadBatches(): Observable<any[]> {
+  getMyEnrolledProgrammes(): Observable<MyProgramme[]> {
+    return this.api.getSimple(APPURLs.participantMyProgrammes);
+  }
+
+  getUploadBatches(): Observable<UploadBatch[]> {
     return this.api.getSimple(APPURLs.participantUploadBatches);
   }
 
-  uploadParticipants(batchNo: string, file: File): Observable<any> {
+  uploadParticipants(batchNo: string, file: File): Observable<{ message: string }> {
     return this.api.postWithFile(`${APPURLs.participantUpload}/${batchNo}`, {}, file, 'file');
   }
 
-  getMyEnrolledProgrammes(): Observable<any[]> {
-    return this.api.getSimple(APPURLs.participantMyProgrammes);
+  getCandidates(filter: CandidatesFilter): Observable<CandidatesResult> {
+    return this.api.postSimpleWithHeader(APPURLs.participantGetCandidates, filter);
   }
 }

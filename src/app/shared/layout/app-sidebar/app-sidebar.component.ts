@@ -129,12 +129,33 @@ export class AppSidebarComponent {
     {
      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
       name: "Certificates",
-      path: "/certificates",  
+      path: "/certificates",
       subItems: [
         { name: "Certificates", path: "/certificates" }
         ],
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]     
+      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]
     },
+    // {
+    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
+    //   name: "Org Categories",
+    //   path: "/orgcategories",
+    //   subItems: [
+    //     { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
+    //   ],
+    //   roleaccess: [AppRoles.SuperAdmin]
+    // },
+    // {
+    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
+    //   name: "Category Admins",
+    //   path: "/categoryadmins",
+    //   subItems: [
+    //     { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
+    //   ],
+    //   roleaccess: [AppRoles.SuperAdmin]
+    // },
     
     // {
     //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,
@@ -423,9 +444,30 @@ export class AppSidebarComponent {
       name: "Certificates",
       path: "/certificates",
       subItems: [
-        { name: "Certificates", path: "/certificates" ,roleaccess:[AppRoles.SuperAdmin]}
+        { name: "Certificates", path: "/certificates", roleaccess:[AppRoles.SuperAdmin] }
         ],
       roleaccess:[AppRoles.SuperAdmin]
+    },
+    {
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
+      name: "Org Categories",
+      path: "/orgcategories",
+      subItems: [
+        { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
+    },
+    {
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
+      name: "Category Admins",
+      path: "/categoryadmins",
+      subItems: [
+        { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
     },
 
     // {

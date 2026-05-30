@@ -1,0 +1,126 @@
+<div *ngIf="errormessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<div *ngIf="successmessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="categoryForm" class="space-y-6">
+
+  <!-- Category Details -->
+  <app-component-card title="Category Details">
+    <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+
+      <div>
+        <app-label for="value">Category Value <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="value"
+          type="text"
+          placeholder="e.g. ZED"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="categoryForm.get('value')?.invalid && categoryForm.get('value')?.touched"
+           class="mt-1.5 text-xs text-error-500">Category value is required.</p>
+      </div>
+
+      <div>
+        <app-label for="label">Display Label <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="label"
+          type="text"
+          placeholder="e.g. ZED"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="categoryForm.get('label')?.invalid && categoryForm.get('label')?.touched"
+           class="mt-1.5 text-xs text-error-500">Display label is required.</p>
+      </div>
+
+    </div>
+  </app-component-card>
+
+  <!-- Sub Categories -->
+  <app-component-card title="Sub Categories">
+
+    <div formArrayName="subCategories" class="space-y-4">
+
+      @for (subCtrl of subCategories.controls; track $index) {
+      <div [formGroupName]="$index"
+           class="grid grid-cols-1 gap-x-4 gap-y-3 lg:grid-cols-2 p-4 rounded-lg border border-gray-200 bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.02]">
+
+        <div class="lg:col-span-2 flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+            Sub Category {{ $index + 1 }}
+          </span>
+          <button
+            type="button"
+            (click)="removeSubCategory($index)"
+            [disabled]="subCategories.length === 1"
+            class="inline-flex items-center gap-1 text-xs text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed dark:text-red-400">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Remove
+          </button>
+        </div>
+
+        <div>
+          <app-label>Value <span class="text-error-500">*</span></app-label>
+          <input
+            formControlName="value"
+            type="text"
+            placeholder="e.g. Assessor"
+            class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+          />
+          <p *ngIf="subCtrl.get('value')?.invalid && subCtrl.get('value')?.touched"
+             class="mt-1.5 text-xs text-error-500">Value is required.</p>
+        </div>
+
+        <div>
+          <app-label>Display Label <span class="text-error-500">*</span></app-label>
+          <input
+            formControlName="label"
+            type="text"
+            placeholder="e.g. Assessor"
+            class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+          />
+          <p *ngIf="subCtrl.get('label')?.invalid && subCtrl.get('label')?.touched"
+             class="mt-1.5 text-xs text-error-500">Label is required.</p>
+        </div>
+
+      </div>
+      }
+
+    </div>
+
+    <!-- Add Sub Category -->
+    <div class="mt-4">
+      <button
+        type="button"
+        (click)="addSubCategory()"
+        class="inline-flex items-center gap-2 rounded-lg border border-dashed border-blue-300 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-600 hover:bg-blue-100 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Sub Category
+      </button>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex items-center gap-3 mt-6 lg:justify-end">
+      <app-button size="md" variant="outline" (btnClick)="clearForm()">Clear</app-button>
+      <app-button size="md" variant="outline" (btnClick)="cancel()">Cancel</app-button>
+      <app-button size="md" (btnClick)="onSubmit()">Create Category</app-button>
+    </div>
+
+  </app-component-card>
+
+</form>

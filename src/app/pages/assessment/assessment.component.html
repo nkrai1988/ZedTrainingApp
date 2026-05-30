@@ -1,0 +1,186 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl">
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">ZED Self Assessment</h1>
+      <p class="text-gray-500 text-sm mt-1">Complete all steps to submit your assessment</p>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="flex items-center justify-center mb-8 gap-2">
+      <ng-container *ngFor="let s of [1, 2, 3, 4]; let i = index">
+        <div class="flex items-center">
+          <div [class]="'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ' +
+            (step > s ? 'bg-green-500 text-white' : step === s ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-500')">
+            <span *ngIf="step > s">&#10003;</span>
+            <span *ngIf="step <= s">{{ s }}</span>
+          </div>
+          <span class="hidden sm:block ml-1 text-xs text-gray-500">
+            {{ s === 1 ? 'Verify' : s === 2 ? 'Questions' : s === 3 ? 'Photo' : 'Done' }}
+          </span>
+        </div>
+        <div *ngIf="i < 3" class="w-8 h-0.5 bg-gray-300 mx-1"></div>
+      </ng-container>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-md p-6 sm:p-8">
+
+      <!-- Error Alert -->
+      <div *ngIf="errorMessage" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        {{ errorMessage }}
+      </div>
+
+      <!-- STEP 1: Verify Identity -->
+      <form *ngIf="step === 1" [formGroup]="verifyForm" (ngSubmit)="checkStatus()">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Step 1: Verify Your Identity</h2>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-600 mb-1">Email Address</label>
+          <input formControlName="emailId" type="email" placeholder="Enter your registered email"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <p *ngIf="verifyForm.get('emailId')?.touched && verifyForm.get('emailId')?.invalid"
+            class="text-red-500 text-xs mt-1">Valid email is required.</p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-600 mb-1">Aadhaar / Mobile No.</label>
+          <input formControlName="aadhaarNo" type="text" placeholder="Enter Aadhaar or Mobile number"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <p *ngIf="verifyForm.get('aadhaarNo')?.touched && verifyForm.get('aadhaarNo')?.invalid"
+            class="text-red-500 text-xs mt-1">This field is required.</p>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-600 mb-1">Batch Number</label>
+          <input formControlName="batchNo" type="text" placeholder="Enter your batch number"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <p *ngIf="verifyForm.get('batchNo')?.touched && verifyForm.get('batchNo')?.invalid"
+            class="text-red-500 text-xs mt-1">Batch number is required.</p>
+        </div>
+
+        <button type="submit" [disabled]="loading"
+          class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold py-2.5 rounded-lg transition text-sm">
+          {{ loading ? 'Verifying...' : 'Verify & Continue' }}
+        </button>
+      </form>
+
+      <!-- STEP 2: Questions -->
+      <div *ngIf="step === 2">
+        <h2 class="text-lg font-semibold text-gray-700 mb-1">Step 2: Self Assessment Questions</h2>
+        <p *ngIf="candidateName" class="text-sm text-gray-500 mb-4">Welcome, {{ candidateName }}</p>
+
+        <div *ngIf="loading" class="text-center py-8 text-gray-400">Loading questions...</div>
+
+        <div *ngIf="!loading">
+          <div *ngFor="let q of questions; let i = index" class="mb-6 pb-5 border-b border-gray-100 last:border-0">
+            <p class="text-sm font-medium text-gray-700 mb-2">
+              <span class="text-blue-600 font-bold mr-1">{{ i + 1 }}.</span>{{ q.questionName }}
+            </p>
+            <p *ngIf="q.sectionName" class="text-xs text-gray-400 mb-2">Section: {{ q.sectionName }}</p>
+
+            <!-- Radio / Single Select -->
+            <div *ngIf="q.answerType === 'radio' || q.answerType === 'single'" class="space-y-2">
+              <label *ngFor="let opt of q.options"
+                class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-50"
+                [class.bg-blue-50]="q.answerCode === opt.optionCode">
+                <input type="radio" [name]="'q_' + i" [value]="opt.optionCode"
+                  [checked]="q.answerCode === opt.optionCode"
+                  (change)="selectAnswer(q, opt.optionCode, opt.optionName)"
+                  class="accent-blue-600" />
+                <span class="text-sm text-gray-600">{{ opt.optionName }}</span>
+              </label>
+            </div>
+
+            <!-- Text / Open -->
+            <div *ngIf="q.answerType === 'text' || q.answerType === 'open'">
+              <textarea rows="3" [value]="q.answerText || ''"
+                (input)="setTextAnswer(q, $any($event.target).value)"
+                placeholder="Enter your answer..."
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+              </textarea>
+            </div>
+
+            <!-- Options with Other -->
+            <div *ngIf="q.answerType === 'other'">
+              <div class="space-y-2 mb-2">
+                <label *ngFor="let opt of q.options"
+                  class="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-gray-50">
+                  <input type="radio" [name]="'q_' + i" [value]="opt.optionCode"
+                    [checked]="q.answerCode === opt.optionCode"
+                    (change)="selectAnswer(q, opt.optionCode, opt.optionName)"
+                    class="accent-blue-600" />
+                  <span class="text-sm text-gray-600">{{ opt.optionName }}</span>
+                </label>
+              </div>
+              <input type="text" placeholder="Other (specify)" [value]="q.answerOther || ''"
+                (input)="setOtherAnswer(q, $any($event.target).value)"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300" />
+            </div>
+          </div>
+
+          <div *ngIf="!allAnswered()" class="text-amber-600 text-xs mb-3">
+            Please answer all questions to continue.
+          </div>
+
+          <button (click)="submitQuestions()" [disabled]="loading || !allAnswered()"
+            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold py-2.5 rounded-lg transition text-sm">
+            {{ loading ? 'Saving...' : 'Save & Continue' }}
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Photo Upload -->
+      <div *ngIf="step === 3">
+        <h2 class="text-lg font-semibold text-gray-700 mb-2">Step 3: Upload Your Photo</h2>
+        <p class="text-sm text-gray-400 mb-5">A selfie or passport photo is required for verification.</p>
+
+        <!-- Preview -->
+        <div *ngIf="photoPreview" class="mb-4 flex justify-center">
+          <img [src]="photoPreview" alt="Preview" class="w-32 h-32 object-cover rounded-full border-4 border-blue-200" />
+        </div>
+
+        <!-- Upload input -->
+        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center mb-4 hover:border-blue-400 transition">
+          <label class="cursor-pointer">
+            <span class="block text-gray-500 text-sm mb-2">
+              {{ photoPreview ? 'Change photo' : 'Click to select a photo' }}
+            </span>
+            <span class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-medium px-4 py-2 rounded-lg transition">
+              Browse
+            </span>
+            <input type="file" accept="image/jpeg,image/png,image/gif" class="hidden" (change)="onFileSelected($event)" />
+          </label>
+        </div>
+
+        <div class="flex gap-3">
+          <button (click)="uploadPhoto()" [disabled]="loading"
+            class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold py-2.5 rounded-lg transition text-sm">
+            {{ loading ? 'Uploading...' : (photoPreview ? 'Upload & Submit' : 'Skip & Submit') }}
+          </button>
+          <button (click)="skipPhoto()" [disabled]="loading"
+            class="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-600 font-semibold py-2.5 rounded-lg transition text-sm">
+            Skip
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Success -->
+      <div *ngIf="step === 4" class="text-center py-6">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold text-gray-800 mb-2">Assessment Submitted!</h2>
+        <p class="text-gray-500 text-sm">
+          Your self-assessment has been successfully submitted.<br />
+          You may close this page.
+        </p>
+        <p *ngIf="candidateName" class="mt-3 text-blue-600 font-medium text-sm">Thank you, {{ candidateName }}!</p>
+      </div>
+
+    </div>
+  </div>
+</div>

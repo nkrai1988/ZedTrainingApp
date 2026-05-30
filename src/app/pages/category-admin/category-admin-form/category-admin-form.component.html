@@ -1,0 +1,120 @@
+<div *ngIf="errormessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<div *ngIf="successmessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="adminForm" class="space-y-6">
+
+  <app-component-card title="New Category Admin">
+    <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+
+      <!-- First Name -->
+      <div>
+        <app-label for="firstName">First Name <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="firstName"
+          type="text"
+          placeholder="e.g. John"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="adminForm.get('firstName')?.invalid && adminForm.get('firstName')?.touched"
+           class="mt-1.5 text-xs text-error-500">First name is required.</p>
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <app-label for="lastName">Last Name <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="lastName"
+          type="text"
+          placeholder="e.g. Doe"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="adminForm.get('lastName')?.invalid && adminForm.get('lastName')?.touched"
+           class="mt-1.5 text-xs text-error-500">Last name is required.</p>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <app-label for="email">Email <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="e.g. john@example.com"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="adminForm.get('email')?.invalid && adminForm.get('email')?.touched"
+           class="mt-1.5 text-xs text-error-500">A valid email is required.</p>
+      </div>
+
+      <!-- Mobile -->
+      <div>
+        <app-label for="mobile">Mobile No. <span class="text-error-500">*</span></app-label>
+        <input
+          formControlName="mobile"
+          type="text"
+          placeholder="e.g. 9876543210"
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
+        <p *ngIf="adminForm.get('mobile')?.invalid && adminForm.get('mobile')?.touched"
+           class="mt-1.5 text-xs text-error-500">Mobile number is required.</p>
+      </div>
+
+      <!-- Category -->
+      <div>
+        <app-label>Category <span class="text-error-500">*</span></app-label>
+        <app-select
+          [options]="categoryOptions"
+          placeholder="Select a category"
+          [value]="selectedCategory"
+          (valueChange)="handleCategoryChange($event)"
+        ></app-select>
+        <p *ngIf="adminForm.get('orgCategory')?.invalid && adminForm.get('orgCategory')?.touched"
+           class="mt-1.5 text-xs text-error-500">Please select a category.</p>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <app-label>Auto-generated Password</app-label>
+        <div class="flex items-center gap-2">
+          <input
+            formControlName="password"
+            type="text"
+            readonly
+            class="h-11 flex-1 rounded-lg border appearance-none px-4 py-2.5 text-sm font-mono shadow-theme-xs bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-300 cursor-default"
+          />
+          <button
+            type="button"
+            (click)="regeneratePassword()"
+            title="Regenerate password"
+            class="h-11 inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 text-sm font-medium text-gray-600 hover:bg-gray-50 dark:border-white/[0.1] dark:bg-transparent dark:text-gray-400 dark:hover:bg-white/[0.05]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+            Regenerate
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 mt-6 lg:justify-end">
+      <app-button size="md" variant="outline" (btnClick)="cancel()">Cancel</app-button>
+      <app-button size="md" (btnClick)="onSubmit()">Create Admin</app-button>
+    </div>
+
+  </app-component-card>
+
+</form>

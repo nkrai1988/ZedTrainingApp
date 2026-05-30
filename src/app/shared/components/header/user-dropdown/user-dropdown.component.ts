@@ -15,7 +15,7 @@ export class UserDropdownComponent {
   //private helper = Inject(HelperService);
   userEmail='';
   userName='';
-  constructor(private helper:HelperService){
+  constructor(public helper:HelperService){
 
   }
   ngOnInit(){

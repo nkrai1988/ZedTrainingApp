@@ -1,0 +1,113 @@
+<div *ngIf="successmessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+
+  <div class="flex flex-col items-start gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Org Categories</h3>
+      <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Manage programme categories and their sub-categories</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a routerLink="/addsubcategory"
+         class="inline-flex items-center gap-2 rounded-lg border border-blue-300 bg-white px-4 py-2.5 text-sm font-medium text-blue-600 shadow-theme-xs hover:bg-blue-50 dark:border-blue-500/30 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-500/10">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Sub Category
+      </a>
+      <a routerLink="/neworgcategory"
+         class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-blue-700">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Category
+      </a>
+    </div>
+  </div>
+
+  <div class="max-w-full overflow-auto flex-1 min-h-0 max-h-[600px]">
+
+    <table class="min-w-full" *ngIf="!dataLoadProgress && dataRow.length">
+      <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+        <tr>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">S.No</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Category Value</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Label</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Sub Categories</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of dataRow; track $index) {
+        <tr class="border-t border-gray-100 dark:border-white/[0.05] hover:bg-gray-50 dark:hover:bg-white/[0.02]">
+
+          <td class="px-6 py-3.5">
+            <span class="text-theme-sm font-medium text-gray-700 dark:text-gray-400">{{ $index + 1 }}</span>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <span class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ row.value }}</span>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <span class="text-theme-sm text-gray-700 dark:text-gray-400">{{ row.label }}</span>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <div class="flex flex-wrap gap-1.5">
+              @if (row.subCategories && row.subCategories.length) {
+                @for (sub of row.subCategories; track $index) {
+                  <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+                        [ngClass]="sub.isActive
+                          ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400'
+                          : 'bg-gray-100 text-gray-400 dark:bg-white/[0.05] dark:text-gray-500 line-through'">
+                    {{ sub.label }}
+                  </span>
+                }
+              } @else {
+                <span class="text-xs text-gray-400 dark:text-gray-500 italic">No sub-categories</span>
+              }
+            </div>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <app-badge variant="light" [color]="getStatusBadgeColor(row.isActive)" size="sm">
+              {{ row.isActive ? 'Active' : 'Inactive' }}
+            </app-badge>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <button
+              (click)="toggleStatus(row)"
+              [title]="row.isActive ? 'Deactivate' : 'Activate'"
+              class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium border transition-colors"
+              [ngClass]="row.isActive
+                ? 'border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10'
+                : 'border-green-200 text-green-600 hover:bg-green-50 dark:border-green-500/30 dark:text-green-400 dark:hover:bg-green-500/10'">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path *ngIf="row.isActive" stroke-linecap="round" stroke-linejoin="round"
+                  d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"/>
+                <path *ngIf="!row.isActive" stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+              </svg>
+              {{ row.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+          </td>
+
+        </tr>
+        }
+      </tbody>
+    </table>
+
+    <app-datanotfound *ngIf="dataRow.length === 0 && !dataLoadProgress"></app-datanotfound>
+    <app-dataloadinprogress *ngIf="dataLoadProgress"></app-dataloadinprogress>
+
+  </div>
+</div>
