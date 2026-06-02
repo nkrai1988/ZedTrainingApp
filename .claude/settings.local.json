@@ -3,7 +3,20 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"d:\\\\AZED\\\\AngularTemplate\\\\zedFrontEndApp\\\\src\\\\app\" -Recurse -Filter \"*.component.ts\")",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Measure-Object -Line)"
+      "Bash(Measure-Object -Line)",
+      "Bash(sqlcmd *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\AppAndAPI\\\\monitoringapi\\\\ZedTrainingAPI\\\\zedtraningapi\" -Recurse)",
+      "Bash(Measure-Object)",
+      "PowerShell(sqlcmd *)",
+      "PowerShell(dotnet build *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\AppAndAPI\\\\monitoringapi\" -Recurse -Filter \"*.sql\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\AppAndAPI\\\\monitoringapi\\\\ZedTrainingAPI\\\\zedtraningapi\\\\SQL\" -Filter \"*.sql\")",
+      "Bash(Select-Object Name)",
+      "Bash(powershell *)",
+      "Bash(dir \"D:\\\\AZED\\\\MonitoringZedApp\\\\ZedTrainingApp\\\\public\" /s /b)",
+      "Bash(findstr /i \"\\\\.pdf\")",
+      "Bash(npx ng *)"
     ]
   }
 }

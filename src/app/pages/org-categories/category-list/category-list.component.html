@@ -6,6 +6,14 @@
   </app-component-card>
 </div>
 
+<div *ngIf="errormessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
 <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
 
   <div class="flex flex-col items-start gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -37,6 +45,7 @@
       <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">S.No</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Logo</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Category Value</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Label</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Sub Categories</th>
@@ -50,6 +59,16 @@
 
           <td class="px-6 py-3.5">
             <span class="text-theme-sm font-medium text-gray-700 dark:text-gray-400">{{ $index + 1 }}</span>
+          </td>
+
+          <!-- Logo thumbnail -->
+          <td class="px-6 py-3.5">
+            <div class="w-10 h-10 rounded-lg border border-gray-200 bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.03] flex items-center justify-center overflow-hidden">
+              <img *ngIf="row.logoPath" [src]="getLogoUrl(row.logoPath)" alt="Logo" class="w-full h-full object-contain p-0.5" />
+              <svg *ngIf="!row.logoPath" class="w-5 h-5 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 20.25h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12.75c0 .828.672 1.5 1.5 1.5z"/>
+              </svg>
+            </div>
           </td>
 
           <td class="px-6 py-3.5">
@@ -84,21 +103,33 @@
           </td>
 
           <td class="px-6 py-3.5">
-            <button
-              (click)="toggleStatus(row)"
-              [title]="row.isActive ? 'Deactivate' : 'Activate'"
-              class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium border transition-colors"
-              [ngClass]="row.isActive
-                ? 'border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10'
-                : 'border-green-200 text-green-600 hover:bg-green-50 dark:border-green-500/30 dark:text-green-400 dark:hover:bg-green-500/10'">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path *ngIf="row.isActive" stroke-linecap="round" stroke-linejoin="round"
-                  d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"/>
-                <path *ngIf="!row.isActive" stroke-linecap="round" stroke-linejoin="round"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
-              </svg>
-              {{ row.isActive ? 'Deactivate' : 'Activate' }}
-            </button>
+            <div class="flex items-center gap-2">
+              <button
+                (click)="toggleStatus(row)"
+                [title]="row.isActive ? 'Deactivate' : 'Activate'"
+                class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium border transition-colors"
+                [ngClass]="row.isActive
+                  ? 'border-red-200 text-red-600 hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10'
+                  : 'border-green-200 text-green-600 hover:bg-green-50 dark:border-green-500/30 dark:text-green-400 dark:hover:bg-green-500/10'">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path *ngIf="row.isActive" stroke-linecap="round" stroke-linejoin="round"
+                    d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"/>
+                  <path *ngIf="!row.isActive" stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>
+                </svg>
+                {{ row.isActive ? 'Deactivate' : 'Activate' }}
+              </button>
+
+              <button
+                (click)="openLogoModal(row)"
+                title="Update Logo"
+                class="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium border border-blue-200 text-blue-600 hover:bg-blue-50 dark:border-blue-500/30 dark:text-blue-400 dark:hover:bg-blue-500/10 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 20.25h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12.75c0 .828.672 1.5 1.5 1.5z"/>
+                </svg>
+                Update Logo
+              </button>
+            </div>
           </td>
 
         </tr>
@@ -111,3 +142,84 @@
 
   </div>
 </div>
+
+<!-- Update Logo Modal -->
+<app-modal [isOpen]="isLogoModalOpen" (close)="closeLogoModal()" className="max-w-md mx-4">
+  <div class="p-6 sm:p-8">
+
+    <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 mb-1">Update Category Logo</h4>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      {{ selectedCategory?.label }} — choose a new image to replace the current logo.
+    </p>
+
+    <!-- Current / Preview -->
+    <div class="flex flex-col items-center gap-4 mb-6">
+      <div class="w-32 h-32 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.03] flex items-center justify-center overflow-hidden">
+        <img *ngIf="logoPreviewUrl" [src]="logoPreviewUrl" alt="Logo preview" class="w-full h-full object-contain p-2" />
+        <svg *ngIf="!logoPreviewUrl" class="w-12 h-12 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 20.25h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12.75c0 .828.672 1.5 1.5 1.5z"/>
+        </svg>
+      </div>
+      <p *ngIf="selectedLogoFile" class="text-xs text-gray-500 dark:text-gray-400 text-center max-w-xs truncate">
+        {{ selectedLogoFile.name }}
+      </p>
+    </div>
+
+    <!-- File input -->
+    <input
+      #modalLogoInput
+      type="file"
+      accept="image/jpeg,image/png,image/gif,image/svg+xml,image/webp"
+      class="hidden"
+      (change)="onLogoSelected($event)"
+    />
+
+    <div class="flex flex-col gap-2 mb-6">
+      <button
+        type="button"
+        (click)="modalLogoInput.click()"
+        class="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-white/80 dark:hover:bg-white/[0.06] transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+        {{ selectedLogoFile ? 'Choose Different Image' : 'Choose Image' }}
+      </button>
+      <button
+        *ngIf="selectedLogoFile"
+        type="button"
+        (click)="removeLogo(modalLogoInput)"
+        class="w-full inline-flex items-center justify-center gap-1.5 text-xs text-red-500 hover:text-red-700 dark:text-red-400 py-1">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+        Remove selection
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center justify-end gap-3">
+      <button
+        type="button"
+        (click)="closeLogoModal()"
+        [disabled]="logoUploading"
+        class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.08] dark:bg-transparent dark:text-white/80 dark:hover:bg-white/[0.05] disabled:opacity-50 transition-colors">
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="uploadLogo(modalLogoInput)"
+        [disabled]="!selectedLogoFile || logoUploading"
+        class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        <svg *ngIf="logoUploading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+        </svg>
+        <svg *ngIf="!logoUploading" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+        {{ logoUploading ? 'Uploading…' : 'Save Logo' }}
+      </button>
+    </div>
+
+  </div>
+</app-modal>

@@ -448,27 +448,36 @@ export class AppSidebarComponent {
         ],
       roleaccess:[AppRoles.SuperAdmin]
     },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
-      name: "Org Categories",
-      path: "/orgcategories",
-      subItems: [
-        { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
-        { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
-        { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
-      ],
-      roleaccess: [AppRoles.SuperAdmin]
-    },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
-      name: "Category Admins",
-      path: "/categoryadmins",
-      subItems: [
-        { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
-        { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
-      ],
-      roleaccess: [AppRoles.SuperAdmin]
-    },
+    // {
+    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C12.4142 1.25 12.75 1.58579 12.75 2V3.32698C13.5904 3.47668 14.3889 3.75916 15.1206 4.15224L16.0555 3.21734C16.3484 2.92445 16.8233 2.92445 17.1162 3.21734L20.7827 6.88388C21.0756 7.17678 21.0756 7.65165 20.7827 7.94454L19.8478 8.87944C20.2409 9.61112 20.5233 10.4096 20.673 11.25H22C22.4142 11.25 22.75 11.5858 22.75 12C22.75 12.4142 22.4142 12.75 22 12.75H20.673C20.5233 13.5904 20.2409 14.3889 19.8478 15.1206L20.7827 16.0555C21.0756 16.3484 21.0756 16.8233 20.7827 17.1162L17.1162 20.7827C16.8233 21.0756 16.3484 21.0756 16.0555 20.7827L15.1206 19.8478C14.3889 20.2409 13.5904 20.5233 12.75 20.673V22C12.75 22.4142 12.4142 22.75 12 22.75C11.5858 22.75 11.25 22.4142 11.25 22V20.673C10.4096 20.5233 9.61112 20.2409 8.87944 19.8478L7.94454 20.7827C7.65165 21.0756 7.17678 21.0756 6.88388 20.7827L3.21734 17.1162C2.92445 16.8233 2.92445 16.3484 3.21734 16.0555L4.15224 15.1206C3.75916 14.3889 3.47668 13.5904 3.32698 12.75H2C1.58579 12.75 1.25 12.4142 1.25 12C1.25 11.5858 1.58579 11.25 2 11.25H3.32698C3.47668 10.4096 3.75916 9.61112 4.15224 8.87944L3.21734 7.94454C2.92445 7.65165 2.92445 7.17678 3.21734 6.88388L6.88388 3.21734C7.17678 2.92445 7.65165 2.92445 7.94454 3.21734L8.87944 4.15224C9.61112 3.75916 10.4096 3.47668 11.25 3.32698V2C11.25 1.58579 11.5858 1.25 12 1.25ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25ZM6.75 12C6.75 9.10051 9.10051 6.75 12 6.75C14.8995 6.75 17.25 9.10051 17.25 12C17.25 14.8995 14.8995 17.25 12 17.25C9.10051 17.25 6.75 14.8995 6.75 12Z" fill="currentColor"></path></svg>`,
+    //   name: "Reg. Form Config",
+    //   path: "/registration-config",
+    //   subItems: [
+    //     { name: "Registration Form Config", path: "/registration-config", roleaccess: [AppRoles.SuperAdmin] }
+    //   ],
+    //   roleaccess: [AppRoles.SuperAdmin]
+    // },
+    // {
+    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
+    //   name: "Org Categories",
+    //   path: "/orgcategories",
+    //   subItems: [
+    //     { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
+    //   ],
+    //   roleaccess: [AppRoles.SuperAdmin]
+    // },
+    // {
+    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
+    //   name: "Category Admins",
+    //   path: "/categoryadmins",
+    //   subItems: [
+    //     { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
+    //     { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
+    //   ],
+    //   roleaccess: [AppRoles.SuperAdmin]
+    // },
 
     // {
     //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,

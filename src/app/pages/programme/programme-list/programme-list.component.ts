@@ -51,7 +51,7 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
 })
 export class ProgrammeListComponent {
   constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService){
-      
+
     }
 
     filterForm!: FormGroup;
@@ -113,10 +113,9 @@ handleStatusSelectChange(value: string) {
     successmessage='';
     ngOnInit(){
       this.createForm();
-      this.loadStatus();      
+      this.loadStatus();
       this.getProgrammesFromServer();
       this.loadStates();
-      
     }
 
     getProgrammesFromServer(){
@@ -129,11 +128,11 @@ handleStatusSelectChange(value: string) {
     }
 
     createForm(){
-     this.filterForm = this.fb.group({      
-      StateName: ['', [Validators.required]],
-      Status: ['', [Validators.required]],      
-      StartDate: ['', [Validators.required]],
-      EndDate: ['', [Validators.required]]      
+     this.filterForm = this.fb.group({
+      StateName: [''],
+      Status: [''],
+      StartDate: [''],
+      EndDate: ['']
     });
   }
   get f() { return this.filterForm.controls; }
@@ -151,10 +150,10 @@ handleStatusSelectChange(value: string) {
 
   onFilterSubmit(){
     console.log(this.filterForm.value)
-    let tempListData= this.programmeList;    
+    let tempListData= this.programmeList;
     if(this.filterForm.value.StateName){
-     tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);     
-    }    
+     tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);
+    }
     if(this.filterForm.value.Status){
      tempListData = tempListData.filter((p:any)=> p.status == this.filterForm.value.Status);
     }
@@ -162,7 +161,6 @@ handleStatusSelectChange(value: string) {
       tempListData = tempListData.filter((p:any)=> (p.strStartDateFilter == this.filterForm.value.StartDate && p.strEndDateFilter == this.filterForm.value.EndDate));
     }
     this.dataRow = tempListData;
-    
 
   }
 
@@ -270,7 +268,7 @@ handleStatusSelectChange(value: string) {
 
   getProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getProgrammeList(this.helperService.getUserEmail()).subscribe({
+    this.programmeservice.getProgrammeList(this.helperService.getUserEmail(), this.helperService.getOrgCategory()).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -285,7 +283,7 @@ handleStatusSelectChange(value: string) {
 
   getAdminProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getAdminProgrammeList().subscribe({
+    this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory()).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -320,7 +318,6 @@ handleStatusSelectChange(value: string) {
     console.log({'this.statusOptions':this.statusOptions});
   }
 
-  
   
 
   

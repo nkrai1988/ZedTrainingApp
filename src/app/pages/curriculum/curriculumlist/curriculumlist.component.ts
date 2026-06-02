@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { BasicTableTwoComponent } from '../../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { AgencyService } from '../../../services/agencies.service';
@@ -47,7 +48,7 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './curriculumlist.component.html',
   styleUrl: './curriculumlist.component.css',
 })
-export class CurriculumlistComponent {
+export class CurriculumlistComponent implements OnInit, OnDestroy {
   constructor(private service:CurriculumService,public modal: ModalService,public helperService:HelperService,private router:Router){
       
     }
@@ -63,6 +64,8 @@ export class CurriculumlistComponent {
     programmetype='';
     programmename='';
     newProgrammeclicked=false;
+    orgCategory = '';
+    private subscription: Subscription = new Subscription();
   openModal(row:any) {
     this.modelItem=row;
     console.log({'modelItem':this.modelItem});
@@ -77,9 +80,21 @@ export class CurriculumlistComponent {
     successmessage='';
     errormessage='';
     programmetypeOptions:any=[];
-    ngOnInit(){
-      this.getCurriculum();
+    ngOnInit() {
       this.loadProgrammeType();
+      if (this.helperService.IsSuperAdmin()) {
+        this.subscription = this.helperService.category$.subscribe(val => {
+          this.orgCategory = val;
+          this.getCurriculum();
+        });
+      } else {
+        this.orgCategory = this.helperService.getOrgCategory() || '';
+        this.getCurriculum();
+      }
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
     }
 
     clearForm(){
@@ -94,7 +109,7 @@ export class CurriculumlistComponent {
       console.log(this.programmename,this.programmetype);
       if(this.programmename && this.programmetype){
         this.newProgrammeclicked=false;
-          this.service.postCurriculum({ProgrammeType:this.programmetype,ProgrammeName:this.programmename}).subscribe(
+          this.service.postCurriculum({ProgrammeType:this.programmetype,ProgrammeName:this.programmename,OrgCategory:this.orgCategory}).subscribe(
             {
               next:(response:any[])=>{
               this.successmessage ="New Curriculum added successfully.";
@@ -156,7 +171,7 @@ export class CurriculumlistComponent {
 
     getCurriculum(){
     this.dataLoadProgress=true;
-    this.service.getCurriculumList(this.checkedValue).subscribe({
+    this.service.getCurriculumList(this.checkedValue, this.orgCategory).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.dataLoadProgress=false;

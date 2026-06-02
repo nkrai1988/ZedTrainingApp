@@ -111,7 +111,7 @@ export class TechnicalskillsComponent {
     dateValue: any;
     @ViewChild('fileInput') fileInput!: ElementRef;
     @Output() onSkillSubmit = new EventEmitter<any>();
-    @Input() skillList = [];
+    @Input() skillList: any[] = [];
     disciplineMeta:any;
     viewOnly=false;
     ngOnInit(){

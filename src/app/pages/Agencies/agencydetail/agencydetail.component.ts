@@ -1,4 +1,4 @@
- import { Component } from '@angular/core';
+ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { SelectComponent } from '../../../shared/components/form/select/select.component';
@@ -9,6 +9,7 @@ import { HelperService } from '../../../services/helper.service';
 import { AgencyService } from '../../../services/agencies.service';
 import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-agencydetail',
@@ -25,7 +26,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './agencydetail.component.html',
   styles: ``
 })
-export class AgencydetailComponent {
+export class AgencydetailComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,private helperService:HelperService,private agencyservice:AgencyService,private router: Router,private route:ActivatedRoute){
 
@@ -54,7 +55,7 @@ export class AgencydetailComponent {
   timeValue = '';
   cardNumber = '';
   id='';
-
+private subscription: Subscription = new Subscription();
   
   ngOnInit() {  
     this.createForm();
@@ -63,10 +64,22 @@ export class AgencydetailComponent {
       if(params['id']){
          this.id = params['id'];
          this.getAgencyDetail(this.id);
-      }     
-      
-    });  
+      }
+    });
     
+    if (this.helperService.IsMasterAdmin()) {
+      this.subscription = this.helperService.category$.subscribe(val => {
+        console.log({'this.Category': val});
+        this.detailForm.controls['OrgCategory'].setValue(val);
+      });
+    }
+    else{
+      this.detailForm.controls['OrgCategory'].setValue(this.helperService.getOrgCategory());
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   
@@ -86,6 +99,7 @@ export class AgencydetailComponent {
       AdhaarNo: ['', [Validators.pattern(/^\d{12}$/)]],
       PanNo: ['', [Validators.required,Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
       GstNo: ['', [Validators.pattern(/^\d{15}$/)]],
+      OrgCategory: ['', [Validators.required]],
     });
   }
   get f() { return this.detailForm.controls; }
@@ -100,7 +114,7 @@ export class AgencydetailComponent {
 
   loadProgrammeType(){
     let programmeTypes= this.helperService.getUserTraingProgrammes();
-    console.log({'programmeTypes':programmeTypes});
+    
     programmeTypes.forEach((element:any) => {
       this.programmetypeOptions.push({value:element,label:element});
     });
@@ -109,7 +123,7 @@ export class AgencydetailComponent {
   getAgencyDetail(userid:any){
     this.agencyservice.getAgencyDetail(userid).subscribe({
       next:(response:any[]) =>{
-        console.log({'detailresponse':response});
+        
         this.stuffValue(response[0]);
       },
       error:(error) =>{
@@ -151,7 +165,7 @@ stuffValue(values:any){
     this.stateOptions=[];
     this.helperService.getAllStates().subscribe({
         next:(response:any)=>{
-          console.log({'response state':response});          
+                  
           response.forEach((element:any) => {
             this.stateOptions.push({value:element.stateID,label: element.stateName});
           });
@@ -168,7 +182,7 @@ stuffValue(values:any){
     this.districtOptions=[];
     this.helperService.getDistrictByStates(stateId).subscribe({
         next:(response:any)=>{
-          console.log({'response district':response});
+          
           response.forEach((element:any) => {
             this.districtOptions.push({value:element.districtID,label: element.districtname});
           });
@@ -187,8 +201,6 @@ this.router.navigate(['/agencies']);
   onUpdate(){
     this.detailForm.markAllAsTouched(); 
     this.detailForm.controls['email'].enable();
-    console.log({'this.detailForm':this.detailForm.value});
-    
     if (this.detailForm.invalid) return;
     if (this.detailForm.valid) {    
       // Call your ApiService here
@@ -215,9 +227,7 @@ this.router.navigate(['/agencies']);
   }
 
   onSubmit(){
-    this.detailForm.markAllAsTouched(); 
-    console.log({'this.detailForm':this.detailForm});
-    
+    this.detailForm.markAllAsTouched();
     if (this.detailForm.invalid) return;
     if (this.detailForm.valid) {    
       // Call your ApiService here

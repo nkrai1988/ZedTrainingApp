@@ -85,7 +85,7 @@ export class QualificationComponent {
   programmetypeOptions:any=[];
   selectedOptionagency = '';
   selectedOptionforprogrammetype = '';
-  @Input() qualificationList = [];
+  @Input() qualificationList: any[] = [];
   viewOnly=false;
 @Output() onQualificationSubmit = new EventEmitter<any>();
   blockUser(row:any){

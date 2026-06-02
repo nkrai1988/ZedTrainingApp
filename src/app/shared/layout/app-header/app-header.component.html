@@ -72,6 +72,59 @@
         <!-- NotificationDropdown placeholder -->
         <!-- <app-notification-dropdown /> -->
       </div>
+
+      <!-- Category Dropdown -->
+      <div *ngIf="helper.IsMasterAdmin()" class="relative" #categoryDropdownEl>
+        <button
+          (click)="toggleCategoryDropdown()"
+          class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+              fill="currentColor" />
+          </svg>
+          <span class="max-w-[120px] truncate">{{ selectedCategory ? selectedCategory.label : 'All Categories' }}</span>
+          <svg
+            width="12" height="12" viewBox="0 0 24 24" fill="none"
+            class="transition-transform duration-200"
+            [class.rotate-180]="isCategoryDropdownOpen">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        @if (isCategoryDropdownOpen) {
+          <div class="absolute right-0 mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-[99999] dark:bg-gray-800 dark:border-gray-700">
+            <ul class="py-1 max-h-60 overflow-y-auto">
+              <li>
+                <button
+                  (click)="clearCategory()"
+                  class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  [ngClass]="!selectedCategory
+                    ? 'text-brand-600 bg-gray-50 dark:bg-gray-700 dark:text-brand-400 font-medium'
+                    : 'text-gray-500 dark:text-gray-400'">
+                  All Categories
+                </button>
+              </li>
+              @for (category of categories; track category.value) {
+                <li>
+                  <button
+                    (click)="selectCategory(category)"
+                    class="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    [ngClass]="selectedCategory?.value === category.value
+                      ? 'text-brand-600 bg-brand-50 dark:bg-brand-900/20 dark:text-brand-400 font-medium'
+                      : 'text-gray-700 dark:text-gray-300'">
+                    {{ category.label }}
+                  </button>
+                </li>
+              }
+              @if (categories.length === 0) {
+                <li class="px-4 py-2 text-sm text-gray-400 dark:text-gray-500">No categories available</li>
+              }
+            </ul>
+          </div>
+        }
+      </div>
+
       <!-- UserDropdown placeholder -->
       <app-user-dropdown />
     </div>

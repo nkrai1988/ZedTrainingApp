@@ -1,17 +1,4 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-newfaculty',
-//   imports: [],
-//   templateUrl: './newfaculty.component.html',
-//   styleUrl: './newfaculty.component.css',
-// })
-// export class NewfacultyComponent {
-
-// }
-
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
@@ -42,7 +29,7 @@ import { FacultyService } from '../../../services/faculty.service';
   templateUrl: './newfaculty.component.html',
   styles: ``
 })
-export class NewfacultyComponent {
+export class NewfacultyComponent implements OnInit {
 
   constructor(private fb: FormBuilder,private helperService:HelperService,private service:FacultyService,private router: Router,private route:ActivatedRoute){
 
@@ -96,9 +83,9 @@ resumefile:any;
       qualification: [''],
       experience: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],      
+      phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
       adhaarNo: ['', [Validators.pattern(/^\d{12}$/)]],
-      //resume: [''],
+      orgCategory: [this.helperService.getOrgCategory() || ''],
     });
   }
 

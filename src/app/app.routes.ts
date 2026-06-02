@@ -67,6 +67,7 @@ import { CategoryFormComponent } from './pages/org-categories/category-form/cate
 import { AddSubcategoryComponent } from './pages/org-categories/add-subcategory/add-subcategory.component';
 import { CategoryAdminListComponent } from './pages/category-admin/category-admin-list/category-admin-list.component';
 import { CategoryAdminFormComponent } from './pages/category-admin/category-admin-form/category-admin-form.component';
+import { RegistrationConfigComponent } from './pages/registration-config/registration-config.component';
 
 export const routes: Routes = [
   {
@@ -423,6 +424,12 @@ export const routes: Routes = [
         component:FullScreenModalComponent,
         title:'Modal'
       },
+      {
+        path: 'registration-config',
+        component: RegistrationConfigComponent,
+        title: 'Registration Form Configuration',
+        canActivate: [AuthGuard]
+      },
     ]
   },
   // participant layout
@@ -436,6 +443,13 @@ export const routes: Routes = [
         component: ParticipantDashboardComponent,
         pathMatch: 'full',
         title: 'My Training',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'register',
+        component: MasterRegisterComponent,
+        pathMatch: 'full',
+        title: 'Register',
         canActivate: [AuthGuard]
       },
     ]
@@ -467,11 +481,6 @@ export const routes: Routes = [
     path:'participant/verifyemail',
     component:ParticipantVerifyEmailComponent,
     title:'Verify Email'
-  },
-  {
-    path:'register',
-    component:MasterRegisterComponent,
-    title:'Register'
   },
   {
     path:'registerdetail/:id',

@@ -198,52 +198,34 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Reject Modal -->
 <app-modal
   [isOpen]="isOpen"
   (close)="closeModal()"
-  className="max-w-[700px] m-4"
+  className="max-w-[480px] m-4"
 >
-  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[600px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
-    <div class="px-2 pr-14">
-      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-        Comment
-      </h4>      
+  <div *ngIf="modelItem" class="p-6 sm:p-8">
+    <h4 class="mb-1 text-xl font-semibold text-gray-800 dark:text-white/90">
+      Reject Programme
+    </h4>
+    <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      Please provide a reason for rejecting this programme.
+    </p>
+    <div class="mb-6">
+      <app-text-area
+        [error]="commenterror"
+        [hint]="commenthind"
+        (valueChange)="commentValueChange($event)"
+        [value]="comment"
+      ></app-text-area>
     </div>
-    <form class="flex flex-col" (ngSubmit)="handleSave()">
-      <div class="custom-scrollbar h-[250px] overflow-y-auto px-2 pb-3">
-        <div>
-          <!-- <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-            Social Links
-          </h5> -->
-          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-            <div>
-              
-              <app-text-area [error]="commenterror" [hint]="commenthind" (valueChange)="commentValueChange($event)" [value]="comment"></app-text-area>
-            </div>
-            <div>
-              
-            </div>
-            
-          </div>
-        </div>
-        
-      </div>
-      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-        <!-- <app-button
-          size="sm"
-          variant="outline"
-          (btnClick)="closeModal()"
-        >
-          Close
-        </app-button> -->
-        <app-button
-          size="sm"
-          (btnClick)="handleSave()"
-        >
-          Reject
-        </app-button>
-      </div>
-    </form>
+    <div class="flex items-center justify-end gap-3">
+      <app-button size="sm" variant="outline" (btnClick)="closeModal()">
+        Cancel
+      </app-button>
+      <app-button size="sm" (btnClick)="handleSave()">
+        Reject
+      </app-button>
+    </div>
   </div>
 </app-modal>

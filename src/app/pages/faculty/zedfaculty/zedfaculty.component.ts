@@ -11,7 +11,8 @@
 // }
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -61,9 +62,11 @@ import { DataloadinprogressComponent } from '../../../shared/components/common/d
   templateUrl: './zedfaculty.component.html',
   styleUrl: './zedfaculty.component.css',
 })
-export class ZedfacultyComponent {
+export class ZedfacultyComponent implements OnDestroy {
+  private categorySub: Subscription = new Subscription();
+
   constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,public helperService:HelperService,private router: Router){
-      
+
     }
 
     filterForm!: FormGroup;
@@ -116,12 +119,28 @@ handleAgencyChange(value: string) {
     programmeList:any=[];
     successmessage='';
     rejectcommentbtnclick=false;
+    orgCategory='';
     ngOnInit(){
       this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
       this.loadProgrammeType();
-      this.getProgrammes();
       this.loadAgencies();
-      
+      if (this.helperService.IsMasterAdmin()) {
+        this.categorySub = this.helperService.category$.subscribe(cat => {
+          this.orgCategory = cat;
+          this.dataRow = [];
+          this.getProgrammes();
+        });
+      } else if (this.helperService.IsSuperAdmin()) {
+        this.orgCategory = this.helperService.getOrgCategory() || '';
+        this.getProgrammes();
+      } else {
+        this.orgCategory = this.helperService.getOrgCategory() || '';
+        this.getProgrammes();
+      }
+    }
+
+    ngOnDestroy(){
+      this.categorySub.unsubscribe();
     }
 
     rejectProgramme(row:any,status:any){
@@ -150,10 +169,10 @@ handleAgencyChange(value: string) {
     
   }
 
-  getProgrammes(){   
-    this.dataLoadProgress=true; 
+  getProgrammes(){
+    this.dataLoadProgress=true;
     this.dataRow=[];
-    this.facultyservice.getFacultyList('').subscribe({
+    this.facultyservice.getFacultyList('', this.orgCategory).subscribe({
       next:(response:any[])=>{        
         this.dataRow = response;
         this.dataLoadProgress=false;

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from '../shared/services/api.service';
 import { APPURLs } from '../shared/constants/url.constants';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrgCategoryService {
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private http: HttpClient) {}
 
   getCategories(): Observable<any[]> {
     return this.api.getSimple(APPURLs.orgcategorylist);
@@ -24,5 +26,13 @@ export class OrgCategoryService {
 
   addSubCategory(categoryId: number, body: any): Observable<any> {
     return this.api.postSimpleWithHeader(`${APPURLs.orgsubcategoryadd}/${categoryId}/subcategories`, body);
+  }
+
+  uploadLogo(categoryId: number, logo: File): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token });
+    const formData = new FormData();
+    formData.append('logo', logo, logo.name);
+    return this.http.post(`${environment.apiurl}/orgcategory/${categoryId}/logo`, formData, { headers });
   }
 }

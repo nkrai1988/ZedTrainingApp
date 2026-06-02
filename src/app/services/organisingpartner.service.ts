@@ -22,8 +22,8 @@ getOrganisingPartnerList(){
   }
 
 postOP(detail:any){
-    let query ="?newPartner="+detail.newPartner;
-    return this.api.postSimpleWithHeader(APPURLs.organisingpartnerPOST+query,detail);  
+    let query ="?newPartner="+detail.newPartner+"&orgCategory="+detail.orgCategory;
+    return this.api.postSimpleWithHeader(APPURLs.organisingpartnerPOST+query,detail);
 }
 
 editAgency(detail:any){

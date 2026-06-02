@@ -93,7 +93,7 @@ export class ExperienceComponent {
     experiencecOption:any=[];
     experienceselect='';
     checkedValue='';
-    @Input() experienceList = [];
+    @Input() experienceList: any[] = [];
     viewOnly=false;
 @Output() onExperienceSubmit = new EventEmitter<any>();
     @ViewChild('fileInput') fileInput!: ElementRef;

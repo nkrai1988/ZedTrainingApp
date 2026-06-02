@@ -92,7 +92,7 @@ export class CoordinatordetailComponent {
       phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required,,Validators.email]],
       AdhaarNo: ['', [Validators.pattern(/^\d{12}$/)]],
-      
+      orgCategory: [this.helperService.getOrgCategory()],
     });
   }
   get f() { return this.detailForm.controls; }

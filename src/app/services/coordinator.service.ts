@@ -12,14 +12,14 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getAgencyList(status:string){
-  let query ="?status="+status;
-   return this.api.getSimple(APPURLs.agencylist+query);  
+getAgencyList(status:string, orgCategory:string=''){
+  let query ="?status="+status+"&orgCategory="+encodeURIComponent(orgCategory);
+   return this.api.getSimple(APPURLs.coordinatorlist+query);
   }
 
   exportToExcel(activeorblocked:string){
     let query='?isactive='+(activeorblocked =='Active' ? true:false);
-    return this.api.getTestFile(APPURLs.agencyexport+query);
+    return this.api.getTestFile(APPURLs.coordinatorexport+query);
 }
 
   getAgencyDetail(userid:string){

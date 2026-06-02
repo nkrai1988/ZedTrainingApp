@@ -27,6 +27,8 @@ export class CategoryFormComponent implements OnInit {
   categoryForm!: FormGroup;
   errormessage = '';
   successmessage = '';
+  selectedLogoFile: File | null = null;
+  logoPreviewUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -63,12 +65,39 @@ export class CategoryFormComponent implements OnInit {
     }
   }
 
+  onLogoSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      this.errormessage = 'Only image files are allowed (jpg, png, gif, svg, webp).';
+      setTimeout(() => this.errormessage = '', 4000);
+      input.value = '';
+      return;
+    }
+
+    this.selectedLogoFile = file;
+    const reader = new FileReader();
+    reader.onload = () => { this.logoPreviewUrl = reader.result as string; };
+    reader.readAsDataURL(file);
+  }
+
+  removeLogo(logoInput: HTMLInputElement) {
+    this.selectedLogoFile = null;
+    this.logoPreviewUrl = null;
+    logoInput.value = '';
+  }
+
   clearForm() {
     this.categoryForm.reset();
     while (this.subCategories.length > 1) {
       this.subCategories.removeAt(1);
     }
     this.subCategories.at(0).reset();
+    this.selectedLogoFile = null;
+    this.logoPreviewUrl = null;
   }
 
   onSubmit() {
@@ -76,18 +105,32 @@ export class CategoryFormComponent implements OnInit {
     if (this.categoryForm.invalid) return;
 
     this.orgCategoryService.saveCategory(this.categoryForm.value).subscribe({
-      next: () => {
-        this.successmessage = 'Category created successfully.';
-        setTimeout(() => {
-          this.successmessage = '';
-          this.router.navigate(['/orgcategories']);
-        }, 3000);
+      next: (res: any) => {
+        if (this.selectedLogoFile && res?.id) {
+          this.orgCategoryService.uploadLogo(res.id, this.selectedLogoFile).subscribe({
+            next: () => this.finishSuccess(),
+            error: () => {
+              this.successmessage = 'Category created but logo upload failed.';
+              setTimeout(() => { this.successmessage = ''; this.router.navigate(['/orgcategories']); }, 3000);
+            }
+          });
+        } else {
+          this.finishSuccess();
+        }
       },
       error: (err: any) => {
         this.errormessage = 'Failed to create category. ' + (err?.error || '');
         setTimeout(() => this.errormessage = '', 4000);
       }
     });
+  }
+
+  private finishSuccess() {
+    this.successmessage = 'Category created successfully.';
+    setTimeout(() => {
+      this.successmessage = '';
+      this.router.navigate(['/orgcategories']);
+    }, 3000);
   }
 
   cancel() {

@@ -12,9 +12,12 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getProgrammeList(centerId:string){
+getProgrammeList(centerId:string, orgCategory: string = ''){
   let query ="?centerId="+centerId;
-   return this.api.getSimple(APPURLs.programmelist+query);  
+  if(orgCategory){
+    query += '&orgCategory=' + encodeURIComponent(orgCategory);
+  }
+   return this.api.getSimple(APPURLs.programmelist+query);
   }
 
   getTrainingProgrammeList(){  
@@ -25,9 +28,9 @@ registerAssessorsToBatch(data:any){
   return this.api.postSimple(APPURLs.trainingprogrammeenroll,data);
 }
 
-  getAdminProgrammeList(){
-  
-   return this.api.getSimple(APPURLs.programmenewlist);  
+  getAdminProgrammeList(orgCategory: string = ''){
+    let query = orgCategory ? '?orgCategory=' + encodeURIComponent(orgCategory) : '';
+   return this.api.getSimple(APPURLs.programmenewlist + query);
   }
 
   getPlainProgrammeList(){
@@ -83,17 +86,22 @@ getQCApprovalList(ptype:string,status:string,agency:string){
   }
 
 
-  rejectProgrammeStatus(id:any,comment:any,status:any){
-    return this.api.putSimple(APPURLs.qcstatuschangetoReject,{BatchId:id,Comment:comment,Status:status});
-    
+  rejectProgrammeStatus(id:any,comment:any){
+    let query = '?id=' + id + '&comments=' + encodeURIComponent(comment);
+    return this.api.putSimple(APPURLs.programmereject + query, {});
+  }
+
+  qcRejectProgramme(batchId:any, comment:any){
+    return this.api.putSimple(APPURLs.qcstatuschangetoReject, {BatchId:batchId, Comment:comment});
   }
 
 
   getCoordinatorsList(){  
    return this.api.getSimple(APPURLs.programmecoordinators);  
   }
-  getActiveAgencyList(){  
-   return this.api.getSimple(APPURLs.activeagencylist);  
+  getActiveAgencyList(orgCategory: string = ''){
+    let query = orgCategory ? '?orgCategory=' + encodeURIComponent(orgCategory) : '';
+   return this.api.getSimple(APPURLs.activeagencylist + query);
   }
 
   getLeadTrainersList(){  

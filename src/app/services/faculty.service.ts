@@ -17,9 +17,9 @@ getTrainerList(id:string){
    return this.api.getSimple(APPURLs.trainerlist+query);  
   }
 
-  getFacultyList(id:string){
-  let query ="?id="+id;
-   return this.api.getSimple(APPURLs.facultylist+query);  
+  getFacultyList(id:string, orgCategory:string=''){
+  let query ="?id="+id+"&orgCategory="+encodeURIComponent(orgCategory);
+   return this.api.getSimple(APPURLs.facultylist+query);
   }
 
   getRegistrationList(status:string){

@@ -13,10 +13,15 @@ export class HelperService{
     constructor(private router:Router,private http:HttpClient,private api: ApiService){
 
     }
+
+    private categorySubject = new BehaviorSubject<string>('ZED');
+    category$ = this.categorySubject.asObservable(); // Observable to subscribe to
     //private router= Inject(Router);
     mainPortal='training';
     private dataSubject = new BehaviorSubject<string>('training');
     data$ = this.dataSubject.asObservable(); // Observable to subscribe to
+
+    masterOrgCategory='';
 
     setPortal(portal:string){
         this.mainPortal=portal;
@@ -33,8 +38,15 @@ export class HelperService{
 
     storeLoginData(data:any){
         console.log('Success:', data)
+        this.masterOrgCategory = data.user.orgCategory;
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+    }
+
+    getOrgSubCategory(): string {
+        let userString: any = localStorage.getItem('user');
+        let user = JSON.parse(userString);
+        return user?.orgSubCategory ?? '';
     }
 
     isLoggedIn():boolean{
@@ -80,6 +92,24 @@ export class HelperService{
         
         return user.tptype;
     }
+
+    getOrgCategory(){
+        if(this.IsMasterAdmin()){
+            return this.masterOrgCategory;
+        }
+    else{
+     let userString:any = localStorage.getItem('user');
+        let user = JSON.parse(userString);        
+        return user.orgCategory;
+    }        
+    }
+
+    setOrgCategory(category:any){
+        this.masterOrgCategory=category;
+        this.categorySubject.next(category);
+    }
+
+    
 
     IsSuperAdmin():boolean{
         var role = this.getUserRole();

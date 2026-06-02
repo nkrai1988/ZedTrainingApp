@@ -109,7 +109,8 @@ export class NewprogrammeComponent {
       PinCode: ['', [Validators.required,Validators.minLength(6)]],
       Coordinator: ['', [Validators.required]],
       LeadTrainer: [''],
-      OrganisingPartner: ['', [Validators.required]],      
+      OrganisingPartner: ['', [Validators.required]],
+      orgCategory: [this.helperService.masterOrgCategory],
     });
   }
   get f() { return this.detailForm.controls; }

@@ -12,10 +12,11 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getCurriculumList(status:string){
-  let query ="?status="+status;
-   return this.api.getSimple(APPURLs.curriculumlist+query);  
-  }
+getCurriculumList(status: string, orgCategory: string = '') {
+  let query = "?status=" + status;
+  if (orgCategory) query += "&orgCategory=" + orgCategory;
+  return this.api.getSimple(APPURLs.curriculumlist + query);
+}
 
   getAgencyDetail(userid:string){
   let query ="?userid="+userid;

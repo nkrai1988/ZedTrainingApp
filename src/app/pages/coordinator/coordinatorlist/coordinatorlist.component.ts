@@ -1,6 +1,7 @@
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -17,6 +18,7 @@ import { InputFieldComponent } from '../../../shared/components/form/input/input
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
 import { RouterModule } from '@angular/router';
 import { CoordinatorService } from '../../../services/coordinator.service';
+import { HelperService } from '../../../services/helper.service';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
 
@@ -43,9 +45,11 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './coordinatorlist.component.html',
   styleUrl: './coordinatorlist.component.css',
 })
-export class CoordinatorlistComponent {
-  constructor(private coordinatorservice:CoordinatorService,public modal: ModalService){
-      
+export class CoordinatorlistComponent implements OnDestroy {
+  private categorySub: Subscription = new Subscription();
+
+  constructor(private coordinatorservice:CoordinatorService,public modal: ModalService,private helperService:HelperService){
+
     }
     dataLoadProgress=false;
     isOpen = false;
@@ -61,8 +65,27 @@ export class CoordinatorlistComponent {
   }
     dataRow:any=[];
     successmessage='';
+    orgCategory='';
     ngOnInit(){
-      this.getAgencies();
+      if (this.helperService.IsMasterAdmin()) {
+        this.categorySub = this.helperService.category$.subscribe(cat => {
+          this.orgCategory = cat;
+          this.dataRow = [];
+          this.getAgencies();
+        });
+      } else {
+        this.orgCategory = this.helperService.getOrgCategory() || '';
+        console.log({'this.helperService.masterOrgCategory':this.helperService.masterOrgCategory});
+        console.log({'this.orgCategory':this.orgCategory});
+        this.getAgencies();
+      } 
+      // else {
+      //   this.getAgencies();
+      // }
+    }
+
+    ngOnDestroy(){
+      this.categorySub.unsubscribe();
     }
 
     handleSave() {
@@ -73,7 +96,7 @@ export class CoordinatorlistComponent {
 
     getAgencies(){
       this.dataLoadProgress=true;
-    this.coordinatorservice.getAgencyList(this.checkedValue).subscribe({
+    this.coordinatorservice.getAgencyList(this.checkedValue, this.orgCategory).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.dataLoadProgress=false;

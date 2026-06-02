@@ -158,7 +158,7 @@ handleAgencyChange(value: string) {
     if(!this.rejectcomment){
       return;
     }
-      this.programmeservice.rejectProgrammeStatus(this.modelItem.batchNo,this.rejectcomment,"5").subscribe({
+      this.programmeservice.qcRejectProgramme(this.modelItem.batchNo,this.rejectcomment).subscribe({
       next:(response:any)=>{  
         
       this.closeModal();     

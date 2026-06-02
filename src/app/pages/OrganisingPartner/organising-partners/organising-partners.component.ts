@@ -30,6 +30,7 @@ import { ButtonComponent } from '../../../shared/components/ui/button/button.com
 import { RouterModule } from '@angular/router';
 import { CoordinatorService } from '../../../services/coordinator.service';
 import { organisingpartnerService } from '../../../services/organisingpartner.service';
+import { HelperService } from '../../../services/helper.service';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
@@ -59,7 +60,7 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   styleUrl: './organising-partners.component.css',
 })
 export class OrganisingPartnersComponent {
-  constructor(private service:organisingpartnerService,public modal: ModalService){
+  constructor(private service:organisingpartnerService,public modal: ModalService,private helperService:HelperService){
       
     }
     dataLoadProgress=false;
@@ -93,7 +94,7 @@ export class OrganisingPartnersComponent {
       console.log(this.neworganizer);
       if(this.neworganizer){
         this.neworganizerclicked=false;
-          this.service.postOP({newPartner:this.neworganizer}).subscribe(
+          this.service.postOP({newPartner:this.neworganizer, orgCategory:this.helperService.masterOrgCategory}).subscribe(
             {
               next:(response:any[])=>{
               this.successmessage ="New Partner added successfully.";

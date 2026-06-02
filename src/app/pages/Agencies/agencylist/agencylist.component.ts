@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { BasicTableTwoComponent } from '../../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { AgencyService } from '../../../services/agencies.service';
@@ -17,6 +17,8 @@ import { ButtonComponent } from '../../../shared/components/ui/button/button.com
 import { RouterModule } from '@angular/router';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
+import { HelperService } from '../../../services/helper.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -41,9 +43,11 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './agencylist.component.html',
   styleUrl: './agencylist.component.css',
 })
-export class AgencylistComponent {
-  constructor(private agencyservice:AgencyService,public modal: ModalService){
-      
+export class AgencylistComponent implements OnDestroy {
+  private categorySub: Subscription = new Subscription();
+
+  constructor(private agencyservice:AgencyService,public modal: ModalService,private helperService:HelperService){
+
     }
     isOpen = false;
     modelItem:any;
@@ -59,8 +63,24 @@ export class AgencylistComponent {
   }
     dataRow:any=[];
     successmessage='';
+    orgCategory='';
     ngOnInit(){
-      this.getAgencies();
+      if (this.helperService.IsMasterAdmin()) {
+        this.categorySub = this.helperService.category$.subscribe(cat => {
+          this.orgCategory = cat;
+          this.dataRow = [];
+          this.getAgencies();
+        });
+      } else if (this.helperService.IsSuperAdmin()) {
+        this.orgCategory = this.helperService.getOrgCategory() || '';
+        this.getAgencies();
+      } else {
+        this.getAgencies();
+      }
+    }
+
+    ngOnDestroy(){
+      this.categorySub.unsubscribe();
     }
 
     handleSave() {
@@ -71,7 +91,7 @@ export class AgencylistComponent {
 
     getAgencies(){
     this.dataLoadProgress=true;
-    this.agencyservice.getAgencyList(this.checkedValue).subscribe({
+    this.agencyservice.getAgencyList(this.checkedValue, this.orgCategory).subscribe({
       next:(response:any[])=>{
       this.dataRow = response;
       this.dataLoadProgress=false;

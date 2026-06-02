@@ -45,6 +45,57 @@
       </div>
 
     </div>
+
+    <!-- Logo Upload -->
+    <div class="mt-5">
+      <app-label>Category Logo <span class="text-gray-400 text-xs font-normal">(optional — jpg, png, gif, svg, webp)</span></app-label>
+
+      <div class="mt-2 flex items-start gap-5">
+
+        <!-- Preview -->
+        <div class="flex-shrink-0 w-20 h-20 rounded-lg border border-gray-200 bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.03] flex items-center justify-center overflow-hidden">
+          <img *ngIf="logoPreviewUrl" [src]="logoPreviewUrl" alt="Logo preview" class="w-full h-full object-contain p-1" />
+          <svg *ngIf="!logoPreviewUrl" class="w-8 h-8 text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 20.25h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12.75c0 .828.672 1.5 1.5 1.5z"/>
+          </svg>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex flex-col gap-2">
+          <input
+            #logoInput
+            type="file"
+            accept="image/jpeg,image/png,image/gif,image/svg+xml,image/webp"
+            class="hidden"
+            (change)="onLogoSelected($event)"
+          />
+          <button
+            type="button"
+            (click)="logoInput.click()"
+            class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.08] dark:bg-white/[0.03] dark:text-white/80 dark:hover:bg-white/[0.06] transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+            </svg>
+            {{ selectedLogoFile ? 'Change Logo' : 'Upload Logo' }}
+          </button>
+          <button
+            *ngIf="selectedLogoFile"
+            type="button"
+            (click)="removeLogo(logoInput)"
+            class="inline-flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 dark:text-red-400">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Remove
+          </button>
+          <p *ngIf="selectedLogoFile" class="text-xs text-gray-500 dark:text-gray-400 max-w-xs truncate">
+            {{ selectedLogoFile.name }}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
   </app-component-card>
 
   <!-- Sub Categories -->

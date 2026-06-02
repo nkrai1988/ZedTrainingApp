@@ -54,7 +54,7 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
 })
 export class AdminProgrammListComponent {
   constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,private helperService:HelperService){
-      
+
     }
 
     filterForm!: FormGroup;
@@ -117,8 +117,11 @@ handleStatusSelectChange(value: string) {
     modelItem:any;
   openModal(row:any) {
     this.modelItem=row;
-     this.isOpen = true;
-     }
+    this.comment='';
+    this.commenthind='';
+    this.commenterror=false;
+    this.isOpen = true;
+  }
   closeModal() { 
     this.modelItem=null;
     this.isOpen = false; 
@@ -128,17 +131,16 @@ handleStatusSelectChange(value: string) {
     successmessage='';
     ngOnInit(){
       this.createForm();
-      this.loadStatus();      
+      this.loadStatus();
       this.getProgrammesFromServer();
       this.loadStates();
       this.loadProgrammeType();
       this.loadAgencies();
-      
     }
 
     loadAgencies(){
     this.agenciesOptions=[];
-    this.programmeservice.getActiveAgencyList().subscribe({
+    this.programmeservice.getActiveAgencyList(this.helperService.getOrgCategory() || '').subscribe({
         next:(response:any)=>{
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});
@@ -160,11 +162,11 @@ handleStatusSelectChange(value: string) {
     }
 
     createForm(){
-     this.filterForm = this.fb.group({      
-      StateName: ['', [Validators.required]],
-      Status: ['', [Validators.required]],      
-      StartDate: ['', [Validators.required]],
-      EndDate: ['', [Validators.required]]      
+     this.filterForm = this.fb.group({
+      StateName: [''],
+      Status: [''],
+      StartDate: [''],
+      EndDate: ['']
     });
   }
   get f() { return this.filterForm.controls; }
@@ -182,29 +184,64 @@ handleStatusSelectChange(value: string) {
 
   onFilterSubmit(){
     console.log(this.filterForm.value)
-    let tempListData= this.programmeList;    
+    if(this.helperService.IsSuperAdmin()){
+      this.dataLoadProgress=true;
+      this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory() || '').subscribe({
+        next:(response:any[])=>{
+          this.programmeList=response;
+          let tempListData= response;
+          if(this.filterForm.value.StateName){
+           tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);
+          }
+          if(this.filterForm.value.Status){
+           tempListData = tempListData.filter((p:any)=> p.status == this.filterForm.value.Status);
+          }
+          if(this.filterForm.value.StartDate &&  this.filterForm.value.EndDate){
+            tempListData = tempListData.filter((p:any)=> (p.strStartDateFilter == this.filterForm.value.StartDate && p.strEndDateFilter == this.filterForm.value.EndDate));
+          }
+          this.dataRow = tempListData;
+          this.dataLoadProgress=false;
+        },
+        error:(err:any)=>{ this.dataLoadProgress=false; }
+      });
+      return;
+    }
+    let tempListData= this.programmeList;
     if(this.filterForm.value.StateName){
-     tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);     
-    }    
+     tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);
+    }
     if(this.filterForm.value.Status){
      tempListData = tempListData.filter((p:any)=> p.status == this.filterForm.value.Status);
+    }
+    if(this.filterForm.value.OrgCategory){
+     tempListData = tempListData.filter((p:any)=> p.orgCategory == this.filterForm.value.OrgCategory);
     }
     if(this.filterForm.value.StartDate &&  this.filterForm.value.EndDate){
       tempListData = tempListData.filter((p:any)=> (p.strStartDateFilter == this.filterForm.value.StartDate && p.strEndDateFilter == this.filterForm.value.EndDate));
     }
     this.dataRow = tempListData;
-    
 
   }
 
-  handleSave() {  
-
+  handleSave() {
     if(!this.comment){
       this.commenthind='Comment Required.';
       this.commenterror=true;
       return;
     }
 
+    this.programmeservice.rejectProgrammeStatus(this.modelItem.id, this.comment).subscribe({
+      next: (res: any) => {
+        this.closeModal();
+        this.comment = '';
+        this.getProgrammesFromServer();
+        this.successmessage = "Programme rejected successfully.";
+        setTimeout(() => {
+          this.successmessage = '';
+        }, 5000);
+      },
+      error: (err: any) => {}
+    });
   }
 
   commentValueChange($event:any){
@@ -316,7 +353,7 @@ handleStatusSelectChange(value: string) {
 
   getAdminProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getAdminProgrammeList().subscribe({
+    this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory() || '').subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -350,6 +387,7 @@ handleStatusSelectChange(value: string) {
     this.statusOptions=this.helperService.getProgrammeStatus();
     console.log({'this.statusOptions':this.statusOptions});
   }
+
 
   
   

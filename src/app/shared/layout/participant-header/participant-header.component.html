@@ -24,11 +24,11 @@
         }
       </button>
 
-      <!-- Brand logos — hidden on mobile -->
-      <div class="hidden sm:flex items-center gap-2">
-        <img src="/images/logo/ndie-logo.png" alt="NDIE" class="h-7 w-auto object-contain" />
-        <div class="w-px h-5 bg-gray-200 dark:bg-gray-700"></div>
-        <img src="/images/logo/qci-logo.png" alt="QCI" class="h-6 w-auto object-contain" />
+      <!-- Category logo — hidden on mobile -->
+      <div class="hidden sm:flex items-center">
+        @if (categoryLogoUrl) {
+          <img [src]="categoryLogoUrl" alt="Category Logo" class="h-8 w-auto object-contain" />
+        }
       </div>
     </div>
 
