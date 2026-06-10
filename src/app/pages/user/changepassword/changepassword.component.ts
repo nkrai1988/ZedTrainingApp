@@ -60,6 +60,7 @@ export class ChangepasswordComponent {
 
   errormessage='';
   successmessage='';
+  isSubmitting = false;
   neworganizer="";
   neworganizerclicked=false;
 
@@ -71,8 +72,11 @@ export class ChangepasswordComponent {
     const newPassword = this.resetForm.value.password;
     console.log({'this.resetForm.value':this.resetForm.value});
     // call API: /auth/reset-password with token + newPassword
+    this.isSubmitting = true;
     this.authService.postChangePassword({oldPassword:this.resetForm.value.oldpassword,newPassword:this.resetForm.value.password,confirmPassword:this.resetForm.value.confirmPassword}).subscribe({
       next:(response)=>{
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage='Password reset successfull.';
         setTimeout(() => {
           this.successmessage='';
@@ -80,9 +84,10 @@ export class ChangepasswordComponent {
         }, 3000);
       },
       error:(err)=>{
-         this.errormessage='Password reset failed.';
-         setTimeout(() => {
-          
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.errormessage='Password reset failed.';
+        setTimeout(() => {
           this.errormessage='';
         }, 3000);
       }

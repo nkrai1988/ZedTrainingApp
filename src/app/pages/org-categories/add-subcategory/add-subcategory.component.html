@@ -62,9 +62,9 @@
 
     <!-- Actions -->
     <div class="flex items-center gap-3 mt-6 lg:justify-end">
-      <app-button size="md" variant="outline" (btnClick)="clearForm()">Clear</app-button>
-      <app-button size="md" variant="outline" (btnClick)="cancel()">Cancel</app-button>
-      <app-button size="md" (btnClick)="onSubmit()">Add Sub Category</app-button>
+      <app-button size="md" variant="outline" (btnClick)="clearForm()" [disabled]="isSubmitting">Clear</app-button>
+      <app-button size="md" variant="outline" (btnClick)="cancel()" [disabled]="isSubmitting">Cancel</app-button>
+      <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Add Sub Category' }}</app-button>
     </div>
 
   </app-component-card>

@@ -41,6 +41,7 @@ export class NewfacultyComponent implements OnInit {
   districtOptions:any=[];
   errormessage='';
   successmessage='';
+  isSubmitting = false;
   isdisable:boolean=true;
 
   options = [
@@ -127,8 +128,11 @@ cancelUpdate(){
     this.detailForm.markAllAsTouched();
     if (this.detailForm.invalid) return;
 
+    this.isSubmitting = true;
     this.service.postFaculty(this.detailForm.value, this.resumefile).subscribe({
       next: (response: any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage = "Faculty created successfully.";
         setTimeout(() => {
           this.successmessage = '';
@@ -137,7 +141,9 @@ cancelUpdate(){
         }, 3000);
       },
       error: (error: any) => {
+        this.isSubmitting = false;
         console.error('Error:', error);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.errormessage = 'Faculty creation failed. ' + error.error;
         setTimeout(() => {
           this.errormessage = '';

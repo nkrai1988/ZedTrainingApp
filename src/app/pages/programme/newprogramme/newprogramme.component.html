@@ -149,9 +149,9 @@
       <p *ngIf="detailForm.get('OrganisingPartner')?.invalid && (detailForm.get('OrganisingPartner')?.touched || detailForm.get('OrganisingPartner')?.dirty)" class="mt-1.5 text-xs text-error-500">Organising Partner is required.</p>
     </div>
     
-     <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">        
-        <app-button size="md" (btnClick)="clearForm()" variant="outline">Clear</app-button>
-        <app-button size="md"  (btnClick)="onSubmit()">Save Changes</app-button>
+     <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+        <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
+        <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Save Changes' }}</app-button>
       </div>
 
       

@@ -51,7 +51,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Qualification</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email ID/Contact No</th>
                    
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>          
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start" *ngIf="helperService.IsSuperAdmin()">Action</th>          
         </tr>
       </thead>
       <tbody>
@@ -115,7 +115,7 @@
           
           
           
-          
+          <ng-container *ngIf="helperService.IsSuperAdmin()">
           
           <td class="px-4 sm:px-6 py-3.5" *ngIf="row.isActive">
             <a (click)="changeStatus(row,'false')" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
@@ -138,6 +138,7 @@
             </button>
             } -->
           </td>
+          </ng-container>
         </tr>
         }
       </tbody>

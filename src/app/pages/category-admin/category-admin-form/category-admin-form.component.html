@@ -111,8 +111,8 @@
 
     <!-- Actions -->
     <div class="flex items-center gap-3 mt-6 lg:justify-end">
-      <app-button size="md" variant="outline" (btnClick)="cancel()">Cancel</app-button>
-      <app-button size="md" (btnClick)="onSubmit()">Create Admin</app-button>
+      <app-button size="md" variant="outline" (btnClick)="cancel()" [disabled]="isSubmitting">Cancel</app-button>
+      <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Create Admin' }}</app-button>
     </div>
 
   </app-component-card>

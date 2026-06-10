@@ -32,6 +32,7 @@ export class CategoryAdminFormComponent implements OnInit {
   selectedCategory = '';
   errormessage = '';
   successmessage = '';
+  isSubmitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -89,8 +90,11 @@ export class CategoryAdminFormComponent implements OnInit {
       ...this.adminForm.getRawValue()
     };
 
+    this.isSubmitting = true;
     this.categoryAdminService.createAdmin(payload).subscribe({
       next: () => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage = 'Category admin created successfully.';
         setTimeout(() => {
           this.successmessage = '';
@@ -98,6 +102,8 @@ export class CategoryAdminFormComponent implements OnInit {
         }, 3000);
       },
       error: (err: any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.errormessage = 'Failed to create admin. ' + (err?.error || '');
         setTimeout(() => this.errormessage = '', 4000);
       }

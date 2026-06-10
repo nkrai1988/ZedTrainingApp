@@ -82,13 +82,16 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
     programmetypeOptions:any=[];
     ngOnInit() {
       this.loadProgrammeType();
-      if (this.helperService.IsSuperAdmin()) {
+      
+      if (this.helperService.IsMasterAdmin()) {
+        
         this.subscription = this.helperService.category$.subscribe(val => {
           this.orgCategory = val;
           this.getCurriculum();
         });
       } else {
         this.orgCategory = this.helperService.getOrgCategory() || '';
+        
         this.getCurriculum();
       }
     }

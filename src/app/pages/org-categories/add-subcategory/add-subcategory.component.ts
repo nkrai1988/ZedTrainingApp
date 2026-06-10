@@ -31,6 +31,7 @@ export class AddSubcategoryComponent implements OnInit {
   selectedCategoryId = '';
   errormessage = '';
   successmessage = '';
+  isSubmitting = false;
 
   constructor(
     private fb: FormBuilder,
@@ -74,8 +75,11 @@ export class AddSubcategoryComponent implements OnInit {
 
     const { categoryId, value, label } = this.subCategoryForm.value;
 
+    this.isSubmitting = true;
     this.orgCategoryService.addSubCategory(Number(categoryId), { value, label }).subscribe({
       next: () => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage = 'Sub-category added successfully.';
         setTimeout(() => {
           this.successmessage = '';
@@ -83,6 +87,8 @@ export class AddSubcategoryComponent implements OnInit {
         }, 3000);
       },
       error: (err: any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.errormessage = 'Failed to add sub-category. ' + (err?.error || '');
         setTimeout(() => this.errormessage = '', 4000);
       }

@@ -38,6 +38,7 @@ export class AgencydetailComponent implements OnInit, OnDestroy {
   districtOptions:any=[];
   errormessage='';
   successmessage='';
+  isSubmitting = false;
   isdisable:boolean=true;
 
   options = [
@@ -199,25 +200,27 @@ this.router.navigate(['/agencies']);
   }
 
   onUpdate(){
-    this.detailForm.markAllAsTouched(); 
+    this.detailForm.markAllAsTouched();
     this.detailForm.controls['email'].enable();
     if (this.detailForm.invalid) return;
-    if (this.detailForm.valid) {    
-      // Call your ApiService here
+    if (this.detailForm.valid) {
+      this.isSubmitting = true;
        this.agencyservice.editAgency(this.detailForm.value).subscribe({
-      next: (response:any) => { 
+      next: (response:any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage ="Agency Updated successfully."
-        
-      // Redirect
       setTimeout(() => {
         this.successmessage ='';
         this.errormessage='';
       this.router.navigate(['/agencies']);
       }, 3000);
-       //this.router.navigate(['/dashboard']); 
       },
-      error: (error:any) => {console.error('Error:', error)
-        this.errormessage='Agency Update failed. '+error.error;//error.message;
+      error: (error:any) => {
+        this.isSubmitting = false;
+        console.error('Error:', error)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.errormessage='Agency Update failed. '+error.error;
         setTimeout(() => {
           this.errormessage='';
         }, 3000);
@@ -229,22 +232,24 @@ this.router.navigate(['/agencies']);
   onSubmit(){
     this.detailForm.markAllAsTouched();
     if (this.detailForm.invalid) return;
-    if (this.detailForm.valid) {    
-      // Call your ApiService here
+    if (this.detailForm.valid) {
+      this.isSubmitting = true;
        this.agencyservice.postAgency(this.detailForm.value).subscribe({
-      next: (response:any) => { 
+      next: (response:any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage ="Agency created successfully."
-        //this.helperService.storeLoginData(response);      
-      // Redirect
       setTimeout(() => {
         this.successmessage ='';
         this.errormessage='';
       this.router.navigate(['/agencies']);
       }, 3000);
-       //this.router.navigate(['/dashboard']); 
       },
-      error: (error:any) => {console.error('Error:', error)
-        this.errormessage='Agency creation failed. '+error.error;//error.message;
+      error: (error:any) => {
+        this.isSubmitting = false;
+        console.error('Error:', error)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.errormessage='Agency creation failed. '+error.error;
         setTimeout(() => {
           this.errormessage='';
         }, 3000);

@@ -27,6 +27,7 @@ export class CategoryFormComponent implements OnInit {
   categoryForm!: FormGroup;
   errormessage = '';
   successmessage = '';
+  isSubmitting = false;
   selectedLogoFile: File | null = null;
   logoPreviewUrl: string | null = null;
 
@@ -104,12 +105,15 @@ export class CategoryFormComponent implements OnInit {
     this.categoryForm.markAllAsTouched();
     if (this.categoryForm.invalid) return;
 
+    this.isSubmitting = true;
     this.orgCategoryService.saveCategory(this.categoryForm.value).subscribe({
       next: (res: any) => {
         if (this.selectedLogoFile && res?.id) {
           this.orgCategoryService.uploadLogo(res.id, this.selectedLogoFile).subscribe({
             next: () => this.finishSuccess(),
             error: () => {
+              this.isSubmitting = false;
+              window.scrollTo({ top: 0, behavior: 'smooth' });
               this.successmessage = 'Category created but logo upload failed.';
               setTimeout(() => { this.successmessage = ''; this.router.navigate(['/orgcategories']); }, 3000);
             }
@@ -119,6 +123,8 @@ export class CategoryFormComponent implements OnInit {
         }
       },
       error: (err: any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.errormessage = 'Failed to create category. ' + (err?.error || '');
         setTimeout(() => this.errormessage = '', 4000);
       }
@@ -126,6 +132,8 @@ export class CategoryFormComponent implements OnInit {
   }
 
   private finishSuccess() {
+    this.isSubmitting = false;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     this.successmessage = 'Category created successfully.';
     setTimeout(() => {
       this.successmessage = '';

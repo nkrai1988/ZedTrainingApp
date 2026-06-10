@@ -47,6 +47,7 @@ export class CoordinatordetailComponent {
   errormessage='';
   successmessage='';
   isdisable:boolean=true;
+  isSubmitting = false;
 
   options = [
     { value: 'marketing', label: 'Marketing' },
@@ -192,27 +193,29 @@ this.router.navigate(['/agencies']);
   }
 
   onUpdate(){
-    this.detailForm.markAllAsTouched(); 
+    this.detailForm.markAllAsTouched();
     this.detailForm.controls['email'].enable();
     console.log({'this.detailForm':this.detailForm.value});
-    
+
     if (this.detailForm.invalid) return;
-    if (this.detailForm.valid) {    
-      // Call your ApiService here
+    if (this.detailForm.valid) {
+      this.isSubmitting = true;
        this.coordinatorservice.editAgency(this.detailForm.value).subscribe({
-      next: (response:any) => { 
+      next: (response:any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage ="Coordinator Updated successfully."
-        
-      // Redirect
       setTimeout(() => {
         this.successmessage ='';
         this.errormessage='';
       this.router.navigate(['/agencies']);
       }, 3000);
-       //this.router.navigate(['/dashboard']); 
       },
-      error: (error:any) => {console.error('Error:', error)
-        this.errormessage='Coordinator Update failed. '+error.error;//error.message;
+      error: (error:any) => {
+        this.isSubmitting = false;
+        console.error('Error:', error)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.errormessage='Coordinator Update failed. '+error.error;
         setTimeout(() => {
           this.errormessage='';
         }, 3000);
@@ -222,27 +225,27 @@ this.router.navigate(['/agencies']);
   }
 
   onSubmit(){
-    this.detailForm.markAllAsTouched(); 
-   // console.log({'this.detailForm':this.detailForm.value});
+    this.detailForm.markAllAsTouched();
     console.log({'this.detailForm':this.detailForm});
-    //return;
     if (this.detailForm.invalid) return;
-    if (this.detailForm.valid) {    
-      // Call your ApiService here
+    if (this.detailForm.valid) {
+      this.isSubmitting = true;
        this.coordinatorservice.postAgency(this.detailForm.value).subscribe({
-      next: (response:any) => { 
+      next: (response:any) => {
+        this.isSubmitting = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         this.successmessage ="Coordinator created successfully."
-        //this.helperService.storeLoginData(response);      
-      // Redirect
       setTimeout(() => {
         this.successmessage ='';
         this.errormessage='';
       this.router.navigate(['/coordinators']);
       }, 3000);
-       //this.router.navigate(['/dashboard']); 
       },
-      error: (error:any) => {console.error('Error:', error)
-        this.errormessage='Coordinator creation failed. '+error.error;//error.message;
+      error: (error:any) => {
+        this.isSubmitting = false;
+        console.error('Error:', error)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.errormessage='Coordinator creation failed. '+error.error;
         setTimeout(() => {
           this.errormessage='';
         }, 3000);

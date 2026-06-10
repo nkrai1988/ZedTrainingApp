@@ -89,12 +89,12 @@
 
     <div class="lg:col-span-2 flex items-center gap-3 mt-2 lg:justify-end">
       <ng-container *ngIf="!id">
-        <app-button size="md" (btnClick)="clearForm()" variant="outline">Clear</app-button>
-        <app-button size="md" (btnClick)="onSubmit()">Save Changes</app-button>
+        <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
+        <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Save Changes' }}</app-button>
       </ng-container>
       <ng-container *ngIf="id">
-        <app-button size="md" (btnClick)="cancelUpdate()" variant="outline">Cancel</app-button>
-        <app-button size="md" (btnClick)="onUpdate()">Update</app-button>
+        <app-button size="md" (btnClick)="cancelUpdate()" variant="outline" [disabled]="isSubmitting">Cancel</app-button>
+        <app-button size="md" (btnClick)="onUpdate()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Update' }}</app-button>
       </ng-container>
     </div>
 

@@ -143,13 +143,13 @@
     </div>
 
     <div *ngIf="!id" class="flex items-center gap-3 mt-6 lg:justify-end">
-      <app-button size="md" (btnClick)="clearForm()" variant="outline">Clear</app-button>
-      <app-button size="md" (btnClick)="onSubmit()">Create</app-button>
+      <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
+      <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Create' }}</app-button>
     </div>
 
     <div *ngIf="id" class="flex items-center gap-3 mt-6 lg:justify-end">
-      <app-button size="md" (btnClick)="cancelUpdate()" variant="outline">Cancel</app-button>
-      <app-button size="md" (btnClick)="onUpdate()">Update</app-button>
+      <app-button size="md" (btnClick)="cancelUpdate()" variant="outline" [disabled]="isSubmitting">Cancel</app-button>
+      <app-button size="md" (btnClick)="onUpdate()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Update' }}</app-button>
     </div>
 
   </app-component-card>
