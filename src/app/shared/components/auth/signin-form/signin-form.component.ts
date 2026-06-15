@@ -82,6 +82,9 @@ private helperService = inject(HelperService);
         this.helperService.storeLoginData(response); 
         if(this.helperService.IsAgency()){
          this.router.navigate(['/coordinators']);     
+        }
+        else if(this.helperService.IsCoordinator()){
+         this.router.navigate(['/programme']);     
         } 
         else{
           this.router.navigate(['/dashboard']);     

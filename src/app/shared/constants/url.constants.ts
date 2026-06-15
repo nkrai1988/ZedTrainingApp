@@ -111,4 +111,7 @@
   registrationSteps: 'registrationstepconfig',
   registrationStepsAdmin: 'registrationstepconfig/admin',
   registrationStepsToggle: 'registrationstepconfig/toggle',
+  practicalScoresBatches: 'practicalscores/batches',
+  practicalScoresGet: 'practicalscores/scores',
+  practicalScoresSubmit: 'practicalscores/submitscores',
 }

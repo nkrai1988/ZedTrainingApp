@@ -68,6 +68,8 @@ import { AddSubcategoryComponent } from './pages/org-categories/add-subcategory/
 import { CategoryAdminListComponent } from './pages/category-admin/category-admin-list/category-admin-list.component';
 import { CategoryAdminFormComponent } from './pages/category-admin/category-admin-form/category-admin-form.component';
 import { RegistrationConfigComponent } from './pages/registration-config/registration-config.component';
+import { PracticalScoresBatchesComponent } from './pages/participants/practical-scores-batches/practical-scores-batches.component';
+import { PracticalScoresComponent } from './pages/participants/practical-scores/practical-scores.component';
 
 export const routes: Routes = [
   {
@@ -428,6 +430,20 @@ export const routes: Routes = [
         path: 'registration-config',
         component: RegistrationConfigComponent,
         title: 'Registration Form Configuration',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'practicalscoresbatches',
+        component: PracticalScoresBatchesComponent,
+        pathMatch: 'full',
+        title: 'Practical Scores — Batches',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'practicalscores/:id',
+        component: PracticalScoresComponent,
+        pathMatch: 'full',
+        title: 'Update Practical Scores',
         canActivate: [AuthGuard]
       },
     ]

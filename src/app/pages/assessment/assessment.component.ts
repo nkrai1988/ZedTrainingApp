@@ -64,19 +64,36 @@ export class AssessmentComponent implements OnInit {
     this.errorMessage = '';
 
     this.assessmentService.checkExamStatus(this.verifyForm.value).subscribe({
-      next: (res: AssessmentResponse) => {
+      next: (res: any) => {
         this.loading = false;
-        if (res.status === '0') {
-          this.errorMessage = res.errorMessage || 'Verification failed.';
+        const statusRow = res?.Table?.[0];
+        if (!statusRow || statusRow.ErrorStatus === 0) {
+          this.errorMessage = statusRow?.ErrorMessage || 'Verification failed.';
           return;
         }
-        const data = Array.isArray(res.data) && res.data.length > 0 ? res.data[0] : null;
-        if (data) {
-          this.candidateId = Number(data['CandidateId'] ?? data['candidateId'] ?? 0);
-          this.candidateName = data['CandidateName'] ?? data['candidateName'] ?? '';
+
+        const candidate = res?.Table5?.[0];
+        if (candidate) {
+          this.candidateId = Number(candidate.CandidateId ?? candidate.Id ?? 0);
+          this.candidateName = [candidate.FirstName, candidate.LastName].filter(Boolean).join(' ');
           this.batchNo = this.verifyForm.value.batchNo;
         }
-        this.loadQuestions();
+
+        const rawQuestions: any[] = res?.Table2 ?? [];
+        const rawOptions: any[] = res?.Table3 ?? [];
+
+        this.questions = rawQuestions.map((q: any) => ({
+          sectionCode: q.SectionCode,
+          sectionName: q.SectionName,
+          questionCode: q.QuestionCode,
+          questionName: q.QuestionText,
+          answerType: 'radio',
+          options: rawOptions
+            .filter((o: any) => o.SectionCode === q.SectionCode && o.QuestionCode === q.QuestionCode)
+            .map((o: any) => ({ optionCode: o.OptionCode, optionName: o.OptionName }))
+        }));
+
+        this.step = 2;
       },
       error: () => {
         this.loading = false;

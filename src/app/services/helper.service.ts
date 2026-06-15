@@ -127,6 +127,14 @@ export class HelperService{
         return false;
     }
 
+    IsCoordinator():boolean{
+        var role = this.getUserRole();
+        if(role &&  role == '4'){
+            return true;
+        }
+        return false;
+    }
+
     IsAssessor():boolean{
         var role = this.getUserRole();
         if(role &&  role == '5'){

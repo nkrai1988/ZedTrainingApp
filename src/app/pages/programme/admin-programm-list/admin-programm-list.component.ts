@@ -83,29 +83,31 @@ handleStateSelectChange(value: string) {
 
   loadProgrammeType(){
     let programmeTypes= this.helperService.getUserTraingProgrammeswithValue();
-    console.log({'programmeTypes':programmeTypes});
     programmeTypes.forEach((element:any) => {
       this.programmetypeOptions.push({value:element.qpCode,label:element.qpName});
     });
+    if(this.programmetypeOptions.length ==  1){
+      this.programmetype=this.programmetypeOptions[0].value;
+    }
   }
 
 handleStatusSelectChange(value: string) {
     this.selectedOptionforStatus = value;
-    console.log('Selected value:', value);
+    
     this.filterForm.controls['Status'].setValue(value)
 }
 
   handleStartDateChange(event: any) {
     this.dateValue = event;
-    console.log('Date changed:', event);
+    
     let dtstr = event.dateStr.split('-');
-    console.log(dtstr);
+    
     this.filterForm.controls['StartDate'].setValue((dtstr[2]+dtstr[0]+dtstr[1]));//yymmdd
   }
 
   handleEndDateChange(event: any) {
     this.dateValue = event;
-    console.log('Date changed:', event);
+    
     let dtstr = event.dateStr.split('-');
     this.filterForm.controls['EndDate'].setValue((dtstr[2]+dtstr[0]+dtstr[1]));//yymmdd
   }
@@ -257,6 +259,8 @@ handleStatusSelectChange(value: string) {
       Status:this.filterForm.value.Status,
       StartDate:this.filterForm.value.StartDate,
       EndDate:this.filterForm.value.EndDate,
+      Type:'Training',//this.programmetype,
+      reportType:'New'
     }
 
     console.log({'filters':filters});

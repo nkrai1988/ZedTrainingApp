@@ -1,0 +1,124 @@
+<app-component-card>
+  <div class="p-4">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Practical Scores Update</h2>
+      <a routerLink="/practicalscoresbatches"
+         class="rounded bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+        &larr; Back
+      </a>
+    </div>
+
+    @if (errorMessage) {
+      <div class="mb-4 rounded border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ errorMessage }}
+      </div>
+    }
+    @if (successMessage) {
+      <div class="mb-4 rounded border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-700">
+        {{ successMessage }}
+      </div>
+    }
+
+    @if (venue) {
+      <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="rounded border border-green-200 bg-green-50 p-4 text-sm dark:border-green-700 dark:bg-green-900/20">
+          <dl class="space-y-1">
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Programme ID</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.batchNo }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Programme</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.qpName }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Venue</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.venueName }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">State</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.stateName }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">District</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.districtname }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Pin Code</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.zip }}</dd></div>
+          </dl>
+        </div>
+        <div class="rounded border border-green-200 bg-green-50 p-4 text-sm dark:border-green-700 dark:bg-green-900/20">
+          <dl class="space-y-1">
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Agency</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.agency }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Coordinator</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.firstname }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Email ID</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.email }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Mobile No</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.phoneno }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">Start Date</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.startDate }}</dd></div>
+            <div class="flex gap-2"><dt class="font-semibold text-gray-600 dark:text-gray-400 w-32">End Date</dt><dd class="text-gray-800 dark:text-gray-200">{{ venue.endDate }}</dd></div>
+          </dl>
+        </div>
+      </div>
+    }
+
+    @if (dataLoadProgress) {
+      <app-dataloadinprogress />
+    } @else if (participants.length === 0) {
+      <app-datanotfound />
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">S.No</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Name</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Attendance<br />(Max 10)</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Class Participation<br />(Max 10)</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Communication Skills<br />(Max 10)</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Assessment Skills<br />(Max 10)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 bg-white dark:divide-gray-700 dark:bg-gray-800">
+            @for (p of participants; track p.candidateId; let i = $index) {
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td class="px-4 py-2 text-center text-gray-700 dark:text-gray-300">{{ i + 1 }}</td>
+                <td class="px-4 py-2 text-gray-700 dark:text-gray-300">{{ p.firstName }} {{ p.lastName }}</td>
+                <td class="px-4 py-2 text-center">
+                  <input
+                    type="number" min="0" max="10"
+                    [(ngModel)]="p.attendance"
+                    [disabled]="alreadySubmitted"
+                    class="w-20 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-60"
+                  />
+                </td>
+                <td class="px-4 py-2 text-center">
+                  <input
+                    type="number" min="0" max="10"
+                    [(ngModel)]="p.classParticipation"
+                    [disabled]="alreadySubmitted"
+                    class="w-20 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-60"
+                  />
+                </td>
+                <td class="px-4 py-2 text-center">
+                  <input
+                    type="number" min="0" max="10"
+                    [(ngModel)]="p.communicationSkills"
+                    [disabled]="alreadySubmitted"
+                    class="w-20 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-60"
+                  />
+                </td>
+                <td class="px-4 py-2 text-center">
+                  <input
+                    type="number" min="0" max="10"
+                    [(ngModel)]="p.assessmentSkills"
+                    [disabled]="alreadySubmitted"
+                    class="w-20 rounded border border-gray-300 px-2 py-1 text-center text-sm focus:border-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-white disabled:opacity-60"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (!alreadySubmitted) {
+        <div class="mt-4 flex justify-end">
+          <button
+            (click)="submitScores()"
+            [disabled]="submitting"
+            class="rounded bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+          >
+            {{ submitting ? 'Submitting...' : 'Submit' }}
+          </button>
+        </div>
+      } @else if (!successMessage) {
+        <div class="mt-4 rounded border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-700">
+          Scores have already been submitted for this batch.
+        </div>
+      }
+    }
+  </div>
+</app-component-card>

@@ -1,0 +1,55 @@
+<app-component-card>
+  <div class="p-4">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-white">Programmes — Update Practical Scores</h2>
+    </div>
+
+    @if (errorMessage) {
+      <div class="mb-4 rounded border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {{ errorMessage }}
+      </div>
+    }
+
+    @if (dataLoadProgress) {
+      <app-dataloadinprogress />
+    } @else if (batches.length === 0) {
+      <app-datanotfound />
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">S.No</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Programme ID</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Programme</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold uppercase">Venue</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Start Date</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">End Date</th>
+              <th class="px-4 py-3 text-center text-xs font-semibold uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 bg-white dark:divide-gray-700 dark:bg-gray-800">
+            @for (batch of batches; track batch.batchNo; let i = $index) {
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">{{ i + 1 }}</td>
+                <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">{{ batch.batchNo }}</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{{ batch.qpName }}</td>
+                <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{{ batch.venueName }}</td>
+                <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">{{ batch.strStartDate }}</td>
+                <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300">{{ batch.strEndDate }}</td>
+                <td class="px-4 py-3 text-center">
+                  <a
+                    [routerLink]="['/practicalscores', batch.batchNo]"
+                    class="inline-block rounded bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+                  >
+                    Update Practical Scores
+                  </a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</app-component-card>
