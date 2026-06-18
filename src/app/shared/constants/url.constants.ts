@@ -26,6 +26,8 @@
   qcstatuschangetoReject:'agency/qcrejectprogramme',
   qcprogrammeapprove:'programme/approve',
   programmereject:'programme/reject',
+  programmeCloseRegistration:'programme/closeregistration',
+  programmePostpone:'programme/postpone',
   statesall:'common/states',
   districtbystates:'common/statedistricts',
   programmelist:'programme/list',

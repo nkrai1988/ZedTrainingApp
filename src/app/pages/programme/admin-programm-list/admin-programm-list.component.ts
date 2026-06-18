@@ -23,6 +23,7 @@ import { ModalService } from '../../../shared/services/modal.service';
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
 import { RouterModule } from '@angular/router';
 import { ProgrammeService } from '../../../services/programme.service';
+import { TrainingService, UpdateExamTimeRequest } from '../../../services/training.service';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { SelectComponent } from '../../../shared/components/form/select/select.component';
 import { DatePickerComponent } from '../../../shared/components/form/date-picker/date-picker.component';
@@ -53,7 +54,7 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
    styleUrl: './admin-programm-list.component.css',
 })
 export class AdminProgrammListComponent {
-  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,private helperService:HelperService){
+  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService, private trainingService:TrainingService){
 
     }
 
@@ -476,7 +477,115 @@ handleStatusSelectChange(value: string) {
 return statusString;
   }
 
-  changeUserStatus(user:any){ 
+  // ── Postpone ───────────────────────────────────────────────────────────────
+  isPostponeOpen = false;
+  postponeItem: any = null;
+  postponeComment = '';
+  postponeCommentError = false;
+
+  openPostponeModal(row: any) {
+    this.postponeItem = row;
+    this.postponeComment = '';
+    this.postponeCommentError = false;
+    this.isPostponeOpen = true;
+  }
+
+  closePostponeModal() {
+    this.postponeItem = null;
+    this.isPostponeOpen = false;
+    this.postponeCommentError = false;
+  }
+
+  confirmPostpone() {
+    if (!this.postponeComment.trim()) {
+      this.postponeCommentError = true;
+      return;
+    }
+    this.programmeservice.postponeProgramme(this.postponeItem.batchNo, this.postponeComment).subscribe({
+      next: () => {
+        const batchNo = this.postponeItem.batchNo;
+        this.closePostponeModal();
+        this.getProgrammesFromServer();
+        this.successmessage = 'Programme ' + batchNo + ' postponed successfully.';
+        setTimeout(() => { this.successmessage = ''; }, 5000);
+      },
+      error: () => { this.closePostponeModal(); }
+    });
+  }
+
+  // ── Close Registration ─────────────────────────────────────────────────────
+  isCloseRegOpen = false;
+  closeRegItem: any = null;
+
+  openCloseRegModal(row: any) {
+    this.closeRegItem = row;
+    this.isCloseRegOpen = true;
+  }
+
+  closeCloseRegModal() {
+    this.closeRegItem = null;
+    this.isCloseRegOpen = false;
+  }
+
+  confirmCloseRegistration() {
+    this.programmeservice.closeRegistration(this.closeRegItem.batchNo).subscribe({
+      next: () => {
+        this.closeCloseRegModal();
+        this.getProgrammesFromServer();
+        this.successmessage = 'Registrations closed for programme ' + this.closeRegItem?.batchNo + ' successfully.';
+        setTimeout(() => { this.successmessage = ''; }, 5000);
+      },
+      error: () => { this.closeCloseRegModal(); }
+    });
+  }
+
+  // ── Set Exam Time ──────────────────────────────────────────────────────────
+  isExamTimeOpen = false;
+  examTimeItem: any = null;
+  examStartTime = '';
+  examEndTime = '';
+  examTimeError = '';
+
+  openExamTimeModal(row: any) {
+    this.examTimeItem = row;
+    this.examStartTime = row.examStartTime || '';
+    this.examEndTime = row.examEndTime || '';
+    this.examTimeError = '';
+    this.isExamTimeOpen = true;
+  }
+
+  closeExamTimeModal() {
+    this.examTimeItem = null;
+    this.isExamTimeOpen = false;
+    this.examTimeError = '';
+  }
+
+  confirmSetExamTime() {
+    if (!this.examStartTime) {
+      this.examTimeError = 'Exam Start Time is required.';
+      return;
+    }
+    const req: UpdateExamTimeRequest = {
+      batchId: this.examTimeItem.batchNo,
+      startTime: this.examStartTime,
+      endTime: this.examEndTime
+    };
+    this.trainingService.updateExamStartEndTime(req).subscribe({
+      next: (res: any) => {
+        if (res.status === '1') {
+          this.closeExamTimeModal();
+          this.getProgrammesFromServer();
+          this.successmessage = 'Exam time updated for programme ' + req.batchId + ' successfully.';
+          setTimeout(() => { this.successmessage = ''; }, 5000);
+        } else {
+          this.examTimeError = res.errorMessage || 'Failed to update exam time.';
+        }
+      },
+      error: () => { this.examTimeError = 'Failed to update exam time.'; }
+    });
+  }
+
+  changeUserStatus(user:any){
     // let confirmText = user.isActive ? 'Block this user and prevent future access?': 'Un Block this user?'
     // if(confirm(confirmText)){
     //   this.agencyservice.putAuditorStatus(user).subscribe({

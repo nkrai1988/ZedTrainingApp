@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   AssessmentService,
   AssessmentQuestion,
@@ -27,11 +27,13 @@ interface OptionItem {
 @Component({
   selector: 'app-assessment',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './assessment.component.html',
   styleUrls: ['./assessment.component.css']
 })
-export class AssessmentComponent implements OnInit {
+export class AssessmentComponent implements OnInit, OnDestroy {
+
+  // Steps: 1=Verify, 2=Details, 3=Photo, 4=Questions, 5=Review, 6=Done
   step = 1;
   loading = false;
   errorMessage = '';
@@ -40,13 +42,46 @@ export class AssessmentComponent implements OnInit {
   candidateId = 0;
   batchNo = '';
   candidateName = '';
+  candidateEmail = '';
+  candidateMobile = '';
+  programmeId = '';
+  programmeName = '';
+  venue = '';
+  programLink = '';
 
   questions: QuestionItem[] = [];
-  photoRefId = '';
-  selectedFile: File | null = null;
-  photoPreview: string | null = null;
+  currentPage = 1;
+  readonly pageSize = 10;
+  declared = false;
 
-  isMobile = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+  // Camera
+  @ViewChild('videoElement') videoRef!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement') canvasRef!: ElementRef<HTMLCanvasElement>;
+  private cameraStream: MediaStream | null = null;
+  cameraError = '';
+  photoTaken = false;
+  photoPreview: string | null = null;
+  photoRefId = '';
+
+  get totalPages(): number {
+    return Math.ceil(this.questions.length / this.pageSize);
+  }
+
+  get pageStart(): number {
+    return (this.currentPage - 1) * this.pageSize;
+  }
+
+  get pagedQuestions(): QuestionItem[] {
+    return this.questions.slice(this.pageStart, this.pageStart + this.pageSize);
+  }
+
+  get isLastPage(): boolean {
+    return this.currentPage === this.totalPages;
+  }
+
+  currentPageAnswered(): boolean {
+    return this.pagedQuestions.every(q => q.answerCode || q.answerText);
+  }
 
   constructor(private fb: FormBuilder, private assessmentService: AssessmentService) {
     this.verifyForm = this.fb.group({
@@ -57,6 +92,12 @@ export class AssessmentComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.stopCamera();
+  }
+
+  // ── Step 1: Verify ─────────────────────────────────────────────────────────
 
   checkStatus(): void {
     if (this.verifyForm.invalid) return;
@@ -73,10 +114,21 @@ export class AssessmentComponent implements OnInit {
         }
 
         const candidate = res?.Table5?.[0];
+        const programme = res?.Table4?.[0];
+
         if (candidate) {
           this.candidateId = Number(candidate.CandidateId ?? candidate.Id ?? 0);
           this.candidateName = [candidate.FirstName, candidate.LastName].filter(Boolean).join(' ');
+          this.candidateEmail = candidate.EmailId ?? candidate.Email ?? '';
+          this.candidateMobile = candidate.MobileNo ?? candidate.Mobile ?? candidate.PhoneNo ?? '';
           this.batchNo = this.verifyForm.value.batchNo;
+        }
+
+        if (programme) {
+          this.programmeId = programme.BatchNo ?? '';
+          this.programmeName = programme.QpName ?? '';
+          this.venue = programme.VenueName ?? '';
+          this.programLink = programme.WebLink ?? '';
         }
 
         const rawQuestions: any[] = res?.Table2 ?? [];
@@ -102,34 +154,110 @@ export class AssessmentComponent implements OnInit {
     });
   }
 
-  private loadQuestions(): void {
-    this.loading = true;
-    this.assessmentService.getQuestions('SelfAssessment').subscribe({
-      next: (res: AssessmentResponse) => {
-        this.loading = false;
-        if (res.status === '0') {
-          this.errorMessage = res.errorMessage || 'Could not load questions.';
-          return;
-        }
-        const { questions = [], options = [] } = res.data ?? {};
-        this.questions = questions.map((q: any) => ({
-          sectionCode: q.sectionCode,
-          sectionName: q.sectionName,
-          questionCode: q.questionCode,
-          questionName: q.questionName,
-          answerType: q.answerType,
-          options: options
-            .filter((o: any) => o.sectionCode === q.sectionCode && o.questionCode === q.questionCode)
-            .sort((a: any, b: any) => (a.newOrderNo ?? 0) - (b.newOrderNo ?? 0))
-            .map((o: any) => ({ optionCode: o.optionCode, optionName: o.optionName }))
-        }));
-        this.step = 2;
-      },
-      error: () => {
-        this.loading = false;
-        this.errorMessage = 'Could not load questions.';
+  // ── Step 2 → 3: Photo ──────────────────────────────────────────────────────
+
+  goToPhoto(): void {
+    this.errorMessage = '';
+    this.cameraError = '';
+    this.photoTaken = false;
+    this.photoPreview = null;
+    this.step = 3;
+    // Wait for *ngIf to render the video element before starting camera
+    setTimeout(() => this.startCamera(), 100);
+  }
+
+  // ── Step 3: Camera ─────────────────────────────────────────────────────────
+
+  async startCamera(): Promise<void> {
+    this.cameraError = '';
+    try {
+      this.cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 640 } }
+      });
+      const video = this.videoRef?.nativeElement;
+      if (video) {
+        video.srcObject = this.cameraStream;
+        await video.play();
       }
-    });
+    } catch {
+      this.cameraError = 'Camera access denied. Please allow camera permission or skip to proceed.';
+    }
+  }
+
+  capturePhoto(): void {
+    const video = this.videoRef?.nativeElement;
+    const canvas = this.canvasRef?.nativeElement;
+    if (!video || !canvas) return;
+
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 640;
+    canvas.getContext('2d')!.drawImage(video, 0, 0, canvas.width, canvas.height);
+    this.photoPreview = canvas.toDataURL('image/jpeg', 0.85);
+    this.photoTaken = true;
+    this.stopCamera();
+  }
+
+  retakePhoto(): void {
+    this.photoPreview = null;
+    this.photoTaken = false;
+    setTimeout(() => this.startCamera(), 100);
+  }
+
+  stopCamera(): void {
+    this.cameraStream?.getTracks().forEach(t => t.stop());
+    this.cameraStream = null;
+  }
+
+  proceedToQuestions(): void {
+    this.stopCamera();
+    this.errorMessage = '';
+    this.currentPage = 1;
+    this.step = 4;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  backToDetails(): void {
+    this.stopCamera();
+    this.errorMessage = '';
+    this.step = 2;
+  }
+
+  // ── Step 4: Questions ──────────────────────────────────────────────────────
+
+  nextPage(): void {
+    if (!this.currentPageAnswered()) {
+      this.errorMessage = 'Please answer all questions on this page before continuing.';
+      return;
+    }
+    this.errorMessage = '';
+    this.currentPage++;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  prevPage(): void {
+    this.errorMessage = '';
+    this.currentPage--;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  goToReview(): void {
+    if (!this.allAnswered()) {
+      this.errorMessage = 'Please answer all questions before proceeding.';
+      return;
+    }
+    this.errorMessage = '';
+    this.step = 5;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Step 5: Review ─────────────────────────────────────────────────────────
+
+  backToQuestions(): void {
+    this.errorMessage = '';
+    this.declared = false;
+    this.currentPage = this.totalPages;
+    this.step = 4;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   selectAnswer(question: QuestionItem, optionCode: string, optionName: string): void {
@@ -150,10 +278,7 @@ export class AssessmentComponent implements OnInit {
   }
 
   submitQuestions(): void {
-    if (!this.allAnswered()) {
-      this.errorMessage = 'Please answer all questions before proceeding.';
-      return;
-    }
+    if (!this.allAnswered() || !this.declared) return;
     this.loading = true;
     this.errorMessage = '';
 
@@ -179,7 +304,7 @@ export class AssessmentComponent implements OnInit {
           this.errorMessage = res.errorMessage || 'Failed to save answers.';
           return;
         }
-        this.step = 3;
+        this.uploadPhotoThenFinish();
       },
       error: () => {
         this.loading = false;
@@ -188,67 +313,32 @@ export class AssessmentComponent implements OnInit {
     });
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
-    this.selectedFile = input.files[0];
-    const reader = new FileReader();
-    reader.onload = e => this.photoPreview = e.target?.result as string;
-    reader.readAsDataURL(this.selectedFile);
-  }
+  // ── Photo upload + final submit ─────────────────────────────────────────────
 
-  uploadPhoto(): void {
-    if (!this.selectedFile && !this.photoPreview) {
+  private uploadPhotoThenFinish(): void {
+    if (!this.photoPreview) {
       this.finalSubmit();
       return;
     }
 
     this.loading = true;
-    this.errorMessage = '';
-
-    if (this.selectedFile) {
-      this.assessmentService.uploadImage(this.selectedFile, this.candidateId, this.batchNo, 'SelfiePhoto').subscribe({
-        next: (res: AssessmentResponse) => {
-          this.loading = false;
-          if (res.status === '0') {
-            this.errorMessage = res.errorMessage || 'Photo upload failed.';
-            return;
-          }
-          this.photoRefId = res.refId ?? '';
-          this.finalSubmit();
-        },
-        error: () => {
-          this.loading = false;
-          this.errorMessage = 'Photo upload failed.';
-        }
-      });
-    } else if (this.photoPreview) {
-      this.assessmentService.uploadBase64Image({
-        base64Data: this.photoPreview,
-        fileName: 'selfie.jpg',
-        candidateId: this.candidateId,
-        batchNo: this.batchNo,
-        name: 'SelfiePhoto'
-      }).subscribe({
-        next: (res: AssessmentResponse) => {
-          this.loading = false;
-          if (res.status === '0') {
-            this.errorMessage = res.errorMessage || 'Photo upload failed.';
-            return;
-          }
-          this.photoRefId = res.refId ?? '';
-          this.finalSubmit();
-        },
-        error: () => {
-          this.loading = false;
-          this.errorMessage = 'Photo upload failed.';
-        }
-      });
-    }
-  }
-
-  skipPhoto(): void {
-    this.finalSubmit();
+    this.assessmentService.uploadBase64Image({
+      base64Data: this.photoPreview,
+      fileName: 'selfie.jpg',
+      candidateId: this.candidateId,
+      batchNo: this.batchNo,
+      name: 'SelfiePhoto'
+    }).subscribe({
+      next: (res: AssessmentResponse) => {
+        this.loading = false;
+        this.photoRefId = res.refId ?? '';
+        this.finalSubmit();
+      },
+      error: () => {
+        this.loading = false;
+        this.finalSubmit();
+      }
+    });
   }
 
   private finalSubmit(): void {
@@ -262,7 +352,7 @@ export class AssessmentComponent implements OnInit {
           this.errorMessage = res.errorMessage || 'Final submission failed.';
           return;
         }
-        this.step = 4;
+        this.step = 6;
       },
       error: () => {
         this.loading = false;

@@ -91,6 +91,14 @@ getQCApprovalList(ptype:string,status:string,agency:string){
     return this.api.putSimple(APPURLs.programmereject + query, {});
   }
 
+  closeRegistration(batchNo: string) {
+    return this.api.putSimple(APPURLs.programmeCloseRegistration + '?batchNo=' + encodeURIComponent(batchNo), {});
+  }
+
+  postponeProgramme(batchNo: string, comments: string) {
+    return this.api.putSimple(APPURLs.programmePostpone + '?batchNo=' + encodeURIComponent(batchNo) + '&comments=' + encodeURIComponent(comments), {});
+  }
+
   qcRejectProgramme(batchId:any, comment:any){
     return this.api.putSimple(APPURLs.qcstatuschangetoReject, {BatchId:batchId, Comment:comment});
   }

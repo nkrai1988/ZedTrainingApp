@@ -16,7 +16,15 @@
       "Bash(powershell *)",
       "Bash(dir \"D:\\\\AZED\\\\MonitoringZedApp\\\\ZedTrainingApp\\\\public\" /s /b)",
       "Bash(findstr /i \"\\\\.pdf\")",
-      "Bash(npx ng *)"
+      "Bash(npx ng *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\ZEDTraning\\\\ZEDCS_TRAINING\\\\ZEDCS_TRAINING\\\\ResponsiveNet\" -Recurse -Directory)",
+      "Bash(Head -50)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\MonitoringZedApp\\\\ZedTrainingApp\" -Directory)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AZED\\\\AppAndAPI\\\\monitoringapi\\\\ZedTrainingAPI\\\\zedtraningapi\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(awk '{print $NF}')",
+      "Bash(dir \"C:\\\\Users\\\\nandk\\\\OneDrive\\\\Desktop\\\\\" 2>&1 | head -30 *)",
+      "Bash(dir *)"
     ]
   }
 }
