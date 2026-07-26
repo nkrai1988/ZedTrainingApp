@@ -1,63 +1,48 @@
 <div class="grid grid-cols-12 gap-4 md:gap-6">
-  <div class="col-span-6">
-    <div>
-      <app-label>Select State</app-label>
-      <app-select
-        [options]="allstates"
-        placeholder="Select Option"
-        [value]="stateSelectedValue"
-        (valueChange)="handleStateSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-  </div>
-  <div class="col-span-6" *ngIf="tempuser.userId === 1">
-    <div>
-      <app-label>Select Type</app-label>
-      <app-select
-        [options]="programeType"
-        placeholder="Select Option"
-        [value]="selectedValue"
-        (valueChange)="handleProgrammeSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-  </div>
-  <div class="col-span-6" *ngIf="tempuser.userId != 1">
-    <div>
-      <app-label>Programme</app-label>
-      <app-select
-        [options]="programeType"
-        placeholder="Select Option"
-        [value]="selectedQPValue"
-        (valueChange)="handleQPProgrammeSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-  </div>
+
+  <!-- Filter Card -->
   <div class="col-span-12">
-    <div><app-ecommerce-metrics [dataLoadProgress]="dataLoadProgress" [programmeCount]="ProgrammeNumber" [participantCount]="ParticipantNumber" /></div>
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl p-5">
+      <div class="flex items-end gap-4">
 
-    <!-- <div><app-monthly-sales-chart /></div> -->
+        <!-- State -->
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Select State</p>
+          <app-select
+            [options]="allstates"
+            placeholder="All States & Territories"
+            [value]="stateSelectedValue"
+            (valueChange)="handleStateSelectChange($event)"
+            className="dark:bg-dark-900"
+          ></app-select>
+        </div>
+
+<!-- Apply Filters -->
+        <button
+          (click)="applyFilters()"
+          class="flex items-center gap-2 px-5 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Apply Filters
+        </button>
+
+      </div>
+    </div>
   </div>
 
-  <!-- <div class="col-span-12 xl:col-span-5">
-    <app-monthly-target />
-  </div> -->
+  <!-- Metrics Cards -->
+  <div class="col-span-12">
+    <app-ecommerce-metrics
+      [dataLoadProgress]="dataLoadProgress"
+      [programmeCount]="ProgrammeNumber"
+      [participantCount]="ParticipantNumber"
+    />
+  </div>
 
-  <!-- <div class="col-span-12">
-    <app-statics-chart />
-  </div> -->
-
+  <!-- Map -->
   <div class="col-span-12" *ngIf="loadMap">
-    <app-demographic-card  [allLocation]="locationData"/>
+    <app-demographic-card [allLocation]="locationData"/>
   </div>
 
-  <!-- <div class="col-span-12 xl:col-span-5">
-    <app-demographic-card />
-  </div> -->
-
-  <!-- <div class="col-span-12 xl:col-span-7">
-    <app-recent-orders/>
-  </div> -->
 </div>

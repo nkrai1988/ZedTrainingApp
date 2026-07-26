@@ -26,17 +26,7 @@
 
 <app-component-card *ngIf="helperService.IsSuperAdmin()">
   <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-    <div>
-      <app-label>Programme Type:</app-label>
-      <app-select
-        [options]="programmetypeOptions"
-        placeholder="Select an option"
-        [value]="programmetype"
-        (valueChange)="handleSelectAll($event)"
-      ></app-select>
-      <p *ngIf="newProgrammeclicked && (programmetype == '')" class="mt-1.5 text-xs text-error-500">Programme Type is required.</p>
-    </div>
-    <div class="space-y-5" >
+    <div class="space-y-5">
       <div>
         <app-label>Programme Name:</app-label>
         <div class="relative">
@@ -55,7 +45,7 @@
 <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
   <div class="flex flex-col items-start gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
     <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Curriculum</h3>
-    <div class="flex flex-wrap items-center gap-4" *ngIf="helperService.IsSuperAdmin()">
+    <div class="flex flex-wrap items-center gap-4">
       <app-radio [id]="'Active'" [name]="'group1'" [value]="'Active'" [checked]="checkedValue === 'Active'"
         [label]="'Active Curriculum'" [disabled]="false" (valueChange)="handleRadioChange('Active')"/>
       <app-radio [id]="'Blocked'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Blocked'"
@@ -67,64 +57,43 @@
     <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
       <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S.No</th>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme Type</th>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme Code</th>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Programme Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Status</th>
-          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S. NO.</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PROGRAMME CODE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PROGRAMME NAME</th>
+          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
         </tr>
       </thead>
       <tbody>
         @for (row of dataRow; track $index) {
-        <tr>
+        <tr class="border-t border-gray-100 dark:border-white/[0.05]">
           <td class="px-6 py-3.5">
             <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index + 1 }}</span>
           </td>
           <td class="px-6 py-3.5">
-            <span class="text-gray-500 text-theme-sm dark:text-gray-400">
-              {{ row.programCode === 'ZEDAP' ? 'Industry Awareness Programme' : 'Training Programme' }}
-            </span>
-          </td>
-          <td class="px-6 py-3.5">
-            <a (click)="gotosession(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+            <a (click)="gotosession(row)" class="click-link text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 cursor-pointer">
               {{ row.qpCode }}
             </a>
           </td>
           <td class="px-6 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.qpName }}</p>
           </td>
-          <td class="px-6 py-3.5">
-            <app-badge variant="light" [color]="getStatusBadgeColor(row.isActive)" size="sm">
-              {{ row.isActive ? 'Active' : 'Blocked' }}
-            </app-badge>
-          </td>
           <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
             @if (row.id) {
-            <div class="inline-flex items-center gap-2">
-              <button
-                [title]="row.isActive ? 'Block' : 'Un-Block'"
-                (click)="changeUserStatus(row)"
-                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-              >
-                @if (row.isActive) {
-                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="8.5" cy="7" r="4"></circle>
-                  <line x1="18" y1="8" x2="23" y2="13"></line>
-                  <line x1="23" y1="8" x2="18" y2="13"></line>
-                </svg>
-                } @else {
-                <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="8.5" cy="7" r="4"></circle>
-                  <polyline points="17 11 19 13 23 9"></polyline>
-                </svg>
-                }
-              </button>
-              <span class="text-gray-300 dark:text-gray-600">|</span>
-              <a title="Edit" (click)="openModal(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">Edit</a>
-            </div>
+            <button
+              (click)="changeUserStatus(row)"
+              [title]="row.isActive ? 'Block Curriculum' : 'Unblock Curriculum'"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
+              [ngClass]="row.isActive
+                ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
+                : 'border-green-200 bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'">
+              <svg *ngIf="row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+              </svg>
+              <svg *ngIf="!row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6L9 17l-5-5"/>
+              </svg>
+              {{ row.isActive ? 'Block' : 'Unblock' }}
+            </button>
             }
           </td>
         </tr>

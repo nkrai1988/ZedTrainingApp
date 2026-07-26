@@ -1,25 +1,17 @@
 import { Component, inject } from '@angular/core';
-import { LabelComponent } from '../../form/label/label.component';
-import { ButtonComponent } from '../../ui/button/button.component';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AlertComponent } from '../../ui/alert/alert.component';
-import { ComponentCardComponent } from '../../common/component-card/component-card.component';
 import { AuthService } from '../../../../services/auth.service';
 import { HelperService } from '../../../../services/helper.service';
 
 @Component({
   selector: 'app-participant-signin-form',
   imports: [
-    LabelComponent,
-    ButtonComponent,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    AlertComponent,
-    ComponentCardComponent,
   ],
   templateUrl: './participant-signin-form.component.html',
   styles: ``
@@ -27,7 +19,7 @@ import { HelperService } from '../../../../services/helper.service';
 export class ParticipantSigninFormComponent {
 
   showPassword = false;
-  btntext = 'Sign in';
+  btntext = 'Sign In';
 
   signinForm!: FormGroup;
   submitted = false;
@@ -40,7 +32,8 @@ export class ParticipantSigninFormComponent {
     this.errormessage = '';
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      password: ['', [Validators.required, Validators.maxLength(64)]]
+      password: ['', [Validators.required, Validators.maxLength(64)]],
+      rememberMe: [false]
     });
   }
 
@@ -61,7 +54,7 @@ export class ParticipantSigninFormComponent {
         this.router.navigate(['/participantdashboard']);
       },
       error: (error) => {
-        this.btntext = 'Sign in';
+        this.btntext = 'Sign In';
         this.errormessage = (error.error) ? error.error : 'Login failed. Please try again';
       }
     });

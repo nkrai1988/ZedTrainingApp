@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,12 +27,25 @@ import { OrgCategoryService } from '../../../services/org-category.service';
 })
 export class CategoryAdminFormComponent implements OnInit {
 
+  @ViewChild('subCatDropdown') subCatDropdownRef!: ElementRef;
+
   adminForm!: FormGroup;
   categoryOptions: any[] = [];
+  subCategoryOptions: any[] = [];
+  selectedSubCategoryIds: number[] = [];
+  isSubCatDropdownOpen = false;
+  private allCategories: any[] = [];
   selectedCategory = '';
   errormessage = '';
   successmessage = '';
   isSubmitting = false;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.subCatDropdownRef && !this.subCatDropdownRef.nativeElement.contains(event.target)) {
+      this.isSubCatDropdownOpen = false;
+    }
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -47,7 +60,8 @@ export class CategoryAdminFormComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       mobile: ['', [Validators.required, Validators.maxLength(20)]],
-      orgCategory: ['', Validators.required],
+      aadharNo: ['', [Validators.required, Validators.maxLength(20)]],
+      orgCategoryId: [null, Validators.required],
       password: [{ value: this.generatePassword(), disabled: true }]
     });
 
@@ -57,9 +71,8 @@ export class CategoryAdminFormComponent implements OnInit {
   loadCategories() {
     this.orgCategoryService.getCategories().subscribe({
       next: (res: any[]) => {
-        this.categoryOptions = res
-          .filter(c => c.isActive)
-          .map(c => ({ value: c.value, label: c.label }));
+        this.allCategories = res.filter(c => c.isActive);
+        this.categoryOptions = this.allCategories.map(c => ({ value: String(c.id), label: c.label }));
       }
     });
   }
@@ -79,15 +92,58 @@ export class CategoryAdminFormComponent implements OnInit {
 
   handleCategoryChange(value: string) {
     this.selectedCategory = value;
-    this.adminForm.controls['orgCategory'].setValue(value);
+    this.adminForm.controls['orgCategoryId'].setValue(Number(value));
+    this.selectedSubCategoryIds = [];
+    this.isSubCatDropdownOpen = false;
+    const cat = this.allCategories.find(c => String(c.id) === value);
+    this.subCategoryOptions = cat?.subCategories
+      ?.filter((s: any) => s.isActive)
+      .map((s: any) => ({ id: s.id, label: s.label })) ?? [];
+  }
+
+  toggleSubCatDropdown() {
+    if (this.subCategoryOptions.length > 0) {
+      this.isSubCatDropdownOpen = !this.isSubCatDropdownOpen;
+    }
+  }
+
+  getSelectedSubCategoryLabels(): string[] {
+    return this.subCategoryOptions
+      .filter(s => this.selectedSubCategoryIds.includes(s.id))
+      .map(s => s.label);
+  }
+
+  removeSubCategory(id: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.selectedSubCategoryIds = this.selectedSubCategoryIds.filter(x => x !== id);
+  }
+
+  toggleSubCategory(id: number) {
+    const idx = this.selectedSubCategoryIds.indexOf(id);
+    if (idx === -1) {
+      this.selectedSubCategoryIds = [...this.selectedSubCategoryIds, id];
+    } else {
+      this.selectedSubCategoryIds = this.selectedSubCategoryIds.filter(x => x !== id);
+    }
+  }
+
+  isSubCategorySelected(id: number): boolean {
+    return this.selectedSubCategoryIds.includes(id);
   }
 
   onSubmit() {
     this.adminForm.markAllAsTouched();
     if (this.adminForm.invalid) return;
 
+    if (this.selectedSubCategoryIds.length === 0) {
+      this.errormessage = 'Please select at least one sub-category.';
+      setTimeout(() => this.errormessage = '', 4000);
+      return;
+    }
+
     const payload = {
-      ...this.adminForm.getRawValue()
+      ...this.adminForm.getRawValue(),
+      orgSubCategoryIds: this.selectedSubCategoryIds
     };
 
     this.isSubmitting = true;

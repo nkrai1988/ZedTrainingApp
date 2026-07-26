@@ -1,125 +1,199 @@
-<div class="p-4 md:p-6 space-y-6">
+<div class="p-6 md:p-8 space-y-6 min-h-screen flex flex-col">
 
-  <!-- Header -->
-  <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <h1 class="text-xl font-semibold text-gray-800 dark:text-white/90">My Training Dashboard</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400" *ngIf="userName">
-        Welcome back, <span class="font-medium text-gray-700 dark:text-gray-200">{{ userName }}</span>
-      </p>
-    </div>
-    <button
-      (click)="logout()"
-      class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10 transition-colors"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 3.75C16.5 3.33579 16.8358 3 17.25 3H20.25C21.4926 3 22.5 4.00736 22.5 5.25V18.75C22.5 19.9926 21.4926 21 20.25 21H17.25C16.8358 21 16.5 20.6642 16.5 20.25C16.5 19.8358 16.8358 19.5 17.25 19.5H20.25C20.6642 19.5 21 19.1642 21 18.75V5.25C21 4.83579 20.6642 4.5 20.25 4.5H17.25C16.8358 4.5 16.5 4.16421 16.5 3.75ZM10.7197 6.2197C11.0126 5.9268 11.4874 5.9268 11.7803 6.2197L15.5303 9.9697C15.8232 10.2626 15.8232 10.7374 15.5303 11.0303L11.7803 14.7803C11.4874 15.0732 11.0126 15.0732 10.7197 14.7803C10.4268 14.4874 10.4268 14.0126 10.7197 13.7197L13.1893 11.25H3.75C3.33579 11.25 3 10.9142 3 10.5C3 10.0858 3.33579 9.75 3.75 9.75H13.1893L10.7197 7.2803C10.4268 6.9874 10.4268 6.5126 10.7197 6.2197Z"></path>
-      </svg>
-      Sign Out
-    </button>
+  <!-- Page Title -->
+  <div class="flex items-start justify-between flex-wrap gap-3">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Participant Dashboard</h1>
+
+    <!-- Application status banner -->
+    <ng-container *ngIf="!applicationStatusLoading">
+      <span *ngIf="participantStatus === 'Registered' || !participantStatus"
+        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-amber-300 text-amber-700 bg-amber-50 dark:border-amber-500/30 dark:text-amber-400 dark:bg-amber-500/10">
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/></svg>
+        Application not yet submitted
+      </span>
+      <ng-container *ngIf="participantStatus === 'Applied'">
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-blue-300 text-blue-700 bg-blue-50 dark:border-blue-500/30 dark:text-blue-400 dark:bg-blue-500/10">
+          Application Under Review
+        </span>
+        <a [routerLink]="['/participant/myapplication']"
+          class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+          View Application
+        </a>
+      </ng-container>
+      <ng-container *ngIf="participantStatus === 'Active'">
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-green-500 dark:bg-green-600">
+          Application Approved
+        </span>
+        <a [routerLink]="['/participant/myapplication']"
+          class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium border border-green-400 text-green-700 bg-green-50 hover:bg-green-100 transition-colors">
+          View Application
+        </a>
+      </ng-container>
+      <ng-container *ngIf="participantStatus === 'Rejected'">
+        <span
+          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-red-300 text-red-600 bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:bg-red-500/10">
+          Application Rejected
+        </span>
+        <button (click)="goToRegister()"
+          class="ml-2 inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors">
+          Reapply
+        </button>
+      </ng-container>
+    </ng-container>
   </div>
 
-  <!-- Summary Cards -->
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-      <p class="text-sm text-gray-500 dark:text-gray-400">Total Enrolled</p>
-      <p class="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ programmes.length }}</p>
-    </div>
-    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-      <p class="text-sm text-gray-500 dark:text-gray-400">Completed</p>
-      <p class="mt-1 text-2xl font-semibold text-success-600 dark:text-success-400">
-        {{ completedCount }}
-      </p>
-    </div>
-    <div class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-      <p class="text-sm text-gray-500 dark:text-gray-400">Ongoing</p>
-      <p class="mt-1 text-2xl font-semibold text-brand-600 dark:text-brand-400">
-        {{ ongoingCount }}
-      </p>
-    </div>
-  </div>
+  <!-- Quick Overview -->
+  <section>
+    <h2 class="text-base font-semibold text-gray-800 dark:text-white mb-1">Quick Overview</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">View an overview of your training programmes and progress</p>
 
-  <!-- Programmes List -->
-  <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
-    <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800">
-      <h2 class="text-base font-semibold text-gray-800 dark:text-white/90">My Enrolled Programmes</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+      <!-- Total Enrolled -->
+      <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 p-5">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L1 9L12 15L23 9L12 3Z" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 11.5V17C7 17 9 19 12 19C15 19 17 17 17 17V11.5" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full">Active</span>
+        </div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Total Enrolled</p>
+        <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalEnrolled }}</p>
+      </div>
+
+      <!-- Ongoing -->
+      <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 p-5">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="#3b82f6"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full">Active</span>
+        </div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Ongoing</p>
+        <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ ongoingCount }}</p>
+      </div>
+
+      <!-- Completed -->
+      <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 p-5">
+        <div class="flex items-start justify-between mb-4">
+          <div class="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM16.0303 9.46967C16.3232 9.76256 16.3232 10.2374 16.0303 10.5303L11.0303 15.5303C10.7374 15.8232 10.2626 15.8232 9.96967 15.5303L7.96967 13.5303C7.67678 13.2374 7.67678 12.7626 7.96967 12.4697C8.26256 12.1768 8.73744 12.1768 9.03033 12.4697L10.5 13.9393L14.9697 9.46967C15.2626 9.17678 15.7374 9.17678 16.0303 9.46967Z" fill="#3b82f6"/>
+            </svg>
+          </div>
+          <span class="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-500/10 px-2 py-0.5 rounded-full">Active</span>
+        </div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Completed</p>
+        <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ completedCount }}</p>
+      </div>
+
     </div>
+  </section>
+
+  <!-- Ongoing Training Programs -->
+  <section class="flex-1">
+    <h2 class="text-base font-semibold text-gray-800 dark:text-white mb-1">Ongoing Training Programs</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Browse and apply for available training programmes</p>
 
     <!-- Loading -->
-    <div *ngIf="isLoading" class="flex items-center justify-center py-16">
-      <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400">
-        <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-        </svg>
-        <span class="text-sm">Loading your programmes...</span>
+    <div *ngIf="programmesLoading" class="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500 text-sm">
+      Loading programmes...
+    </div>
+
+    <!-- No data -->
+    <div *ngIf="!programmesLoading && programmes.length === 0"
+      class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 flex items-center justify-center py-12 text-gray-400 dark:text-gray-500 text-sm">
+      No ongoing training programmes found for your category.
+    </div>
+
+    <div *ngIf="!programmesLoading && programmes.length > 0" class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">S. No.</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Programme ID</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Programme</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Mode</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">District</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">State</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">Start Date</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide whitespace-nowrap">End Date</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pricing</th>
+              <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let p of programmes; let i = index"
+              class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
+            >
+              <td class="px-4 py-3.5 text-gray-500 dark:text-gray-400 text-center">{{ i + 1 }}</td>
+              <td class="px-4 py-3.5 font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">{{ p.programmeId }}</td>
+              <td class="px-4 py-3.5 text-gray-800 dark:text-white/90 max-w-[200px]">{{ p.programmeName }}</td>
+              <td class="px-4 py-3.5 text-gray-600 dark:text-gray-300">
+                <span *ngIf="p.venue === 'Virtual'">
+                  <a *ngIf="p.webLink" [href]="p.webLink" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">Virtual</a>
+                  <span *ngIf="!p.webLink">Virtual</span>
+                </span>
+                <span *ngIf="p.venue !== 'Virtual'">{{ p.venueName || 'Physical' }}</span>
+              </td>
+              <td class="px-4 py-3.5 text-gray-600 dark:text-gray-300">{{ p.district }}</td>
+              <td class="px-4 py-3.5 text-gray-600 dark:text-gray-300">{{ p.state }}</td>
+              <td class="px-4 py-3.5 text-gray-600 dark:text-gray-300 whitespace-nowrap">{{ p.startDate }}</td>
+              <td class="px-4 py-3.5 text-gray-600 dark:text-gray-300 whitespace-nowrap">{{ p.endDate }}</td>
+
+              <!-- Pricing -->
+              <td class="px-4 py-3.5">
+                <span *ngIf="p.isFree"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400">
+                  Free
+                </span>
+                <span *ngIf="!p.isFree"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400">
+                  Paid
+                </span>
+              </td>
+
+              <!-- Action -->
+              <td class="px-4 py-3.5">
+                <span *ngIf="p.actionType === 'closed'"
+                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-500 border border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 whitespace-nowrap">
+                  Registration Closed
+                </span>
+                <button *ngIf="p.actionType === 'register' && !hasApplied"
+                  (click)="goToRegister()"
+                  class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors whitespace-nowrap">
+                  Register Now
+                </button>
+                <span *ngIf="p.actionType === 'register' && hasApplied"
+                  class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                  Applied
+                </span>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+  </section>
 
-    <!-- Error -->
-    <div *ngIf="!isLoading && hasError" class="px-5 py-12 text-center">
-      <svg class="mx-auto mb-3 w-10 h-10 text-gray-300 dark:text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16C12.5523 16 13 15.5523 13 15C13 14.4477 12.5523 14 12 14C11.4477 14 11 14.4477 11 15C11 15.5523 11.4477 16 12 16Z" fill="currentColor"></path>
-      </svg>
-      <p class="text-sm text-gray-500 dark:text-gray-400">Failed to load programmes. Please try again.</p>
-      <button (click)="loadMyProgrammes()" class="mt-3 text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400">Retry</button>
+  <!-- Footer -->
+  <footer class="pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400 dark:text-gray-500">
+    <span>© 2026 Participant Module <span class="font-mono font-semibold">v2.1.0-STABLE</span></span>
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Compliance Standards</a>
     </div>
-
-    <!-- Empty -->
-    <div *ngIf="!isLoading && !hasError && programmes.length === 0" class="px-5 py-12 text-center">
-      <svg class="mx-auto mb-3 w-10 h-10 text-gray-300 dark:text-gray-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor" opacity="0.2"></path>
-      </svg>
-      <p class="text-sm text-gray-500 dark:text-gray-400">You are not enrolled in any programmes yet.</p>
-    </div>
-
-    <!-- Programmes Table -->
-    <div *ngIf="!isLoading && !hasError && programmes.length > 0" class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-white/[0.03]">
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">#</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Programme Name</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Type</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Start Date</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">End Date</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Location</th>
-            <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let p of programmes; let i = index"
-            class="border-b border-gray-100 dark:border-gray-800 last:border-0 hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors"
-          >
-            <td class="px-5 py-4 text-gray-500 dark:text-gray-400">{{ i + 1 }}</td>
-            <td class="px-5 py-4 font-medium text-gray-800 dark:text-white/90">
-              {{ p.programmeName || p.name || '—' }}
-            </td>
-            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
-              {{ p.programmeType || p.type || '—' }}
-            </td>
-            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
-              {{ p.startDate ? (p.startDate | date: 'dd MMM yyyy') : '—' }}
-            </td>
-            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
-              {{ p.endDate ? (p.endDate | date: 'dd MMM yyyy') : '—' }}
-            </td>
-            <td class="px-5 py-4 text-gray-600 dark:text-gray-300">
-              {{ p.location || p.venue || p.city || '—' }}
-            </td>
-            <td class="px-5 py-4">
-              <span
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                [ngClass]="getStatusClass(p.status)"
-              >
-                {{ p.status || 'N/A' }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  </footer>
 
 </div>

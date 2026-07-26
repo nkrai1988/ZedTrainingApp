@@ -1,15 +1,9 @@
 
 import { Component, inject } from '@angular/core';
 import { LabelComponent } from '../../form/label/label.component';
-import { CheckboxComponent } from '../../form/input/checkbox.component';
-import { ButtonComponent } from '../../ui/button/button.component';
-import { InputFieldComponent } from '../../form/input/input-field.component';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder,FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ComponentCardComponent } from '../../common/component-card/component-card.component';
 import { AlertComponent } from '../../ui/alert/alert.component';
 import { AuthService } from '../../../../services/auth.service';
 import { HelperService } from '../../../../services/helper.service';
@@ -19,17 +13,11 @@ import { HelperService } from '../../../../services/helper.service';
   selector: 'app-signin-form',
   imports: [
     LabelComponent,
-    CheckboxComponent,
-    ButtonComponent,
-    InputFieldComponent,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     AlertComponent,
-    ComponentCardComponent,
-    
-    
 ],
   templateUrl: './signin-form.component.html',
   styles: ``
@@ -78,16 +66,19 @@ private helperService = inject(HelperService);
       // Call your ApiService here
       this.btntext='Processing...';
        this.authService.postLoginData(this.signinForm.value).subscribe({
-      next: (response:any) => { 
-        this.helperService.storeLoginData(response); 
+      next: (response:any) => {
+        this.helperService.storeLoginData(response);
         if(this.helperService.IsAgency()){
-         this.router.navigate(['/coordinators']);     
+         this.router.navigate(['/coordinators']);
         }
         else if(this.helperService.IsCoordinator()){
-         this.router.navigate(['/programme']);     
-        } 
+         this.router.navigate(['/programme']);
+        }
+        else if(this.helperService.IsCategoryAdmin()){
+         this.router.navigate(['/categoryadmindashboard']);
+        }
         else{
-          this.router.navigate(['/dashboard']);     
+          this.router.navigate(['/dashboard']);
         }
         
       // Redirect

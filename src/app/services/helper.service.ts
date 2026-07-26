@@ -11,17 +11,37 @@ import { BehaviorSubject } from "rxjs";
 })
 export class HelperService{
     constructor(private router:Router,private http:HttpClient,private api: ApiService){
-
+        if (!this.IsSuperAdmin()) {
+            const user = this.getUser();
+            if (user?.orgCategoryId) {
+                this.masterOrgCategoryId = user.orgCategoryId;
+                this.categorySubject.next(user.orgCategoryId);
+            }
+            if (user?.orgCategoryName) {
+                this.masterOrgCategoryName = user.orgCategoryName;
+                this.categoryNameSubject.next(user.orgCategoryName);
+            }
+            if (user?.userSubCategoryId) {
+                this.subCategorySubject.next(user.userSubCategoryId);
+            }
+        }
     }
 
-    private categorySubject = new BehaviorSubject<string>('ZED');
-    category$ = this.categorySubject.asObservable(); // Observable to subscribe to
-    //private router= Inject(Router);
+    private categorySubject = new BehaviorSubject<number | null>(null);
+    category$ = this.categorySubject.asObservable();
+
+    private categoryNameSubject = new BehaviorSubject<string | null>(null);
+    categoryName$ = this.categoryNameSubject.asObservable();
+
+    private subCategorySubject = new BehaviorSubject<number | null>(null);
+    subCategory$ = this.subCategorySubject.asObservable();
+
     mainPortal='training';
     private dataSubject = new BehaviorSubject<string>('training');
-    data$ = this.dataSubject.asObservable(); // Observable to subscribe to
+    data$ = this.dataSubject.asObservable();
 
-    masterOrgCategory='';
+    masterOrgCategoryId: number | null = null;
+    masterOrgCategoryName: string | null = null;
 
     setPortal(portal:string){
         this.mainPortal=portal;
@@ -38,15 +58,30 @@ export class HelperService{
 
     storeLoginData(data:any){
         console.log('Success:', data)
-        this.masterOrgCategory = data.user.orgCategory;
         localStorage.setItem('authToken', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        this.masterOrgCategoryId = data.user.orgCategoryId ?? null;
+        if (!this.IsSuperAdmin()) {
+            this.categorySubject.next(data.user.orgCategoryId ?? null);
+            this.categoryNameSubject.next(data.user.orgCategoryName ?? null);
+            this.subCategorySubject.next(data.user.userSubCategoryId ?? null);
+        } else {
+            this.categorySubject.next(null);
+            this.categoryNameSubject.next(null);
+            this.subCategorySubject.next(null);
+        }
     }
 
-    getOrgSubCategory(): string {
+    getOrgSubCategoryId(): number | null {
         let userString: any = localStorage.getItem('user');
         let user = JSON.parse(userString);
-        return user?.orgSubCategory ?? '';
+        return user?.userSubCategoryId ?? null;
+    }
+
+    getOrgSubCategoryValue(): string | null {
+        let userString: any = localStorage.getItem('user');
+        let user = JSON.parse(userString);
+        return user?.orgSubCategoryValue ?? null;
     }
 
     isLoggedIn():boolean{
@@ -60,9 +95,14 @@ export class HelperService{
     }
 
     userLogOut(){
+        const role = this.getUserRole();
         localStorage.removeItem('authToken');
         localStorage.removeItem('user');
-        this.router.navigate(['/signin']);
+        if (role == '7') {
+            this.router.navigate(['/participant/signin']);
+        } else {
+            this.router.navigate(['/signin']);
+        }
     }
 
     getToken(){
@@ -86,6 +126,12 @@ export class HelperService{
         return user ? user.email : '';
     }
 
+    getUserId(): string {
+        let userString: any = localStorage.getItem('user');
+        let user = JSON.parse(userString);
+        return user ? user.userId : '';
+    }
+
     getLoggedUserProgramme(){
         let userString:any = localStorage.getItem('user');
         let user = JSON.parse(userString);
@@ -93,30 +139,51 @@ export class HelperService{
         return user.tptype;
     }
 
-    getOrgCategory(){
-        if(this.IsMasterAdmin()){
-            return this.masterOrgCategory;
+    getOrgCategoryId(): number | null {
+        if (this.IsSuperAdmin()) {
+            return this.masterOrgCategoryId;
         }
-    else{
-     let userString:any = localStorage.getItem('user');
-        let user = JSON.parse(userString);        
-        return user.orgCategory;
-    }        
+        let userString: any = localStorage.getItem('user');
+        let user = JSON.parse(userString);
+        return user?.orgCategoryId ?? null;
     }
 
-    setOrgCategory(category:any){
-        this.masterOrgCategory=category;
-        this.categorySubject.next(category);
+    setOrgCategoryId(categoryId: number | null) {
+        this.masterOrgCategoryId = categoryId;
+        this.categorySubject.next(categoryId);
     }
 
-    
+    getOrgCategoryName(): string | null {
+        if (this.IsSuperAdmin()) {
+            return this.masterOrgCategoryName;
+        }
+        let userString: any = localStorage.getItem('user');
+        let user = JSON.parse(userString);
+        return user?.orgCategoryName ?? null;
+    }
 
-    IsSuperAdmin():boolean{
+    setOrgCategoryName(name: string | null) {
+        this.masterOrgCategoryName = name;
+        this.categoryNameSubject.next(name);
+    }
+
+    setOrgSubCategoryId(subCategoryId: number | null) {
+        this.subCategorySubject.next(subCategoryId);
+    }
+
+    getCategoryAdminSubCategories(): { id: number; label: string }[] {
+        const user = this.getUser();
+        return user?.subCategories ?? [];
+    }
+
+    IsCategoryAdmin(): boolean {
+        const user = this.getUser();
+        return user && user.role == 1;
+    }
+
+    IsSuperAdmin(): boolean {
         var role = this.getUserRole();
-        if(role &&  role == '1'){
-            return true;
-        }
-        return false;
+        return role == '100';
     }
 
     IsAgency():boolean{
@@ -151,20 +218,13 @@ export class HelperService{
         return false;
     }
 
-    IsAdmin():boolean{
-        var user = this.getUser();
-        if(user && user.userId && user.userId == '1'){
-            return true;
-        }
-        return false;
-    }
-    IsMasterAdmin():boolean{
-        var user = this.getUser();
-        if(user && user.userId && user.userId == '1'){
-            return true;
-        }
-        return false;
-    }
+    // IsAdmin():boolean{
+    //     var user = this.getUser();
+    //     if(user && user.userId && user.userId == '1'){
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     superMasterAdminTrainingProgrammeOptions(){
         let tp:any=[];

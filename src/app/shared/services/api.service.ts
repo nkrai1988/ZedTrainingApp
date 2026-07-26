@@ -103,4 +103,11 @@ export class ApiService {
   delete<T>(url: string, params?: HttpParams | {[param: string]: string | number | boolean}): Observable<T> {
     return this.http.delete<T>(`${this.baseUrl}/${url}`, { params });
   }
+
+  uploadParticipantFile(file: File, category: 'profile' | 'idproof' | 'certificate' | 'proof'): Observable<{ path: string }> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('category', category);
+    return this.http.post<{ path: string }>(`${this.baseUrl}/participantfile/upload`, formData);
+  }
 }

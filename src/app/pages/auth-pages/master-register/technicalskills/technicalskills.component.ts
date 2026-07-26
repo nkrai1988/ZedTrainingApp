@@ -35,6 +35,7 @@ import { DatePickerComponent } from '../../../../shared/components/form/date-pic
 import { FacultyService } from '../../../../services/faculty.service';
 import { FileInputComponent } from '../../../../shared/components/form/input/file-input.component';
 import { HelperService } from '../../../../services/helper.service';
+import { ApiService } from '../../../../shared/services/api.service';
 
 @Component({
   selector: 'app-technicalskills',
@@ -62,7 +63,7 @@ import { HelperService } from '../../../../services/helper.service';
   styleUrl: './technicalskills.component.css',
 })
 export class TechnicalskillsComponent {
-  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public helper:HelperService,public modal: ModalService,private router: Router){
+  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public helper:HelperService,public modal: ModalService,private router: Router,private apiService:ApiService){
       
     }
 
@@ -151,10 +152,7 @@ export class TechnicalskillsComponent {
         conductedby?.updateValueAndValidity();
         proof?.updateValueAndValidity();
         });
-      this.dataRow =this.skillList;
-      if(this.skillList.length){
-        this.viewOnly=true;
-      }
+      this.dataRow = this.skillList;
     }
 
     bindrange(){
@@ -246,19 +244,18 @@ export class TechnicalskillsComponent {
       this.openModal(row);
   }
 
-  async handleFileChange(event: Event) {
+  handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (file) {
-      console.log('Selected file:', file);
-      // Convert bytes to KB: 1 KB = 1024 bytes
-      var kbsize= Math.round(file.size / 1024);
-      if(kbsize > 2000){
-        alert('File size is greater than 2000kb');        
+    if (!file) return;
+    if (Math.round(file.size / 1024) > 2000) { alert('File size is greater than 2000kb'); return; }
+    this.apiService.uploadParticipantFile(file, 'proof').subscribe({
+      next: (res) => this.qualificationForm.controls['proof'].setValue(res.path),
+      error: () => {
+        this.qualificationForm.controls['proof'].setValue('');
+        alert('Failed to upload proof. Please try again.');
       }
-      //this.qualificationForm.controls['proof'].setValue(file);
-      this.qualificationForm.controls['proof'].setValue(await this.helper.convertFileToBase64(file));
-    }
+    });
   }
 
   handleYearSelectChange(value:any){

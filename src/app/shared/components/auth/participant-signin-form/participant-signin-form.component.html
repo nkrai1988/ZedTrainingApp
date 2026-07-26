@@ -1,84 +1,144 @@
-<div *ngIf="errormessage">
-  <app-component-card>
-    <div>
-      <app-alert
-        variant="error"
-        title="Error Message"
-        [message]="errormessage"
-        [showLink]="false"
-      />
-    </div>
-  </app-component-card>
-</div>
+<div class="flex flex-col h-full bg-white dark:bg-gray-900 px-6 py-8 sm:px-12 lg:py-10">
 
-<div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-  <div>
-    <div class="mb-5 sm:mb-8">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900/30">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-brand-600 dark:text-brand-400">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path>
-          </svg>
-        </span>
-        <span class="text-xs font-medium text-brand-600 dark:text-brand-400 uppercase tracking-wide">Participant Portal</span>
-      </div>
-      <h1 class="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-        Welcome Back
-      </h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Sign in to access your training programmes and progress.
-      </p>
-    </div>
+  <!-- Page heading -->
+  <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Participant Portal</h1>
 
-    <form (ngSubmit)="onSignIn()" [formGroup]="signinForm" class="space-y-6">
-      <div>
-        <app-label>Email <span class="text-error-500">*</span></app-label>
-        <input
-          type="email"
-          formControlName="email"
-          name="email"
-          placeholder="Enter your email"
-          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
-        />
-        <p *ngIf="f['email'].errors?.['required'] && (f['email'].touched || submitted)" class="mt-1.5 text-xs text-error-500">Email is required</p>
-        <p *ngIf="f['email'].errors?.['email'] && f['email'].touched" class="mt-1.5 text-xs text-error-500">Enter a valid email</p>
+  <!-- Vertically centred form card -->
+  <div class="flex-1 flex flex-col justify-center">
+    <div class="w-full max-w-lg mx-auto rounded-2xl overflow-hidden shadow-md">
+
+      <!-- Dark header card -->
+      <div class="bg-gray-900 px-8 py-6">
+        <p class="text-sm text-gray-400">Training &amp; Capacity Building Module</p>
+        <h2 class="text-2xl font-bold text-white mt-1">Welcome Back</h2>
+        <p class="text-sm text-gray-400 mt-2">
+          Sign in to access your training programmes and progress.
+        </p>
       </div>
 
-      <div>
-        <app-label>Password <span class="text-error-500">*</span></app-label>
-        <div class="relative">
-          <input
-            formControlName="password"
-            [type]="showPassword ? 'text' : 'password'"
-            name="password"
-            placeholder="Enter your password"
-            class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:focus:border-brand-800"
-          />
-          <span (click)="togglePasswordVisibility()" class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2">
-            @if (showPassword) {
-              <svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-gray-500 dark:fill-gray-400 size-5"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.0002 13.8619C7.23361 13.8619 4.86803 12.1372 3.92328 9.70241C4.86804 7.26761 7.23361 5.54297 10.0002 5.54297C12.7667 5.54297 15.1323 7.26762 16.0771 9.70243C15.1323 12.1372 12.7667 13.8619 10.0002 13.8619ZM10.0002 4.04297C6.48191 4.04297 3.49489 6.30917 2.4155 9.4593C2.3615 9.61687 2.3615 9.78794 2.41549 9.94552C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C13.5184 15.3619 16.5055 13.0957 17.5849 9.94555C17.6389 9.78797 17.6389 9.6169 17.5849 9.45932C16.5055 6.30919 13.5184 4.04297 10.0002 4.04297ZM9.99151 7.84413C8.96527 7.84413 8.13333 8.67606 8.13333 9.70231C8.13333 10.7286 8.96527 11.5605 9.99151 11.5605H10.0064C11.0326 11.5605 11.8646 10.7286 11.8646 9.70231C11.8646 8.67606 11.0326 7.84413 10.0064 7.84413H9.99151Z"></path></svg>
-            } @else {
-              <svg width="1em" height="1em" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-gray-500 dark:fill-gray-400 size-5"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.63803 3.57709C4.34513 3.2842 3.87026 3.2842 3.57737 3.57709C3.28447 3.86999 3.28447 4.34486 3.57737 4.63775L4.85323 5.91362C3.74609 6.84199 2.89363 8.06395 2.4155 9.45936C2.3615 9.61694 2.3615 9.78801 2.41549 9.94558C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C11.255 15.3619 12.4422 15.0737 13.4994 14.5598L15.3625 16.4229C15.6554 16.7158 16.1302 16.7158 16.4231 16.4229C16.716 16.13 16.716 15.6551 16.4231 15.3622L4.63803 3.57709ZM12.3608 13.4212L10.4475 11.5079C10.3061 11.5423 10.1584 11.5606 10.0064 11.5606H9.99151C8.96527 11.5606 8.13333 10.7286 8.13333 9.70237C8.13333 9.5461 8.15262 9.39434 8.18895 9.24933L5.91885 6.97923C5.03505 7.69015 4.34057 8.62704 3.92328 9.70247C4.86803 12.1373 7.23361 13.8619 10.0002 13.8619C10.8326 13.8619 11.6287 13.7058 12.3608 13.4212ZM16.0771 9.70249C15.7843 10.4569 15.3552 11.1432 14.8199 11.7311L15.8813 12.7925C16.6329 11.9813 17.2187 11.0143 17.5849 9.94561C17.6389 9.78803 17.6389 9.61696 17.5849 9.45938C16.5055 6.30925 13.5184 4.04303 10.0002 4.04303C9.13525 4.04303 8.30244 4.17999 7.52218 4.43338L8.75139 5.66259C9.1556 5.58413 9.57311 5.54303 10.0002 5.54303C12.7667 5.54303 15.1323 7.26768 16.0771 9.70249Z"></path></svg>
-            }
-          </span>
-          <p *ngIf="f['password'].invalid && (f['password'].touched || submitted)" class="mt-1.5 text-xs text-error-500">
-            Password is required
+      <!-- Light form area -->
+      <div class="bg-slate-50 dark:bg-gray-800 px-8 py-6">
+
+        <!-- API error -->
+        <div
+          *ngIf="errormessage"
+          class="mb-5 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400"
+        >
+          {{ errormessage }}
+        </div>
+
+        <form [formGroup]="signinForm" (ngSubmit)="onSignIn()" class="space-y-5">
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              Email<span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Enter User email"
+              class="w-full h-11 px-4 py-2.5 text-sm rounded-lg border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 focus:border-indigo-400 transition-colors"
+            />
+            <p
+              *ngIf="f['email'].errors?.['required'] && (f['email'].touched || submitted)"
+              class="mt-1.5 text-xs text-orange-500"
+            >
+              Username is required
+            </p>
+            <p
+              *ngIf="f['email'].errors?.['email'] && f['email'].touched"
+              class="mt-1.5 text-xs text-red-500"
+            >
+              Enter a valid email
+            </p>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+              Password
+            </label>
+            <div class="relative">
+              <input
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                placeholder="Enter your password"
+                class="w-full h-11 px-4 py-2.5 pr-11 text-sm rounded-lg border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/30 focus:border-indigo-400 transition-colors"
+              />
+              <span
+                (click)="togglePasswordVisibility()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                @if (showPassword) {
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current size-5">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0002 13.8619C7.23361 13.8619 4.86803 12.1372 3.92328 9.70241C4.86804 7.26761 7.23361 5.54297 10.0002 5.54297C12.7667 5.54297 15.1323 7.26762 16.0771 9.70243C15.1323 12.1372 12.7667 13.8619 10.0002 13.8619ZM10.0002 4.04297C6.48191 4.04297 3.49489 6.30917 2.4155 9.4593C2.3615 9.61687 2.3615 9.78794 2.41549 9.94552C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C13.5184 15.3619 16.5055 13.0957 17.5849 9.94555C17.6389 9.78797 17.6389 9.6169 17.5849 9.45932C16.5055 6.30919 13.5184 4.04297 10.0002 4.04297ZM9.99151 7.84413C8.96527 7.84413 8.13333 8.67606 8.13333 9.70231C8.13333 10.7286 8.96527 11.5605 9.99151 11.5605H10.0064C11.0326 11.5605 11.8646 10.7286 11.8646 9.70231C11.8646 8.67606 11.0326 7.84413 10.0064 7.84413H9.99151Z"/>
+                  </svg>
+                } @else {
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="fill-current size-5">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.63803 3.57709C4.34513 3.2842 3.87026 3.2842 3.57737 3.57709C3.28447 3.86999 3.28447 4.34486 3.57737 4.63775L4.85323 5.91362C3.74609 6.84199 2.89363 8.06395 2.4155 9.45936C2.3615 9.61694 2.3615 9.78801 2.41549 9.94558C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C11.255 15.3619 12.4422 15.0737 13.4994 14.5598L15.3625 16.4229C15.6554 16.7158 16.1302 16.7158 16.4231 16.4229C16.716 16.13 16.716 15.6551 16.4231 15.3622L4.63803 3.57709ZM12.3608 13.4212L10.4475 11.5079C10.3061 11.5423 10.1584 11.5606 10.0064 11.5606H9.99151C8.96527 11.5606 8.13333 10.7286 8.13333 9.70237C8.13333 9.5461 8.15262 9.39434 8.18895 9.24933L5.91885 6.97923C5.03505 7.69015 4.34057 8.62704 3.92328 9.70247C4.86803 12.1373 7.23361 13.8619 10.0002 13.8619C10.8326 13.8619 11.6287 13.7058 12.3608 13.4212ZM16.0771 9.70249C15.7843 10.4569 15.3552 11.1432 14.8199 11.7311L15.8813 12.7925C16.6329 11.9813 17.2187 11.0143 17.5849 9.94561C17.6389 9.78803 17.6389 9.61696 17.5849 9.45938C16.5055 6.30925 13.5184 4.04303 10.0002 4.04303C9.13525 4.04303 8.30244 4.17999 7.52218 4.43338L8.75139 5.66259C9.1556 5.58413 9.57311 5.54303 10.0002 5.54303C12.7667 5.54303 15.1323 7.26768 16.0771 9.70249Z"/>
+                  </svg>
+                }
+              </span>
+            </div>
+            <p
+              *ngIf="f['password'].errors?.['required'] && (f['password'].touched || submitted)"
+              class="mt-1.5 text-xs text-red-500"
+            >
+              Password is required
+            </p>
+          </div>
+
+          <!-- Remember me + Forget Password -->
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                formControlName="rememberMe"
+                class="w-4 h-4 rounded border-gray-300 accent-indigo-600 cursor-pointer"
+              />
+              Remember me
+            </label>
+            <a
+              routerLink="/participant/forgotpassword"
+              class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
+            >
+              Forget Password?
+            </a>
+          </div>
+
+          <!-- Sign In button -->
+          <button
+            type="submit"
+            class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            [disabled]="btntext === 'Processing...'"
+          >
+            {{ btntext }}
+          </button>
+
+        </form>
+
+        <!-- New to platform / Register -->
+        <div class="mt-6 text-center space-y-1.5">
+          <p class="text-xs text-gray-400">New to Platform</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Don't have an account?
+            <a
+              routerLink="/participant/signup"
+              class="font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
+            >
+              Register as Participant
+            </a>
           </p>
         </div>
+
       </div>
-
-      <app-button className="w-full btn-primary-bg" size="sm" (btnClick)="onSignIn()">
-        {{ btntext }}
-      </app-button>
-    </form>
-
-    <div class="mt-5">
-      <p class="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-        Don't have an account?
-        <a routerLink="/participant/signup" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-          Register as Participant
-        </a>
-      </p>
     </div>
   </div>
+
+  <!-- Page footer -->
+  <p class="text-center text-xs text-gray-400 mt-6">
+    Training &amp; Certification Platform – Version 1.0
+  </p>
+
 </div>

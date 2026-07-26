@@ -63,17 +63,23 @@ export class AgencylistComponent implements OnDestroy {
   }
     dataRow:any=[];
     successmessage='';
-    orgCategory='';
+    orgCategory: number | null = null;
+    selectedSubCategoryId: number | null = null;
+
     ngOnInit(){
-      if (this.helperService.IsMasterAdmin()) {
+      if (this.helperService.IsSuperAdmin()) {
         this.categorySub = this.helperService.category$.subscribe(cat => {
           this.orgCategory = cat;
           this.dataRow = [];
           this.getAgencies();
         });
-      } else if (this.helperService.IsSuperAdmin()) {
-        this.orgCategory = this.helperService.getOrgCategory() || '';
-        this.getAgencies();
+      } else if (this.helperService.IsCategoryAdmin()) {
+        this.orgCategory = this.helperService.getOrgCategoryId();
+        this.categorySub = this.helperService.subCategory$.subscribe(subCat => {
+          this.selectedSubCategoryId = subCat;
+          this.dataRow = [];
+          this.getAgencies();
+        });
       } else {
         this.getAgencies();
       }
@@ -91,7 +97,7 @@ export class AgencylistComponent implements OnDestroy {
 
     getAgencies(){
     this.dataLoadProgress=true;
-    this.agencyservice.getAgencyList(this.checkedValue, this.orgCategory).subscribe({
+    this.agencyservice.getAgencyList(this.checkedValue, this.orgCategory, this.selectedSubCategoryId).subscribe({
       next:(response:any[])=>{
       this.dataRow = response;
       this.dataLoadProgress=false;

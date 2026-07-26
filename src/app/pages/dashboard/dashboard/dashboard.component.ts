@@ -33,40 +33,26 @@ locationData:any[]=[];
 tempuser={userId:3};
 
 
-  ngOnInit(){ 
+  ngOnInit(){
       this.getStates();
-      this.getProgrammes();
       this.getProgrammeCount();
   }
   
-programeType:any[]=[];
-// [
-//     { value: 'all', label: 'All' },
-//     { value: 'Industry Awareness Programme', label: 'ZEDAP' },
-//     { value: 'Training Programme', label: 'ZEDTP' },
-//   ];
   stateSelectedValue = 'All';
-  selectedValue = 'All';
+  selectedValue = 'ZEDTP';
   selectedQPValue = 'All';
   ProgrammeNumber=0;
   ParticipantNumber=0;
   loadMap=false;
   dataLoadProgress=false;
+  applyFilters() {
+    this.getProgrammeCount();
+  }
+
   handleStateSelectChange(value: string) {
-    this.stateSelectedValue = value;    
-    this.getProgrammeCount();
+    this.stateSelectedValue = value;
   }
 
-  handleProgrammeSelectChange(value: string) {
-    this.selectedValue = value;    
-    this.getProgrammeCount();
-  }
-
-  handleQPProgrammeSelectChange(value: string) {
-    this.selectedQPValue = value;    
-    this.getProgrammeCount();
-  }
-  
   getStates(){
     this.dashboardservice.getStateData().subscribe({
       next:(response:string[])=>{ 
@@ -80,27 +66,6 @@ programeType:any[]=[];
 
   
 
-  getProgrammes(){
-    console.log({'this.helper.IsSuperAdmin()':this.helper.IsMasterAdmin()});
-    if(this.helper.IsMasterAdmin()){
-        let options = this.helper.superMasterAdminTrainingProgrammeOptions();
-        
-        this.programeType=options.map((x:any)=> ({value:x.value,label:x.label}));
-        this.programeType.unshift({value:'All',label:'All'});
-    }
-    else{
-      this.dashboardservice.getProgrammeOption().subscribe({
-        next:(response:any[])=>{  
-          this.programeType=[];  
-          this.programeType=response.map(x=> ({value:x.qpCode,label:x.qpName}));
-          this.programeType.unshift({value:'All',label:'All'});
-        }
-    });
-    }
-    
-  }
-
-  
 
   getProgrammeCount(){
     this.locationData=[];

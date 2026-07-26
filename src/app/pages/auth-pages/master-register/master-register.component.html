@@ -1,27 +1,88 @@
+<!-- Loading application status -->
+<div *ngIf="applicationStatusLoading" class="py-12">
+  <app-dataloadinprogress />
+</div>
+
+<!-- Already applied screen -->
+<div *ngIf="!applicationStatusLoading && alreadyApplied && !editMode" class="mx-auto max-w-2xl py-12 space-y-4">
+  <app-component-card>
+    <div class="flex flex-col items-center text-center gap-4 py-4">
+      <div class="w-14 h-14 rounded-full flex items-center justify-center"
+           [ngClass]="{
+             'bg-green-100 dark:bg-green-500/10': applicationStatus?.status === 'Approved',
+             'bg-red-100 dark:bg-red-500/10': applicationStatus?.status === 'Rejected',
+             'bg-amber-100 dark:bg-amber-500/10': applicationStatus?.status !== 'Approved' && applicationStatus?.status !== 'Rejected'
+           }">
+        <!-- Approved -->
+        <svg *ngIf="applicationStatus?.status === 'Approved'" class="w-7 h-7 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM16.0303 9.46967C16.3232 9.76256 16.3232 10.2374 16.0303 10.5303L11.0303 15.5303C10.7374 15.8232 10.2626 15.8232 9.96967 15.5303L7.96967 13.5303C7.67678 13.2374 7.67678 12.7626 7.96967 12.4697C8.26256 12.1768 8.73744 12.1768 9.03033 12.4697L10.5 13.9393L14.9697 9.46967C15.2626 9.17678 15.7374 9.17678 16.0303 9.46967Z" fill="currentColor"/>
+        </svg>
+        <!-- Rejected -->
+        <svg *ngIf="applicationStatus?.status === 'Rejected'" class="w-7 h-7 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM9.53033 8.46967C9.23744 8.17678 8.76256 8.17678 8.46967 8.46967C8.17678 8.76256 8.17678 9.23744 8.46967 9.53033L10.9393 12L8.46967 14.4697C8.17678 14.7626 8.17678 15.2374 8.46967 15.5303C8.76256 15.8232 9.23744 15.8232 9.53033 15.5303L12 13.0607L14.4697 15.5303C14.7626 15.8232 15.2374 15.8232 15.5303 15.5303C15.8232 15.2374 15.8232 14.7626 15.5303 14.4697L13.0607 12L15.5303 9.53033C15.8232 9.23744 15.8232 8.76256 15.5303 8.46967C15.2374 8.17678 14.7626 8.17678 14.4697 8.46967L12 10.9393L9.53033 8.46967Z" fill="currentColor"/>
+        </svg>
+        <!-- Pending / other -->
+        <svg *ngIf="applicationStatus?.status !== 'Approved' && applicationStatus?.status !== 'Rejected'" class="w-7 h-7 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Application Already Submitted</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          You have already submitted your application. Current status:
+          <span class="font-semibold"
+                [ngClass]="{
+                  'text-green-600 dark:text-green-400': applicationStatus?.status === 'Approved',
+                  'text-red-600 dark:text-red-400': applicationStatus?.status === 'Rejected',
+                  'text-amber-600 dark:text-amber-400': applicationStatus?.status !== 'Approved' && applicationStatus?.status !== 'Rejected'
+                }">
+            {{ applicationStatus?.status }}
+          </span>
+        </p>
+        <p *ngIf="applicationStatus?.rejectedComments" class="text-sm text-red-600 dark:text-red-400 mt-2 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg px-4 py-2">
+          <span class="font-semibold">Remarks:</span> {{ applicationStatus?.rejectedComments }}
+        </p>
+      </div>
+    </div>
+  </app-component-card>
+</div>
+
 <!-- Loading steps -->
-<div *ngIf="stepsLoading" class="py-12">
+<div *ngIf="!applicationStatusLoading && (!alreadyApplied || editMode) && stepsLoading" class="py-12">
   <app-dataloadinprogress />
 </div>
 
 <!-- Success screen -->
-<div *ngIf="successmessage && !stepsLoading" class="mx-auto max-w-2xl py-12">
+<div *ngIf="!applicationStatusLoading && (!alreadyApplied || editMode) && successmessage && !stepsLoading" class="mx-auto max-w-2xl py-12">
   <app-component-card>
     <app-alert variant="success" title="Application Submitted" [message]="successmessage" [showLink]="false" />
   </app-component-card>
 </div>
 
-<div *ngIf="!stepsLoading && !successmessage">
+<div *ngIf="!applicationStatusLoading && (!alreadyApplied || editMode) && !stepsLoading && !successmessage">
 
   <!-- Page Header -->
-  <div class="mx-auto w-full max-w-[630px] text-center mb-6">
-    <h3 class="mb-2 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
-      Application Form for {{ orgCategory }}{{ orgSubCategory ? ' - ' + orgSubCategory : '' }} Training
-    </h3>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      To refer to the eligibility criteria,
-      <a href="files/ZED Trainings_Professional's_Criteria.pdf" target="_blank" download
-         class="text-brand-500 hover:text-brand-600 dark:text-brand-400">Click Here</a>
-    </p>
+  <div class="mx-auto w-full max-w-[630px] mb-6">
+    <!-- Cancel button in edit mode -->
+    <div *ngIf="editMode" class="mb-3">
+      <button (click)="cancelEdit()"
+        class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Cancel &amp; Back to Application
+      </button>
+    </div>
+    <div class="text-center">
+      <h3 class="mb-2 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl">
+        {{ editMode ? 'Edit Application' : 'Application Form' }} for {{ orgCategoryLabel }}{{ orgSubCategoryLabel ? ' — ' + orgSubCategoryLabel : '' }} Training
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        To refer to the eligibility criteria,
+        <a href="files/ZED Trainings_Professional's_Criteria.pdf" target="_blank" download
+           class="text-brand-500 hover:text-brand-600 dark:text-brand-400">Click Here</a>
+      </p>
+    </div>
   </div>
 
   <!-- Draft restored banner -->
@@ -84,7 +145,7 @@
 
         <div class="mt-5">
           <app-label>Profile Photo (jpg, png — max 2000 KB) <span class="text-error-500">*</span></app-label>
-          <app-imagefile-input (change)="handlePhotoChange($event)" className="custom-class" />
+          <app-imagefile-input (fileChange)="handlePhotoChange($event)" className="custom-class" />
           <p *ngIf="registerForm.get('profileimage')?.invalid && registerForm.get('profileimage')?.touched"
              class="mt-1.5 text-xs text-error-500">Photo is required.</p>
           <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview" class="mt-3 h-24 w-24 rounded-lg object-cover border" />
@@ -129,7 +190,7 @@
           <!-- ID Proof Upload — full width -->
           <div class="lg:col-span-2">
             <app-label>Upload ID Proof <span class="text-gray-400 font-normal">(jpg, png — max 500 KB)</span> <span class="text-error-500">*</span></app-label>
-            <app-file-input (change)="handleIdProofPhotoChange($event)" className="custom-class" />
+            <app-file-input (fileChange)="handleIdProofPhotoChange($event)" accept=".jpg,.jpeg,.png" className="custom-class" />
             <p *ngIf="registerForm.get('idproofphoto')?.invalid && registerForm.get('idproofphoto')?.touched"
                class="mt-1.5 text-xs text-error-500">ID proof document is required.</p>
           </div>
@@ -143,27 +204,21 @@
       <app-component-card title="Step {{ currentStepIndex + 1 }}: Nominated Through">
         <div class="mb-4">
           <p class="text-sm font-medium text-gray-700 dark:text-white/80 mb-3">
-            <span *ngIf="selectedRole === 'Assessor'">Nominated through (Assessors): <span class="text-error-500">*</span></span>
-            <span *ngIf="selectedRole === 'ZEDConsultant'">Associated with (Consultants): <span class="text-error-500">*</span></span>
-            <span *ngIf="!selectedRole">Nominated through: <span class="text-error-500">*</span></span>
+            Nominated Through <span class="text-error-500">*</span>
           </p>
           <div class="flex flex-wrap items-center gap-6">
-            <ng-container *ngIf="selectedRole === 'Assessor'">
-              <app-radio [id]="'nom_cb'" [name]="'group2'" value="Certification Body (CB)"
-                [checked]="selectedNomination === 'Certification Body (CB)'" label="Certification Body (CB)"
-                [disabled]="false" (valueChange)="handleNominationRadioChange('Certification Body (CB)')" />
-              <app-radio [id]="'nom_cra'" [name]="'group2'" value="Credit Rating Agency (CRA)"
-                [checked]="selectedNomination === 'Credit Rating Agency (CRA)'" label="Credit Rating Agency (CRA)"
-                [disabled]="false" (valueChange)="handleNominationRadioChange('Credit Rating Agency (CRA)')" />
-              <app-radio [id]="'nom_ib'" [name]="'group2'" value="Inspection Body (IB)"
-                [checked]="selectedNomination === 'Inspection Body (IB)'" label="Inspection Body (IB)"
-                [disabled]="false" (valueChange)="handleNominationRadioChange('Inspection Body (IB)')" />
-            </ng-container>
-            <ng-container *ngIf="selectedRole === 'ZEDConsultant'">
-              <app-radio [id]="'nom_zed'" [name]="'group2'" value="ZED Consultant"
-                [checked]="selectedNomination === 'ZED Consultant'" label="Consultant"
-                [disabled]="false" (valueChange)="handleNominationRadioChange('ZED Consultant')" />
-            </ng-container>
+            <app-radio [id]="'nom_cb'" [name]="'group2'" value="Certification Body (CB)"
+              [checked]="selectedNomination === 'Certification Body (CB)'" label="Certification Body (CB)"
+              [disabled]="false" (valueChange)="handleNominationRadioChange('Certification Body (CB)')" />
+            <app-radio [id]="'nom_cra'" [name]="'group2'" value="Credit Rating Agency (CRA)"
+              [checked]="selectedNomination === 'Credit Rating Agency (CRA)'" label="Credit Rating Agency (CRA)"
+              [disabled]="false" (valueChange)="handleNominationRadioChange('Credit Rating Agency (CRA)')" />
+            <app-radio [id]="'nom_ib'" [name]="'group2'" value="Inspection Body (IB)"
+              [checked]="selectedNomination === 'Inspection Body (IB)'" label="Inspection Body (IB)"
+              [disabled]="false" (valueChange)="handleNominationRadioChange('Inspection Body (IB)')" />
+            <app-radio [id]="'nom_org'" [name]="'group2'" value="Organisation"
+              [checked]="selectedNomination === 'Organisation'" label="Organisation"
+              [disabled]="false" (valueChange)="handleNominationRadioChange('Organisation')" />
             <app-radio [id]="'nom_free'" [name]="'group2'" value="Freelancer"
               [checked]="selectedNomination === 'Freelancer'" label="Freelancer"
               [disabled]="false" (valueChange)="handleNominationRadioChange('Freelancer')" />
@@ -173,14 +228,9 @@
         </div>
 
         <div *ngIf="selectedNomination && selectedNomination !== 'Freelancer'" class="grid grid-cols-1 gap-6 lg:grid-cols-2 mt-4">
-          <div *ngIf="selectedRole === 'Assessor'">
-            <app-label for="accessorcbidcra">CB/IB/CRA Name <span class="text-error-500">*</span></app-label>
+          <div>
+            <app-label for="accessorcbidcra">Organisation Name <span class="text-error-500">*</span></app-label>
             <input [formControl]="$any(registerForm.get('accessorcbidcra'))" type="text"
-              class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-          </div>
-          <div *ngIf="selectedRole === 'ZEDConsultant'">
-            <app-label for="consultantorg">Consulting Organization <span class="text-error-500">*</span></app-label>
-            <input [formControl]="$any(registerForm.get('consultantorg'))" type="text"
               class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
           </div>
           <div>
@@ -233,7 +283,7 @@
           </div>
           <div>
             <app-label>Date of Birth <span class="text-error-500">*</span></app-label>
-            <app-date-picker id="dob-picker" placeholder="Select a date" (dateChange)="handleDOBChange($event)" />
+            <app-date-picker id="dob-picker" placeholder="Select a date" [maxDate]="maxDOB" (dateChange)="handleDOBChange($event)" />
             <p *ngIf="registerForm.get('DOB')?.invalid && registerForm.get('DOB')?.touched"
                class="mt-1.5 text-xs text-error-500">Required.</p>
           </div>
@@ -248,6 +298,14 @@
             <app-label for="ParentName">Father/Mother Name</app-label>
             <input [formControl]="$any(registerForm.get('ParentName'))" type="text"
               class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+          </div>
+          <div class="lg:col-span-3">
+            <app-label for="AadhaarNo">Aadhaar Number <span class="text-error-500">*</span></app-label>
+            <input [formControl]="$any(registerForm.get('AadhaarNo'))" type="text" maxlength="12"
+              placeholder="12-digit Aadhaar number"
+              class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+            <p *ngIf="registerForm.get('AadhaarNo')?.invalid && registerForm.get('AadhaarNo')?.touched"
+               class="mt-1.5 text-xs text-error-500">Valid 12-digit Aadhaar number required.</p>
           </div>
         </div>
       </app-component-card>
@@ -354,15 +412,58 @@
       <app-experience [experienceList]="experienceCollection" (onExperienceSubmit)="onCollectExperience($event)" />
     </ng-container>
 
-    <!-- ── Step 9: Technical Skills ─────────────────────────────────────── -->
+    <!-- ── Step 9: Industry Experience ─────────────────────────────────── -->
+    <ng-container *ngIf="isCurrentStep('industry_experience')">
+      <app-industry-experience
+        [industryExperienceList]="industryExperienceCollection"
+        (onIndustryExperienceSubmit)="onCollectIndustryExperience($event)" />
+    </ng-container>
+
+    <!-- ── Step 10: Technical Skills ────────────────────────────────────── -->
     <ng-container *ngIf="isCurrentStep('technical_skills')">
       <app-technicalskills [skillList]="skillsCollection" (onSkillSubmit)="onCollectSkills($event)" />
     </ng-container>
 
-    <!-- ── Step 10: Declaration & Submit ────────────────────────────────── -->
+    <!-- ── Step 11: Role Experience (§9A/B/C) ───────────────────────────── -->
+    <ng-container *ngIf="isCurrentStep('role_experience')">
+      <app-role-experience
+        [roleExperienceData]="roleExperienceCollection"
+        (onRoleExperienceSubmit)="onCollectRoleExperience($event)" />
+    </ng-container>
+
+    <!-- ── Step 12: Declaration & Submit ────────────────────────────────── -->
     <ng-container *ngIf="isCurrentStep('declaration')">
-      <app-component-card title="Step {{ currentStepIndex + 1 }}: Declaration">
-        <div class="flex items-start gap-3">
+      <app-component-card title="Step {{ currentStepIndex + 1 }}: Summary &amp; Declaration">
+
+        <!-- §10 Summary of Skill Sets -->
+        <div class="mb-6">
+          <app-label for="summaryofskillsets">
+            10. Summary of Skill Sets / Competencies
+            <span class="text-gray-400 font-normal">(max 500 characters)</span>
+            <span class="text-error-500"> *</span>
+          </app-label>
+          <textarea [formControl]="$any(registerForm.get('summaryofskillsets'))" rows="4" maxlength="500"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"></textarea>
+          <div class="flex items-center justify-between mt-1">
+            <p *ngIf="registerForm.get('summaryofskillsets')?.invalid && registerForm.get('summaryofskillsets')?.touched"
+               class="text-xs text-error-500">Summary is required.</p>
+            <p class="text-xs text-gray-400 ml-auto">{{ registerForm.get('summaryofskillsets')?.value?.length || 0 }} / 500</p>
+          </div>
+        </div>
+
+        <!-- §11 Other Information -->
+        <div class="mb-6">
+          <app-label for="otherinformation">
+            11. Any Other Information
+            <span class="text-gray-400 font-normal">(optional — max 500 characters)</span>
+          </app-label>
+          <textarea [formControl]="$any(registerForm.get('otherinformation'))" rows="3" maxlength="500"
+            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"></textarea>
+          <p class="text-xs text-gray-400 text-right mt-1">{{ registerForm.get('otherinformation')?.value?.length || 0 }} / 500</p>
+        </div>
+
+        <!-- Declaration -->
+        <div class="border-t border-gray-200 dark:border-gray-700 pt-5 flex items-start gap-3">
           <app-checkbox
             [(checked)]="isaccepted"
             (checkedChange)="onTermAccept($event)"
@@ -391,13 +492,19 @@
     <button
       type="button"
       (click)="next()"
-      class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors"
+      [disabled]="isLastStep && submitting"
+      class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       [ngClass]="isLastStep ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'">
-      <span>{{ isLastStep ? 'Submit Application' : 'Next' }}</span>
+      <!-- spinner while submitting -->
+      <svg *ngIf="isLastStep && submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+      </svg>
+      <span>{{ isLastStep ? (submitting ? 'Processing...' : 'Submit Application') : 'Next' }}</span>
       <svg *ngIf="!isLastStep" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
       </svg>
-      <svg *ngIf="isLastStep" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <svg *ngIf="isLastStep && !submitting" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
       </svg>
     </button>

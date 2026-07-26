@@ -1,201 +1,198 @@
-<div *ngIf="successmessage">
-    <app-component-card title="Success Alert">
-      <div>
-        <app-alert
-          variant="success"
-          title="Success Message"
-          [message]="successmessage"
-          [showLink]="false"
-          linkHref="/"
-          linkText="Learn more"
-        />
-      </div>      
-    </app-component-card>
+<div *ngIf="successmessage" class="mb-4">
+  <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" linkHref="/" linkText="" />
+</div>
+
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+
+  <!-- Header -->
+  <div class="px-6 pt-5 pb-4 border-b border-gray-100 dark:border-white/[0.05]">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">MT/AT/CT</h3>
+    <p class="text-sm text-gray-500 mt-0.5">Manage and track all application records.</p>
   </div>
 
+  <!-- Filters -->
+  <div class="flex flex-wrap items-center gap-3 px-6 py-4 border-b border-gray-100 dark:border-white/[0.05]">
 
-<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-  
-  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-        MT/AT/CT
-      </h3>
-    </div>
-      <div class="flex flex-wrap items-center gap-8">
-    <app-radio [id]="'NEW'" [name]="'group1'" [value]="'NEW'" [checked]="statusvalue === 'NEW'"
-      [label]="'NEW'" [disabled]="false" (valueChange)="handleRadioChange('NEW')"/>
-    <app-radio [id]="'HOLD'" [name]="'group1'" [value]="'HOLD'" [checked]="statusvalue === 'HOLD'"
-      [label]="'HOLD'" [disabled]="false" (valueChange)="handleRadioChange('HOLD')"/>
-      <app-radio [id]="'SHORTLISTED'" [name]="'group1'" [value]="'SHORTLISTED'" [checked]="statusvalue === 'SHORTLISTED'"
-      [label]="'SHORTLISTED'" [disabled]="false" (valueChange)="handleRadioChange('SHORTLISTED')"/>
-    <app-radio [id]="'APPROVED'" [name]="'group1'" [value]="'APPROVED'" [checked]="statusvalue === 'APPROVED'"
-      [label]="'APPROVED'" [disabled]="false" (valueChange)="handleRadioChange('APPROVED')"/>
-      <app-radio [id]="'REJECTED'" [name]="'group1'" [value]="'REJECTED'" [checked]="statusvalue === 'REJECTED'"
-      [label]="'REJECTED'" [disabled]="false" (valueChange)="handleRadioChange('REJECTED')"/>
+    <!-- Category dropdown (Master Admin only) -->
+    <select *ngIf="helperService.IsSuperAdmin()"
+      (change)="onCategoryChange($event)"
+      class="h-9 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-white/[0.1] dark:bg-gray-900 dark:text-white/80">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.label }}</option>
+    </select>
 
+    <!-- Category label (Category Admin — fixed, not changeable) -->
+    <span *ngIf="helperService.IsCategoryAdmin()"
+      class="h-9 inline-flex items-center px-3 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-600 dark:border-white/[0.1] dark:bg-gray-800 dark:text-white/60">
+      {{ helperService.getOrgCategoryName() || 'My Category' }}
+    </span>
+
+    <!-- Subcategory (both Master Admin and Category Admin) -->
+    <select *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()"
+      [(ngModel)]="selectedSubCategoryId"
+      class="h-9 rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-white/[0.1] dark:bg-gray-900 dark:text-white/80">
+      <option [ngValue]="null">All Subcategories</option>
+      <option *ngFor="let sub of subCategoryOptions" [ngValue]="sub.id">{{ sub.label }}</option>
+    </select>
+
+    <!-- Filter button -->
+    <button (click)="applyFilter()"
+      class="h-9 px-4 rounded-lg bg-brand-500 text-sm font-medium text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      Filter
+    </button>
+
+    <!-- Download Excel -->
+    <button (click)="downloadExcel()"
+      class="ml-auto h-9 px-4 rounded-lg bg-green-600 text-sm font-medium text-white hover:bg-green-700 flex items-center gap-2 focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Download Excel
+    </button>
   </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-6 px-6 border-b border-gray-100 dark:border-white/[0.05]">
+    <button (click)="setTab('')"
+      class="py-3 text-sm font-medium border-b-2 transition-colors"
+      [ngClass]="activeTab === '' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+      All Data
+    </button>
+    <button (click)="setTab('NEW')"
+      class="py-3 text-sm font-medium border-b-2 transition-colors"
+      [ngClass]="activeTab === 'NEW' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+      Pending
+    </button>
+    <button (click)="setTab('APPROVED')"
+      class="py-3 text-sm font-medium border-b-2 transition-colors"
+      [ngClass]="activeTab === 'APPROVED' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+      Approved
+    </button>
+    <button (click)="setTab('REJECTED')"
+      class="py-3 text-sm font-medium border-b-2 transition-colors"
+      [ngClass]="activeTab === 'REJECTED' ? 'border-brand-500 text-brand-600' : 'border-transparent text-gray-500 hover:text-gray-700'">
+      Rejected
+    </button>
   </div>
+
+  <!-- Table -->
   <div class="max-w-full overflow-x-auto">
-    <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+    <table class="min-w-full" *ngIf="!dataLoadProgress && dataRow.length">
+      <thead class="border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
-          
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
-                </span>
-              </div>
-            </div>
-          </th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">TO</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Applying For</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">CalendarProgrammeID</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Contact No</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">State</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">District</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Created Date</th>         
-          <!-- <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Action</th>           -->
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">S.No</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Name</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">TO</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Category</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Prog. Type</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Applying For</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Cal. Prog. ID</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Contact No.</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Email</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">State</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">District</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Created Date</th>
+          <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
         </tr>
       </thead>
-      <tbody>
-        @for (row of dataRow; track $index) {
-        <tr class="cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.02]" (click)="toggleRowActions($index)">
-          
-          <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                  {{ $index+1 }}
-                </span>
-              </div>
-            </div>
-          </td>
-          <td>
-            <a [routerLink]="['/registerdetail', row.id]"  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{ row.name }}
-            </a>
-            <!-- <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.trainerName }}
-            </p> -->
-          </td>
-          <td >
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.agencyName }}
-                
-            </p>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.applyingFor }}
-                
-            </p>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.programmeId }}
-                
-            </p>
-          </td>
-          <td >
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.contactNumber }}
-            </p>
-          </td>
-          <td>
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.email }}
-            </p>
-          </td>
-          <td>
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.state }}
-            </p>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.district }}
-            </p>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.strCreatedDate }}
-            </p>
-          </td>
-        </tr>
-        @if (selectedRowIndex === $index) {
-        <tr class="bg-gray-50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/[0.05]">
-          <td colspan="10" class="px-6 py-2" (click)="$event.stopPropagation()">
-            <div class="flex items-center gap-3">
-              <button (click)="openModal(row,'REJECT')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD' || row.status == 'SHORTLISTED')"
-                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-red-500 hover:bg-red-600">
-                REJECT
-              </button>
-              <button (click)="updateStatus(row,'APPROVED','')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD' || row.status == 'SHORTLISTED')"
-                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-green-500 hover:bg-green-600">
-                APPROVED
-              </button>
-              <button (click)="updateStatus(row,'SHORTLISTED','')" *ngIf="(row.status == 'NEW' || row.status == 'HOLD')"
-                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-blue-500 hover:bg-blue-600">
-                SHORTLISTED
-              </button>
-              <button (click)="openModal(row,'HOLD')" *ngIf="(row.status == 'NEW' || row.status == 'REJECTED')"
-                class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-yellow-500 hover:bg-yellow-600">
-                HOLD
-              </button>
-            </div>
-          </td>
-        </tr>
-        }
+      <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+        @for (row of paginatedData; track $index) {
+          <tr class="cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.02]"
+              (click)="toggleRowActions((currentPage - 1) * pageSize + $index)">
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">
+              {{ (currentPage - 1) * pageSize + $index + 1 }}
+            </td>
+            <td class="px-4 py-3">
+              <a [routerLink]="['/registerdetail', row.id]" target="_blank"
+                class="text-sm text-brand-500 hover:underline">
+                {{ row.name }}
+              </a>
+            </td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.agencyName }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.category }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.programmeType }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.applyingFor }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.programmeId || '-' }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.contactNumber }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.email }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.state }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.district }}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.strCreatedDate }}</td>
+            <td class="px-4 py-3">
+              <span [class]="getStatusClass(row.status)">{{ getStatusLabel(row.status) }}</span>
+            </td>
+          </tr>
+
+          <!-- Inline action row -->
+          @if (selectedRowIndex === (currentPage - 1) * pageSize + $index) {
+            <tr class="bg-gray-50 dark:bg-white/[0.02] border-b border-gray-100 dark:border-white/[0.05]">
+              <td colspan="13" class="px-6 py-2" (click)="$event.stopPropagation()">
+                <div class="flex items-center gap-3">
+                  <button *ngIf="row.status !== 'APPROVED'"
+                    (click)="updateStatus(row, 'APPROVED', '')"
+                    class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-green-500 hover:bg-green-600">
+                    Accept
+                  </button>
+                  <button *ngIf="row.status !== 'REJECTED'"
+                    (click)="openModal(row, 'REJECTED')"
+                    class="text-xs rounded-lg px-4 py-1.5 font-medium text-white bg-red-500 hover:bg-red-600">
+                    Reject
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
         }
       </tbody>
     </table>
-    <app-datanotfound *ngIf="(dataRow.length == 0 && dataLoadProgress == false)"> </app-datanotfound>
-    <app-dataloadinprogress *ngIf="dataLoadProgress"></app-dataloadinprogress>
+
+    <app-datanotfound *ngIf="dataRow.length === 0 && !dataLoadProgress" />
+    <app-dataloadinprogress *ngIf="dataLoadProgress" />
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!dataLoadProgress && totalPages > 1"
+    class="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100 dark:border-white/[0.05]">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1"
+      class="flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed">
+      ← Previous
+    </button>
+
+    <ng-container *ngFor="let page of visiblePages">
+      <button *ngIf="page !== '...'" (click)="changePage(page)"
+        class="w-8 h-8 text-sm rounded-lg"
+        [ngClass]="page === currentPage
+          ? 'bg-brand-500 text-white font-medium'
+          : 'text-gray-500 hover:bg-gray-100'">
+        {{ page }}
+      </button>
+      <span *ngIf="page === '...'" class="px-1 text-gray-400">...</span>
+    </ng-container>
+
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages"
+      class="flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed">
+      Next →
+    </button>
   </div>
 </div>
 
-<!-- Modal -->
-<app-modal
-  [isOpen]="isOpen"
-  (close)="closeModal()"
-  className="max-w-[700px] m-4"
->
-  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
-    <div class="px-2 pr-14">
-      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-       {{currentStatus}}
-      </h4>      
+<!-- Reject Modal -->
+<app-modal [isOpen]="isOpen" (close)="closeModal()" className="max-w-[500px] m-4">
+  <div *ngIf="modelItem"
+    class="no-scrollbar relative w-full max-w-[500px] overflow-y-auto rounded-3xl bg-white p-6 dark:bg-gray-900">
+    <h4 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white/90">Reject Application</h4>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reason for Rejection</label>
+      <input [(ngModel)]="statusComment" name="statusComment" maxlength="2000" type="text"
+        placeholder="Enter rejection reason..."
+        class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      <p *ngIf="!statusComment && statuscommentbtnclick" class="mt-1.5 text-xs text-error-500">
+        Reason is required.
+      </p>
     </div>
-    <form class="flex flex-col" (ngSubmit)="postStatus(modelItem)">
-      <div class="custom-scrollbar h-[250px] overflow-y-auto px-2 pb-3">
-        <div>
-          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-            
-          </h5>
-          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">  
-            <div>
-              <label>{{currentStatus}} Comments:</label><br/>              
-                <div class="relative">
-              <input [(ngModel)]="statusComment" multiple name="modelpt" maxlength="2000"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-              <p *ngIf="!statusComment && statuscommentbtnclick" class="mt-1.5 text-xs text-error-500">Comment is required.</p>
-              </div>
-            </div>          
-          </div>
-        </div>        
-      </div>
-      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-        <app-button
-          size="sm"          
-          (btnClick)="postStatus(modelItem)"
-        >
-          Update
-        </app-button>        
-      </div>
-    </form>
+    <div class="flex items-center gap-3 mt-6 justify-end">
+      <app-button size="sm" variant="outline" (btnClick)="closeModal()">Cancel</app-button>
+      <app-button size="sm" (btnClick)="postStatus(modelItem)">Confirm Reject</app-button>
+    </div>
   </div>
 </app-modal>

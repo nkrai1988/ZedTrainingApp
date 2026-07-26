@@ -119,22 +119,22 @@ handleAgencyChange(value: string) {
     programmeList:any=[];
     successmessage='';
     rejectcommentbtnclick=false;
-    orgCategory='';
+    orgCategory: number | null = null;
     ngOnInit(){
       this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
       this.loadProgrammeType();
       this.loadAgencies();
-      if (this.helperService.IsMasterAdmin()) {
+      if (this.helperService.IsSuperAdmin()) {
         this.categorySub = this.helperService.category$.subscribe(cat => {
           this.orgCategory = cat;
           this.dataRow = [];
           this.getProgrammes();
         });
-      } else if (this.helperService.IsSuperAdmin()) {
-        this.orgCategory = this.helperService.getOrgCategory() || '';
+      } else if (this.helperService.IsCategoryAdmin()) {
+        this.orgCategory = this.helperService.getOrgCategoryId();
         this.getProgrammes();
       } else {
-        this.orgCategory = this.helperService.getOrgCategory() || '';
+        this.orgCategory = this.helperService.getOrgCategoryId();
         this.getProgrammes();
       }
     }

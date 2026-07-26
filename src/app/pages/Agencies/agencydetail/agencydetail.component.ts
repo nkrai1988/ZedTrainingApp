@@ -68,15 +68,21 @@ private subscription: Subscription = new Subscription();
       }
     });
     
-    if (this.helperService.IsMasterAdmin()) {
-      this.subscription = this.helperService.category$.subscribe(val => {
-        console.log({'this.Category': val});
+    this.subscription.add(
+      this.helperService.category$.subscribe(val => {
+        this.detailForm.controls['OrgCategoryId'].setValue(val);
+      })
+    );
+    this.subscription.add(
+      this.helperService.categoryName$.subscribe(val => {
         this.detailForm.controls['OrgCategory'].setValue(val);
-      });
-    }
-    else{
-      this.detailForm.controls['OrgCategory'].setValue(this.helperService.getOrgCategory());
-    }
+      })
+    );
+    this.subscription.add(
+      this.helperService.subCategory$.subscribe(val => {
+        this.detailForm.controls['OrgSubCategoryId'].setValue(val);
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -93,7 +99,7 @@ private subscription: Subscription = new Subscription();
       StateName: ['', [Validators.required]],
       districtname: ['', [Validators.required]],
       PinCode: ['', [Validators.required,Validators.minLength(6)]],
-      ProgrammeType: ['', [Validators.required]],
+      ProgrammeType: ['Training Programme', [Validators.required]],
       LastName: ['', [Validators.required]],
       phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required,,Validators.email]],
@@ -101,6 +107,8 @@ private subscription: Subscription = new Subscription();
       PanNo: ['', [Validators.required,Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
       GstNo: ['', [Validators.pattern(/^\d{15}$/)]],
       OrgCategory: ['', [Validators.required]],
+      OrgCategoryId: [null, [Validators.required]],
+      OrgSubCategoryId: [null, [Validators.required]],
     });
   }
   get f() { return this.detailForm.controls; }
@@ -231,6 +239,19 @@ this.router.navigate(['/agencies']);
 
   onSubmit(){
     this.detailForm.markAllAsTouched();
+    if (!this.detailForm.controls['OrgCategoryId'].value) {
+      this.errormessage = 'Organisation category is not available. Please re-login and try again.';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { this.errormessage = ''; }, 5000);
+      return;
+    }
+    if (!this.detailForm.controls['OrgSubCategoryId'].value) {
+      this.errormessage = 'Please select a Sub Category from the top header dropdown before creating an agency.';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => { this.errormessage = ''; }, 5000);
+      return;
+    }
+    console.log({'this.detailForm.value':this.detailForm.value});
     if (this.detailForm.invalid) return;
     if (this.detailForm.valid) {
       this.isSubmitting = true;

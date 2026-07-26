@@ -1,161 +1,213 @@
 
 <div *ngIf="errormessage">
-    <app-component-card>      
-      <div>
-        <app-alert
-          variant="error"
-          title="Error Message"
-          [message]="errormessage"
-          [showLink]="false"
-        />
-      </div>
-    </app-component-card>
-  </div>
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error Message" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
 
-  <div *ngIf="successmessage">
-    <app-component-card>      
-      <div>
-        <app-alert
-          variant="success"
-          title="Success Message"
-          [message]="successmessage"
-          [showLink]="false"
-        />
-      </div>
-    </app-component-card>
-  </div>
+<div *ngIf="successmessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="success" title="Success Message" [message]="successmessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
 
 <form (ngSubmit)="onSubmit()" [formGroup]="detailForm" class="space-y-6">
 <app-component-card title="Create Programme">
-  <div class="space-y-6">
-    <div>
-      <app-label>Programme Type:<span class="text-error-500">*</span></app-label>
-      <app-select
-        [options]="programmetypeOptions"
-        placeholder="Select an option"
-        [value]="selectedProgrammetypeOption"
-        (valueChange)="handleProgrammeTypeSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-      <p *ngIf="detailForm.get('ProgrammeType')?.invalid && (detailForm.get('ProgrammeType')?.touched || detailForm.get('ProgrammeType')?.dirty)" class="mt-1.5 text-xs text-error-500"> Please Select Programme Type. </p>
-    </div>    
-    <div>
-      <app-label for="input">Start Date (MM/DD/YYYY):<span class="text-error-500">*</span></app-label>
-      <app-date-picker
-        id="date-picker"       
-        placeholder="Select a date"
-        (dateChange)="handleStartDateChange($event)"/>
-        <p *ngIf="detailForm.get('StartDate')?.invalid && (detailForm.get('StartDate')?.touched || detailForm.get('StartDate')?.dirty)" class="mt-1.5 text-xs text-error-500">Start Date is required.</p>
+  <div class="space-y-5">
+
+    <!-- Programme Type + Paid/Free -->
+    <div class="grid grid-cols-1 gap-x-6 lg:grid-cols-2">
+      <div>
+        <app-label>Programme Type:<span class="text-error-500">*</span></app-label>
+        <app-select
+          [options]="programmetypeOptions"
+          placeholder="Select Program type"
+          [value]="selectedProgrammetypeOption"
+          (valueChange)="handleProgrammeTypeSelectChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+        <p *ngIf="detailForm.get('ProgrammeType')?.invalid && (detailForm.get('ProgrammeType')?.touched || detailForm.get('ProgrammeType')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Select Programme Type.</p>
+      </div>
+      <div>
+        <app-label>&nbsp;</app-label>
+        <app-select
+          [options]="paidOrFreeOptions"
+          placeholder="Select option"
+          [value]="selectedPaidOrFree"
+          (valueChange)="handlePaidOrFreeSelectChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
     </div>
+
+    <!-- Start Date -->
     <div>
-      <app-label for="input">Start Time:<span class="text-error-500">*</span></app-label>      
-      <app-time-picker
-        id="time-picker"
-        placeholder="Select time"
-        (timeChange)="handleStartTime($event)"/>    
-        <p *ngIf="detailForm.get('StartTime')?.invalid && (detailForm.get('StartTime')?.touched || detailForm.get('StartTime')?.dirty)" class="mt-1.5 text-xs text-error-500">Start Time is required.</p>
+      <app-label>Start Date (MM/DD/YYYY):<span class="text-error-500">*</span></app-label>
+      <app-date-picker id="start-date-picker" placeholder="Select date" (dateChange)="handleStartDateChange($event)" />
+      <p *ngIf="detailForm.get('StartDate')?.invalid && (detailForm.get('StartDate')?.touched || detailForm.get('StartDate')?.dirty)" class="mt-1.5 text-xs text-error-500">Start Date is required.</p>
     </div>
+
+    <!-- Start Time -->
     <div>
-      <app-label for="input">End Date (MM/DD/YYYY):<span class="text-error-500">*</span></app-label>
-      <app-date-picker
-        id="date-picker"       
-        placeholder="Select a date"
-        (dateChange)="handleEndDateChange($event)"/>
-        <p *ngIf="detailForm.get('EndDate')?.invalid && (detailForm.get('EndDate')?.touched || detailForm.get('EndDate')?.dirty)" class="mt-1.5 text-xs text-error-500">End Date is required.</p>
+      <app-label>Start Time:<span class="text-error-500">*</span></app-label>
+      <app-time-picker id="start-time-picker" placeholder="Select time" (timeChange)="handleStartTime($event)" />
+      <p *ngIf="detailForm.get('StartTime')?.invalid && (detailForm.get('StartTime')?.touched || detailForm.get('StartTime')?.dirty)" class="mt-1.5 text-xs text-error-500">Start Time is required.</p>
     </div>
+
+    <!-- End Date -->
     <div>
-      <app-label for="input">End Time:<span class="text-error-500">*</span></app-label>      
-      <app-time-picker
-        id="time-picker"
-        placeholder="Select time"
-        (timeChange)="handleEndTime($event)"/>    
-        <p *ngIf="detailForm.get('EndTime')?.invalid && (detailForm.get('EndTime')?.touched || detailForm.get('EndTime')?.dirty)" class="mt-1.5 text-xs text-error-500">End Time is required.</p>
+      <app-label>End Date (MM/DD/YYYY):<span class="text-error-500">*</span></app-label>
+      <app-date-picker id="end-date-picker" placeholder="Select end date" (dateChange)="handleEndDateChange($event)" />
+      <p *ngIf="detailForm.get('EndDate')?.invalid && (detailForm.get('EndDate')?.touched || detailForm.get('EndDate')?.dirty)" class="mt-1.5 text-xs text-error-500">End Date is required.</p>
     </div>
+
+    <!-- End Time -->
     <div>
-      <app-label for="input">Venue (Full Address):<span class="text-error-500">*</span></app-label>
-      <div class="relative">
-        <input formControlName="Venue" type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-        <p *ngIf="detailForm.get('Venue')?.invalid && (detailForm.get('Venue')?.touched || detailForm.get('Venue')?.dirty)" class="mt-1.5 text-xs text-error-500">Venue address is required.</p>
+      <app-label>End Time:<span class="text-error-500">*</span></app-label>
+      <app-time-picker id="end-time-picker" placeholder="Select end time" (timeChange)="handleEndTime($event)" />
+      <p *ngIf="detailForm.get('EndTime')?.invalid && (detailForm.get('EndTime')?.touched || detailForm.get('EndTime')?.dirty)" class="mt-1.5 text-xs text-error-500">End Time is required.</p>
+    </div>
+
+    <!-- Mode of Programme -->
+    <div>
+      <app-label>Mode of Programme:<span class="text-error-500">*</span></app-label>
+      <div class="flex items-center gap-6 mt-2">
+        <app-radio
+          [id]="'modeVirtual'"
+          [name]="'modeOfProgramme'"
+          [value]="'Virtual'"
+          [checked]="selectedModeOfProgramme === 'Virtual'"
+          [label]="'Virtual'"
+          [disabled]="false"
+          (valueChange)="handleModeOfProgrammeSelectChange('Virtual')"
+        />
+        <app-radio
+          [id]="'modePhysical'"
+          [name]="'modeOfProgramme'"
+          [value]="'Physical'"
+          [checked]="selectedModeOfProgramme === 'Physical'"
+          [label]="'Physical'"
+          [disabled]="false"
+          (valueChange)="handleModeOfProgrammeSelectChange('Physical')"
+        />
+      </div>
+    </div>
+
+    <!-- Virtual Link (shown when Virtual is selected) -->
+    <ng-container *ngIf="selectedModeOfProgramme === 'Virtual'">
+      <div>
+        <p class="text-sm text-brand-500 mb-1">If Virtual is selected:</p>
+        <app-label>Virtual Link:<span class="text-error-500">*</span></app-label>
+        <input formControlName="WebLink" type="text"
+          placeholder="Enter virtual meeting link (e.g., Zoom, Google Meet)"
+          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+        <p *ngIf="detailForm.get('WebLink')?.invalid && (detailForm.get('WebLink')?.touched || detailForm.get('WebLink')?.dirty)" class="mt-1.5 text-xs text-error-500">Virtual Link is required.</p>
+      </div>
+    </ng-container>
+
+    <!-- Physical fields (shown when Physical is selected) -->
+    <ng-container *ngIf="selectedModeOfProgramme === 'Physical'">
+      <div>
+        <p class="text-sm text-brand-500 mb-1">If Physical is selected:</p>
+        <app-label>Address:<span class="text-error-500">*</span></app-label>
+        <input formControlName="Venue" type="text"
+          placeholder="Enter full address"
+          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+        <p *ngIf="detailForm.get('Venue')?.invalid && (detailForm.get('Venue')?.touched || detailForm.get('Venue')?.dirty)" class="mt-1.5 text-xs text-error-500">Address is required.</p>
+      </div>
+
+      <div class="grid grid-cols-1 gap-x-6 lg:grid-cols-2">
+        <div>
+          <app-label>State:<span class="text-error-500">*</span></app-label>
+          <app-select
+            [options]="stateOptions"
+            placeholder="Select State"
+            [value]="selectedStateOption"
+            (valueChange)="handleStateSelectChange($event)"
+            className="dark:bg-dark-900"
+          ></app-select>
+          <p *ngIf="detailForm.get('StateName')?.invalid && (detailForm.get('StateName')?.touched || detailForm.get('StateName')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Select State.</p>
         </div>
-    </div>
-    <div>
-      <app-label for="input">Program Link: <span> Note:In case of virtual training, please ensure that correct online link is entered here.</span></app-label>
-      <div class="relative">
-        <input formControlName="WebLink" type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-        <p *ngIf="detailForm.get('WebLink')?.invalid && (detailForm.get('WebLink')?.touched || detailForm.get('WebLink')?.dirty)" class="mt-1.5 text-xs text-error-500">Programme Link is required.</p>
+        <div>
+          <app-label>District:<span class="text-error-500">*</span></app-label>
+          <app-select
+            [options]="districtOptions"
+            placeholder="Select District"
+            [value]="selectedDistrictOption"
+            (valueChange)="handleDistrictSelectChange($event)"
+            className="dark:bg-dark-900"
+          ></app-select>
+          <p *ngIf="detailForm.get('districtname')?.invalid && (detailForm.get('districtname')?.touched || detailForm.get('districtname')?.dirty)" class="mt-1.5 text-xs text-error-500">Please Select District.</p>
         </div>
-    </div>
-    <div>
-      <app-label>State:<span class="text-error-500">*</span></app-label>
-      <app-select
-        [options]="stateOptions"
-        placeholder="Select an option"
-        [value]="selectedStateOption"
-        (valueChange)="handleStateSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-      <p *ngIf="detailForm.get('StateName')?.invalid && (detailForm.get('StateName')?.touched || detailForm.get('StateName')?.dirty)" class="mt-1.5 text-xs text-error-500"> Please Select State. </p>
-    </div>
-    <div>
-      <app-label>District:<span class="text-error-500">*</span></app-label>
-      <app-select
-        [options]="districtOptions"
-        placeholder="Select an option"
-        [value]="selectedDistrictOption"
-        (valueChange)="handleDistrictSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-      <p *ngIf="detailForm.get('districtname')?.invalid && (detailForm.get('districtname')?.touched || detailForm.get('districtname')?.dirty)" class="mt-1.5 text-xs text-error-500"> Please Select District. </p>
-    </div>
-    <div>
-      <app-label for="input">Pin Code:<span class="text-error-500">*</span></app-label>
-      <div class="relative">
-        <input formControlName="PinCode" type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      </div>
+
+      <div>
+        <app-label>Pin Code:<span class="text-error-500">*</span></app-label>
+        <input formControlName="PinCode" type="text" placeholder="e.g. 201303"
+          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
         <p *ngIf="detailForm.get('PinCode')?.invalid && (detailForm.get('PinCode')?.touched || detailForm.get('PinCode')?.dirty)" class="mt-1.5 text-xs text-error-500">Please enter a valid Pincode.</p>
-        </div>
-    </div>
-    
+      </div>
+    </ng-container>
+
+    <!-- Coordinator -->
     <div>
-      <app-label>Coordinator:<span class="text-error-500">*</span></app-label>
+      <app-label>Select coordinator:<span class="text-error-500">*</span></app-label>
       <app-select
         [options]="corrdinatorsOptions"
-        placeholder="Select an option"
+        placeholder="Select Coordinator"
         [value]="selectedCorrdinator"
         (valueChange)="handleCoordinatorsSelectChange($event)"
         className="dark:bg-dark-900"
       ></app-select>
       <p *ngIf="detailForm.get('Coordinator')?.invalid && (detailForm.get('Coordinator')?.touched || detailForm.get('Coordinator')?.dirty)" class="mt-1.5 text-xs text-error-500">Coordinator is required.</p>
+
+      <!-- Search box -->
+      <div class="relative mt-2">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+        </svg>
+        <input
+          [(ngModel)]="coordinatorSearch"
+          [ngModelOptions]="{standalone: true}"
+          type="text"
+          placeholder="Search coordinator..."
+          class="form-control h-10 w-full rounded-lg border appearance-none pl-9 pr-4 py-2 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+      </div>
+
+      <!-- Results list -->
+      <div *ngIf="filteredCoordinatorOptions.length > 0"
+        class="mt-1 rounded-lg border border-gray-200 dark:border-white/[0.08] overflow-hidden">
+        <div *ngFor="let option of filteredCoordinatorOptions"
+          (click)="selectCoordinator(option)"
+          class="flex items-center justify-between px-4 py-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.04] border-b border-gray-100 dark:border-white/[0.05] last:border-0">
+          <span class="text-sm font-medium text-gray-800 dark:text-white/90">{{ option.label }}</span>
+          <span class="text-sm text-gray-400 dark:text-gray-500">{{ option.location }}</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Lead Trainer -->
     <div>
       <app-label>Lead Trainer:</app-label>
       <app-select
         [options]="leadTrainersOptions"
-        placeholder="Select an option"
+        placeholder="Select a option"
         [value]="selectedLeadTrainer"
         (valueChange)="handleLeadTrainerSelectChange($event)"
         className="dark:bg-dark-900"
       ></app-select>
-      <!-- <p *ngIf="detailForm.get('districtname')?.invalid && (detailForm.get('districtname')?.touched || detailForm.get('districtname')?.dirty)" class="mt-1.5 text-xs text-error-500"> Please Select District. </p> -->
     </div>
-    <div>
-      <app-label>Organising Partner:<span class="text-error-500">*</span></app-label>
-      <app-select
-        [options]="organisingPartnerOptions"
-        placeholder="Select an option"
-        [value]="selectedOrganisingPartners"
-        (valueChange)="handleOrganisingPartnerSelectChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-      <p *ngIf="detailForm.get('OrganisingPartner')?.invalid && (detailForm.get('OrganisingPartner')?.touched || detailForm.get('OrganisingPartner')?.dirty)" class="mt-1.5 text-xs text-error-500">Organising Partner is required.</p>
-    </div>
-    
-     <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-        <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
-        <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Save Changes' }}</app-button>
-      </div>
 
-      
-      
+    <!-- Buttons -->
+    <div class="flex items-center gap-3 mt-2 justify-end">
+      <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
+      <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Save Changes' }}</app-button>
+    </div>
+
   </div>
 </app-component-card>
 </form>

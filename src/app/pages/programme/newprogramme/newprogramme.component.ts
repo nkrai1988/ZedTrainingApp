@@ -9,10 +9,11 @@
 // export class NewprogrammeComponent {
 
 // }
- import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { SelectComponent } from '../../../shared/components/form/select/select.component';
+import { RadioComponent } from '../../../shared/components/form/input/radio.component';
 import { DatePickerComponent } from '../../../shared/components/form/date-picker/date-picker.component';
 import { TimePickerComponent } from '../../../shared/components/form/time-picker/time-picker.component';
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
@@ -23,6 +24,7 @@ import { AgencyService } from '../../../services/agencies.service';
 import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProgrammeService } from '../../../services/programme.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-newprogramme',
@@ -30,6 +32,7 @@ import { ProgrammeService } from '../../../services/programme.service';
     ComponentCardComponent,
     LabelComponent,
     SelectComponent,
+    RadioComponent,
     DatePickerComponent,
     TimePickerComponent,
     ButtonComponent,
@@ -41,56 +44,80 @@ import { ProgrammeService } from '../../../services/programme.service';
   templateUrl: './newprogramme.component.html',
   styles: ``
 })
-export class NewprogrammeComponent {
+export class NewprogrammeComponent implements OnDestroy {
 
   constructor(private fb: FormBuilder,private helperService:HelperService,private programmeService:ProgrammeService,private agencyservice:AgencyService,private router: Router,private route:ActivatedRoute){
 
   }
   detailForm!: FormGroup;
   showPassword = false;
-  
+
   programmetypeOptions:any=[];
   stateOptions:any=[];
   districtOptions:any=[];
   corrdinatorsOptions:any=[];
   leadTrainersOptions:any=[];
-  organisingPartnerOptions:any=[];
   errormessage='';
   successmessage='';
   isSubmitting = false;
   isdisable:boolean=true;
 
-  options = [
-    { value: 'marketing', label: 'Marketing' },
-    { value: 'template', label: 'Template' },
-    { value: 'development', label: 'Development' },
+  paidOrFreeOptions = [
+    { value: 'Paid', label: 'Paid' },
+    { value: 'Free', label: 'Free' },
   ];
 
-
-  selectedOption = '';
+selectedOption = '';
   selectedStateOption = '';
   selectedDistrictOption='';
   selectedProgrammetypeOption='';
+  selectedPaidOrFree='';
+  selectedModeOfProgramme='Virtual';
   selectedCorrdinator='';
   selectedLeadTrainer='';
-  selectedOrganisingPartners='';
+  coordinatorSearch='';
   dateValue: any;
   timeValue = '';
-  cardNumber = '';
   id='';
+  private subscription: Subscription = new Subscription();
+  private currentCategoryId: number | null = null;
+  private currentSubCategoryId: number | null = null;
+
+  get filteredCoordinatorOptions(): any[] {
+    if (!this.coordinatorSearch) return [];
+    const q = this.coordinatorSearch.toLowerCase();
+    return this.corrdinatorsOptions.filter((o:any) =>
+      o.label.toLowerCase().includes(q) || (o.location && o.location.toLowerCase().includes(q))
+    );
+  }
 
   
-  ngOnInit() {  
+  ngOnInit() {
     this.createForm();
     this.loadDropdowns();
-    this.route.params.subscribe(params => {      
-      if(params['id']){
-         this.id = params['id'];
-         this.getAgencyDetail(this.id);
-      }     
-      
-    });  
-    
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.id = params['id'];
+        this.getAgencyDetail(this.id);
+      }
+    });
+    this.subscription.add(
+      this.helperService.category$.subscribe(val => {
+        this.currentCategoryId = val;
+        this.detailForm.controls['orgCategory'].setValue(val);
+        this.detailForm.controls['OrgCategoryId'].setValue(val);
+      })
+    );
+    this.subscription.add(
+      this.helperService.subCategory$.subscribe(val => {
+        this.currentSubCategoryId = val;
+        this.detailForm.controls['OrgSubCategoryId'].setValue(val);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   
@@ -99,24 +126,42 @@ export class NewprogrammeComponent {
      this.detailForm = this.fb.group({
       BatchNo:['new', [Validators.required]],
       ProgrammeType: ['', [Validators.required]],
+      PaidOrFree: ['', [Validators.required]],
+      ModeOfProgramme: ['Virtual', [Validators.required]],
       StartDate: ['', [Validators.required]],
       StartTime: ['', [Validators.required]],
       EndDate: ['', [Validators.required]],
       EndTime: ['', [Validators.required]],
-      Venue: ['', [Validators.required]],
-      WebLink: [''],
-      StateName: ['', [Validators.required]],
-      districtname: ['', [Validators.required]],
-      PinCode: ['', [Validators.required,Validators.minLength(6)]],
+      Venue: [''],
+      WebLink: ['', [Validators.required]],
+      StateName: [''],
+      districtname: [''],
+      PinCode: [''],
       Coordinator: ['', [Validators.required]],
       LeadTrainer: [''],
-      OrganisingPartner: ['', [Validators.required]],
-      orgCategory: [this.helperService.masterOrgCategory],
+      OrganisingPartner: [''],
+      orgCategory: [null],
+      OrgCategoryId: [null],
+      OrgSubCategoryId: [null],
     });
   }
   get f() { return this.detailForm.controls; }
   clearForm(){
-    this.detailForm.reset();
+    this.detailForm.reset({
+      BatchNo: 'new',
+      orgCategory: this.currentCategoryId,
+      OrgCategoryId: this.currentCategoryId,
+      OrgSubCategoryId: this.currentSubCategoryId,
+    });
+    this.selectedProgrammetypeOption = '';
+    this.selectedPaidOrFree = '';
+    this.selectedModeOfProgramme = '';
+    this.selectedStateOption = '';
+    this.selectedDistrictOption = '';
+    this.selectedCorrdinator = '';
+    this.selectedLeadTrainer = '';
+    this.coordinatorSearch = '';
+    this.districtOptions = [];
   }
 
   loadDropdowns(){
@@ -124,7 +169,6 @@ export class NewprogrammeComponent {
     this.loadStates();
     this.getCoordinators();
     this.getLeadTrainers();
-    this.getOrganisingPartner();
   }
 
   loadProgrammeType(){
@@ -146,15 +190,22 @@ export class NewprogrammeComponent {
   getCoordinators(){
     this.programmeService.getCoordinatorsList().subscribe({
       next:(response:any[]) =>{
-        console.log({'corrdianotrs':response});
-        response.forEach((element:any) => {
-         this.corrdinatorsOptions.push({value:element.userID,label:element.firstName});
-         });
+        this.corrdinatorsOptions = response.map((element:any) => ({
+          value: element.userID,
+          label: element.firstName,
+          location: [element.districtname, element.stateName].filter(Boolean).join(', ')
+        }));
       },
       error:(error) =>{
         console.log({'error':error});
       }
     });
+  }
+
+  selectCoordinator(option: any) {
+    this.selectedCorrdinator = option.value;
+    this.detailForm.controls['Coordinator'].setValue(option.value);
+    this.coordinatorSearch = '';
   }
 
   getLeadTrainers(){
@@ -171,19 +222,6 @@ export class NewprogrammeComponent {
     });
   }
 
-  getOrganisingPartner(){
-    this.programmeService.getLeadOrganisingParterList().subscribe({
-      next:(response:any[]) =>{
-        console.log({'leadTrainers':response});
-        response.forEach((element:any) => {
-         this.organisingPartnerOptions.push({value:element.organisingPartner,label:element.organisingPartner});
-         });
-      },
-      error:(error) =>{
-        console.log({'error':error});
-      }
-    });
-  }
 
   getAgencyDetail(userid:any){
     this.agencyservice.getAgencyDetail(userid).subscribe({
@@ -327,8 +365,48 @@ this.router.navigate(['/agencies']);
 
   handleProgrammeTypeSelectChange(value: string) {
     this.selectedProgrammetypeOption = value;
-    this.detailForm.controls['ProgrammeType'].setValue(this.selectedProgrammetypeOption);  
+    this.detailForm.controls['ProgrammeType'].setValue(this.selectedProgrammetypeOption);
   }
+
+  handlePaidOrFreeSelectChange(value: string) {
+    this.selectedPaidOrFree = value;
+    this.detailForm.controls['PaidOrFree'].setValue(value);
+  }
+
+  handleModeOfProgrammeSelectChange(value: string) {
+    this.selectedModeOfProgramme = value;
+    this.detailForm.controls['ModeOfProgramme'].setValue(value);
+
+    const webLink  = this.detailForm.controls['WebLink'];
+    const venue    = this.detailForm.controls['Venue'];
+    const state    = this.detailForm.controls['StateName'];
+    const district = this.detailForm.controls['districtname'];
+    const pin      = this.detailForm.controls['PinCode'];
+
+    if (value === 'Virtual') {
+      webLink.setValidators([Validators.required]);
+      venue.clearValidators();
+      state.clearValidators();
+      district.clearValidators();
+      pin.clearValidators();
+    } else {
+      webLink.clearValidators();
+      venue.setValidators([Validators.required]);
+      state.setValidators([Validators.required]);
+      district.setValidators([Validators.required]);
+      pin.setValidators([Validators.required, Validators.minLength(6)]);
+    }
+
+    [webLink, venue, state, district, pin].forEach(c => {
+      c.reset();
+      c.updateValueAndValidity();
+    });
+
+    this.selectedStateOption = '';
+    this.selectedDistrictOption = '';
+    this.districtOptions = [];
+  }
+
   handleSelectChange(value: string) {
     this.selectedStateOption = value;
     this.detailForm.controls['StateName'].setValue(value);
@@ -352,11 +430,6 @@ this.router.navigate(['/agencies']);
     this.detailForm.controls['LeadTrainer'].setValue(value);
   }
 
-  handleOrganisingPartnerSelectChange(value: string) {
-    this.selectedOrganisingPartners = value;
-    console.log({'this.selectedLeadTrainer':this.selectedOrganisingPartners});
-    this.detailForm.controls['OrganisingPartner'].setValue(value);
-  }
 
   handleStateSelectChange(value: string) {
     this.selectedStateOption = value;

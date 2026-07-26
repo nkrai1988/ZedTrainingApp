@@ -14,6 +14,8 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
   @Input() id!: string;
   @Input() mode: 'single' | 'multiple' | 'range' | 'time' = 'single';
   @Input() defaultDate?: string | Date | string[] | Date[];
+  @Input() maxDate?: string | Date;
+  @Input() minDate?: string | Date;
   @Input() label?: string;
   @Input() labelrequired?: boolean;
   @Input() placeholder?: string;
@@ -28,9 +30,10 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
       mode: this.mode,
       static: true,
       monthSelectorType: 'static',
-      //dateFormat: 'Y-m-d',
       dateFormat: 'm-d-Y',
       defaultDate: this.defaultDate,
+      maxDate: this.maxDate,
+      minDate: this.minDate,
       onChange: (selectedDates, dateStr, instance) => {
         this.dateChange.emit({ selectedDates, dateStr, instance });
       }

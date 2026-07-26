@@ -12,7 +12,7 @@
 
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -32,6 +32,7 @@ import { CoordinatorService } from '../../../services/coordinator.service';
 import { organisingpartnerService } from '../../../services/organisingpartner.service';
 import { HelperService } from '../../../services/helper.service';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
+import { Subscription } from 'rxjs';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
 
@@ -59,7 +60,7 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './organising-partners.component.html',
   styleUrl: './organising-partners.component.css',
 })
-export class OrganisingPartnersComponent {
+export class OrganisingPartnersComponent implements OnInit, OnDestroy {
   constructor(private service:organisingpartnerService,public modal: ModalService,private helperService:HelperService){
       
     }
@@ -68,6 +69,8 @@ export class OrganisingPartnersComponent {
     modelItem:any;
     neworganizer:any;
     neworganizerclicked=false;
+    private currentCategoryId: number | null = null;
+    private subscription: Subscription = new Subscription();
   openModal(row:any) {
     this.modelItem=row;
     console.log({'modelItem':this.modelItem});
@@ -82,6 +85,15 @@ export class OrganisingPartnersComponent {
     errormessage='';
     ngOnInit(){
       this.getOPartners();
+      this.subscription.add(
+        this.helperService.category$.subscribe(val => {
+          this.currentCategoryId = val;
+        })
+      );
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
     }
 
     clearOpartner(){
@@ -94,7 +106,7 @@ export class OrganisingPartnersComponent {
       console.log(this.neworganizer);
       if(this.neworganizer){
         this.neworganizerclicked=false;
-          this.service.postOP({newPartner:this.neworganizer, orgCategory:this.helperService.masterOrgCategory}).subscribe(
+          this.service.postOP({newPartner:this.neworganizer, orgCategory:this.currentCategoryId}).subscribe(
             {
               next:(response:any[])=>{
               this.successmessage ="New Partner added successfully.";

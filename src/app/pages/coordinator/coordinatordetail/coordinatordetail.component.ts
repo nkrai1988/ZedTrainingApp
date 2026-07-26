@@ -1,6 +1,6 @@
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { InputFieldComponent } from '../../../shared/components/form/input/input-field.component';
@@ -11,10 +11,10 @@ import { ButtonComponent } from '../../../shared/components/ui/button/button.com
 import { CommonModule } from '@angular/common';
 import { FormBuilder,FormsModule, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HelperService } from '../../../services/helper.service';
-
 import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoordinatorService } from '../../../services/coordinator.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-coordinatordetail',
@@ -34,7 +34,7 @@ import { CoordinatorService } from '../../../services/coordinator.service';
   templateUrl: './coordinatordetail.component.html',
   styles: ``
 })
-export class CoordinatordetailComponent {
+export class CoordinatordetailComponent implements OnDestroy {
 
   constructor(private fb: FormBuilder,private helperService:HelperService,private coordinatorservice:CoordinatorService,private router: Router,private route:ActivatedRoute){
 
@@ -64,19 +64,31 @@ export class CoordinatordetailComponent {
   timeValue = '';
   cardNumber = '';
   id='';
+  private subscription: Subscription = new Subscription();
 
-  
-  ngOnInit() {  
+  ngOnInit() {
     this.createForm();
     this.loadDropdowns();
-    this.route.params.subscribe(params => {      
-      if(params['id']){
-         this.id = params['id'];
-         this.getAgencyDetail(this.id);
-      }     
-      
-    });  
-    
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.id = params['id'];
+        this.getAgencyDetail(this.id);
+      }
+    });
+    this.subscription.add(
+      this.helperService.category$.subscribe(val => {
+        this.detailForm.controls['OrgCategoryId'].setValue(val);
+      })
+    );
+    this.subscription.add(
+      this.helperService.subCategory$.subscribe(val => {
+        this.detailForm.controls['OrgSubCategoryId'].setValue(val);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   
@@ -93,7 +105,8 @@ export class CoordinatordetailComponent {
       phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
       email: ['', [Validators.required,,Validators.email]],
       AdhaarNo: ['', [Validators.pattern(/^\d{12}$/)]],
-      orgCategory: [this.helperService.getOrgCategory()],
+      OrgCategoryId: [null],
+      OrgSubCategoryId: [null],
     });
   }
   get f() { return this.detailForm.controls; }

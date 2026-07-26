@@ -21,7 +21,18 @@ return this.api.getSimple(APPURLs.dashboardStateOption);
    return this.api.getSimple(APPURLs.dashboardProgrammeOption);
   }
 
-  getProgrammeCountOption(stateSelectedValue:any,selectedValue:any,qpvalue:any){  
+  getCategoryAdminStats(state?: string, subCategoryId?: number | null) {
+    let query = '?programmeType=ZEDTP';
+    if (state && state !== 'All') query += '&state=' + encodeURIComponent(state);
+    if (subCategoryId) query += '&subCategoryId=' + subCategoryId;
+    return this.api.getSimple(APPURLs.dashboardCategoryAdminStats + query);
+  }
+
+  getCategoryAdminStates() {
+    return this.api.getSimple(APPURLs.dashboardCategoryAdminStates);
+  }
+
+  getProgrammeCountOption(stateSelectedValue:any,selectedValue:any,qpvalue:any){
   
   let query=''
   if(stateSelectedValue){

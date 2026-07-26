@@ -17,16 +17,6 @@
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
     <div class="space-y-6">
       <div>
-      <app-label>Type</app-label>
-      <app-select
-        [options]="programmetypeOptions"
-        placeholder="Select an option"
-        [value]="selectedOptionforprogrammetype"
-        (valueChange)="handleProgrammetypeChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-      <div>
       <app-label>Curriculum</app-label>
       <app-select
         [options]="curriculumnOption"

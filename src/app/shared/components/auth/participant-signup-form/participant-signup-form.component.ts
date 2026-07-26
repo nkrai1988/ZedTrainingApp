@@ -1,23 +1,15 @@
 import { Component } from '@angular/core';
-import { LabelComponent } from '../../form/label/label.component';
-import { ButtonComponent } from '../../ui/button/button.component';
 import { Router, RouterModule } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AlertComponent } from '../../ui/alert/alert.component';
-import { ComponentCardComponent } from '../../common/component-card/component-card.component';
 import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-participant-signup-form',
   imports: [
-    LabelComponent,
-    ButtonComponent,
     RouterModule,
     ReactiveFormsModule,
     CommonModule,
-    AlertComponent,
-    ComponentCardComponent,
   ],
   templateUrl: './participant-signup-form.component.html',
   styles: ``
@@ -26,28 +18,27 @@ export class ParticipantSignupFormComponent {
 
   currentStep = 1;
   categories: any[] = [];
-  showPassword = false;
-  showConfirmPassword = false;
-  btntext = 'Register';
+  btntext = 'Next';
 
   signupForm!: FormGroup;
   submitted = false;
   successMessage = '';
   errormessage = '';
+  registeredEmail = '';
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.signupForm = this.fb.group({
-      orgCategory: ['', [Validators.required]],
+      orgCategory:    ['', [Validators.required]],
       orgSubCategory: ['', [Validators.required]],
-      firstName: ['', [Validators.required, Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      mobile: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(64), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/)]],
-      confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
+      firstName:      ['', [Validators.required, Validators.maxLength(50)]],
+      lastName:       ['', [Validators.required, Validators.maxLength(50)]],
+      email:          ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
+      mobile:         ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      aadhaarNumber:  ['', [Validators.required, Validators.pattern('^[0-9]{12}$')]],
+      otpCode:        ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
+    });
 
     this.authService.getParticipantCategories().subscribe({
       next: (data: any) => this.categories = data,
@@ -74,60 +65,72 @@ export class ParticipantSignupFormComponent {
   prevStep() {
     this.currentStep = 1;
     this.submitted = false;
+    this.errormessage = '';
   }
 
-  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
-      return { passwordMismatch: true };
-    }
-    return null;
+  verifyViaDigiLocker() {
+    // DigiLocker OAuth integration — to be implemented
   }
 
   get f() { return this.signupForm.controls; }
 
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
-  toggleConfirmPasswordVisibility() {
-    this.showConfirmPassword = !this.showConfirmPassword;
-  }
-
   onRegister() {
     this.submitted = true;
     this.errormessage = '';
-    this.successMessage = '';
 
-    if (this.signupForm.invalid) return;
+    const step2Invalid =
+      this.f['firstName'].invalid ||
+      this.f['lastName'].invalid ||
+      this.f['email'].invalid ||
+      this.f['mobile'].invalid ||
+      this.f['aadhaarNumber'].invalid;
+
+    if (step2Invalid) return;
 
     this.btntext = 'Processing...';
     const payload = {
-      orgCategory: this.f['orgCategory'].value,
+      orgCategory:    this.f['orgCategory'].value,
       orgSubCategory: this.f['orgSubCategory'].value,
-      firstName: this.f['firstName'].value,
-      lastName: this.f['lastName'].value,
-      email: this.f['email'].value,
-      mobile: this.f['mobile'].value,
-      password: this.f['password'].value,
+      firstName:      this.f['firstName'].value,
+      lastName:       this.f['lastName'].value,
+      email:          this.f['email'].value,
+      mobile:         this.f['mobile'].value,
+      aadhaarNumber:  this.f['aadhaarNumber'].value,
     };
 
     this.authService.postParticipantRegister(payload).subscribe({
-      next: (msg: any) => {
-        console.log({'msg':msg});
-        // this.successMessage = typeof msg === 'string'
-        //   ? msg
-        //   : 'Registration successful! Please check your email and click the verification link to activate your account.';
-        this.successMessage ='Registration successful! Please check your email and click the verification link to activate your account.';
-        this.btntext = 'Register';
+      next: (res: any) => {
+        this.btntext = 'Next';
         this.submitted = false;
-        this.signupForm.reset();
+        this.registeredEmail = res.email ?? payload.email;
+        this.currentStep = 3;
       },
       error: (error) => {
-        console.log({'error':error});
-        this.btntext = 'Register';
+        this.btntext = 'Next';
         this.errormessage = (error.error) ? error.error : 'Registration failed. Please try again.';
+      }
+    });
+  }
+
+  verifyOtp() {
+    this.submitted = true;
+    this.errormessage = '';
+
+    if (this.f['otpCode'].invalid) return;
+
+    this.btntext = 'Verifying...';
+    this.authService.postParticipantVerifyOtp({
+      email: this.registeredEmail,
+      otp: this.f['otpCode'].value
+    }).subscribe({
+      next: () => {
+        this.btntext = 'Verify';
+        this.successMessage = 'Account created successfully! Your login credentials have been sent to your email.';
+        this.currentStep = 4;
+      },
+      error: (error) => {
+        this.btntext = 'Verify';
+        this.errormessage = (error.error) ? error.error : 'OTP verification failed. Please try again.';
       }
     });
   }

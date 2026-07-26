@@ -47,6 +47,7 @@ import { DatePickerComponent } from '../../../../shared/components/form/date-pic
 import { FacultyService } from '../../../../services/faculty.service';
 import { FileInputComponent } from '../../../../shared/components/form/input/file-input.component';
 import { HelperService } from '../../../../services/helper.service';
+import { ApiService } from '../../../../shared/services/api.service';
 
 @Component({
   selector: 'app-qualification',
@@ -74,7 +75,7 @@ import { HelperService } from '../../../../services/helper.service';
   styleUrl: './qualification.component.css',
 })
 export class QualificationComponent {
-  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,private router: Router,public helper:HelperService){
+  constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,private router: Router,public helper:HelperService,private apiService:ApiService){
       
     }
 
@@ -109,14 +110,12 @@ export class QualificationComponent {
     rejectcommentbtnclick=false;
     qualificationForm!: FormGroup;
     dateValue: any;
+    today: Date = new Date();
     @ViewChild('fileInput') fileInput!: ElementRef;
     ngOnInit(){
       this.createForm();
       this.getTempData();      
       this.dataRow = this.qualificationList;
-      if(this.qualificationList.length){
-        this.viewOnly=true;
-      }
     }
 
     createForm(){{
@@ -125,6 +124,7 @@ export class QualificationComponent {
       enddate: ['', [Validators.required]],
       institution: ['', [Validators.required]],
       qualification: ['', [Validators.required]],
+      grade: ['', [Validators.required]],
       document: ['', [Validators.required]],
     });
     }}
@@ -165,28 +165,32 @@ export class QualificationComponent {
       this.openModal(row);
   }
 
-  async handleFileChange(event: Event) {
+  handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (file) {
-      console.log('Selected file:', file);
-      // Convert bytes to KB: 1 KB = 1024 bytes
-      var kbsize= Math.round(file.size / 1024);
-      if(kbsize > 2000){
-        alert('File size is greater than 2000kb');        
+    if (!file) return;
+    if (Math.round(file.size / 1024) > 2000) { alert('File size is greater than 2000kb'); return; }
+    this.apiService.uploadParticipantFile(file, 'certificate').subscribe({
+      next: (res) => this.qualificationForm.controls['document'].setValue(res.path),
+      error: () => {
+        this.qualificationForm.controls['document'].setValue('');
+        alert('Failed to upload document. Please try again.');
       }
-      //this.qualificationForm.controls['document'].setValue(file);
-      this.qualificationForm.controls['document'].setValue(await this.helper.convertFileToBase64(file));
-    }
+    });
   }
 
-  handleSave() {  
-    console.log({'form value':this.qualificationForm.value});
+  handleSave() {
+    this.qualificationForm.markAllAsTouched();
+    if (this.qualificationForm.invalid) return;
     var formdata = this.qualificationForm.value;
-    this.dataRow.push({year:formdata.startdate,
-      institue:formdata.institution,
-      qualification:formdata.qualification,
-      certificate:formdata.document.name});
+    this.dataRow.push({
+      year: formdata.startdate + ' – ' + formdata.enddate,
+      institue: formdata.institution,
+      qualification: formdata.qualification,
+      grade: formdata.grade,
+      certificate: 'Uploaded',
+      document: formdata.document,
+    });
       this.onQualificationSubmit.emit(this.dataRow);
       this.resetForm();
       this.closeModal();

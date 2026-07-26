@@ -1,8 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { ParticipantService } from '../../../services/participant.service';
-import { HelperService } from '../../../services/helper.service';
+import { Router, RouterModule } from '@angular/router';
+import { ParticipantService, ApplicationStatus } from '../../../services/participant.service';
+
+interface OngoingProgramme {
+  programmeId: string;
+  programmeName: string;
+  venue: string;
+  venueName: string;
+  webLink: string;
+  district: string;
+  state: string;
+  startDate: string;
+  endDate: string;
+  isFree: boolean;
+  paidOrFree: string;
+  actionType: 'register' | 'closed';
+}
 
 @Component({
   selector: 'app-participant-dashboard',
@@ -11,54 +25,49 @@ import { HelperService } from '../../../services/helper.service';
 })
 export class ParticipantDashboardComponent implements OnInit {
 
-  programmes: any[] = [];
-  isLoading = true;
-  hasError = false;
-  userName = '';
+  totalEnrolled = 0;
+  ongoingCount = 0;
+  completedCount = 0;
 
-  constructor(
-    private participantService: ParticipantService,
-    private helperService: HelperService
-  ) {}
+  applicationStatus: ApplicationStatus | null = null;
+  applicationStatusLoading = true;
+  programmesLoading = true;
 
-  ngOnInit() {
-    const user = this.helperService.getUser();
-    this.userName = user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email : '';
-    this.loadMyProgrammes();
-  }
+  programmes: OngoingProgramme[] = [];
 
-  loadMyProgrammes() {
-    this.isLoading = true;
-    this.hasError = false;
-    this.participantService.getMyEnrolledProgrammes().subscribe({
-      next: (data: any[]) => {
-        this.programmes = data || [];
-        this.isLoading = false;
+  constructor(private participantService: ParticipantService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.participantService.getApplicationStatus().subscribe({
+      next: (status) => {
+        this.applicationStatus = status;
+        this.applicationStatusLoading = false;
       },
       error: () => {
-        this.hasError = true;
-        this.isLoading = false;
+        this.applicationStatusLoading = false;
+      }
+    });
+
+    this.participantService.getOngoingProgrammes().subscribe({
+      next: (data) => {
+        this.programmes = data;
+        this.programmesLoading = false;
+      },
+      error: () => {
+        this.programmesLoading = false;
       }
     });
   }
 
-  get completedCount(): number {
-    return this.programmes.filter(p => (p.status || '').toLowerCase() === 'completed').length;
+  get hasApplied(): boolean {
+    return false;//return this.applicationStatus?.hasApplied ?? false;
   }
 
-  get ongoingCount(): number {
-    return this.programmes.filter(p => ['ongoing', 'active'].includes((p.status || '').toLowerCase())).length;
+  get participantStatus(): string | null {
+    return this.applicationStatus?.participantStatus ?? null;
   }
 
-  getStatusClass(status: string): string {
-    const s = (status || '').toLowerCase();
-    if (s === 'completed') return 'bg-success-50 text-success-700 dark:bg-success-500/15 dark:text-success-400';
-    if (s === 'ongoing' || s === 'active') return 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400';
-    if (s === 'upcoming') return 'bg-warning-50 text-warning-700 dark:bg-warning-500/15 dark:text-warning-400';
-    return 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-400';
-  }
-
-  logout() {
-    this.helperService.userLogOut();
+  goToRegister(): void {
+    this.router.navigate(['/register']);
   }
 }

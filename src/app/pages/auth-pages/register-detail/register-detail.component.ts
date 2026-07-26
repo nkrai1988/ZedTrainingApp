@@ -1,509 +1,195 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-register-detail',
-//   imports: [],
-//   templateUrl: './register-detail.component.html',
-//   styleUrl: './register-detail.component.css',
-// })
-// export class RegisterDetailComponent {
-
-// }
-import { Component } from '@angular/core';
-import { AuthPageLayoutComponent } from '../../../shared/layout/auth-page-layout/auth-page-layout.component';
-//import { AuthPageLayoutComponent } from '../../../shared/layout/auth-page-layout/auth-page-layout.component';
-import { RegisterComponent } from '../../../shared/components/auth/register/register.component';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LabelComponent } from '../../../shared/components/form/label/label.component';
-import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
-import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
-import { RadioComponent } from '../../../shared/components/form/input/radio.component';
-import { HelperService } from '../../../services/helper.service';
-import { SelectComponent } from '../../../shared/components/form/select/select.component';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatePickerComponent } from '../../../shared/components/form/date-picker/date-picker.component';
-import { CheckboxComponent } from '../../../shared/components/form/input/checkbox.component';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
-import { QualificationComponent } from '../master-register/qualification/qualification.component';
-import { ExperienceComponent } from '../master-register/experience/experience.component';
-import { TechnicalskillsComponent } from '../master-register/technicalskills/technicalskills.component';
-import { DomSanitizer } from '@angular/platform-browser';
+import { FacultyService } from '../../../services/faculty.service';
+import { HelperService } from '../../../services/helper.service';
+import { ParticipantService } from '../../../services/participant.service';
+import { ModalComponent } from '../../../shared/components/ui/modal/modal.component';
+import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
+import { AlertComponent } from '../../../shared/components/ui/alert/alert.component';
+import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-master-register',
+  selector: 'app-register-detail',
   imports: [
-    AuthPageLayoutComponent,
-    RegisterComponent,
-    QualificationComponent,
-    ExperienceComponent,
-    TechnicalskillsComponent,
     CommonModule,
-    ComponentCardComponent,
-    LabelComponent,
-    AlertComponent,
-    RadioComponent,
-    SelectComponent,
+    RouterModule,
     FormsModule,
-    ReactiveFormsModule,
-    DatePickerComponent,
-    CheckboxComponent
+    ModalComponent,
+    ButtonComponent,
+    AlertComponent,
+    DataloadinprogressComponent,
   ],
   templateUrl: './register-detail.component.html',
   styleUrl: './register-detail.component.css',
 })
-export class RegisterDetailComponent {
-  constructor(private helper:HelperService,private fb: FormBuilder,private authservice:AuthService,private route:ActivatedRoute,private sanitizer:DomSanitizer){
+export class RegisterDetailComponent implements OnInit {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private facultyService: FacultyService,
+    public helperService: HelperService,
+    private participantService: ParticipantService,
+  ) {}
 
-  }
+  registerId = '';
+  participantMode = false;
 
-  steponedata:any;
-  email='test';
-  contactno='';
-  post='';
-  checkedValue='';
-  IDProofDocumentTypeOptions:any=[];
-  IdProofSeelcted='';
-  registerForm!: FormGroup;
-  IdProofPhoto:any;
-  StateOptions:any=[];
-  SelectedState='';
-  districtOptions:any=[];
-  districtSelect='';
-  imagePreview: any;
-  languageOptions:any=[];
-  speakinglangSelect='';
-  writinglangSelect='';
-  qualificationCollection=[];
-  experienceCollection=[];
-  skillsCollection=[];
-  isaccepted=true;
-  errormessage=''
-  successmessage='';
-  registerId='';
-  formdata:any;
+  detail: any = null;
+  loading = true;
+  successMessage = '';
+  activeTab = 'overview';
 
-  ngOnInit(){
-    this.createForm();
-    this.route.params.subscribe(params => {      
-      if(params['id']){
-         this.registerId = params['id'];   
-         this.getRegistrationDetail();
-      }});
-    this.bindDropDowns();
-  }
+  qualifications: any[] = [];
+  experience: any[] = [];
+  industryExperience: any[] = [];
+  skills: any[] = [];
+  roleExperience: any = {};
+  formData: any = {};
 
-  getRegistrationDetail(){
-    this.authservice.getRegisterDetailData(this.registerId).subscribe({
-      next:(res:any)=>{
-        this.filltheform(res);
-      }        
-    });
-  }
+  isOpen = false;
+  statusComment = '';
+  statusCommentBtnClick = false;
 
+  readonly fileServerBase = environment.apiurl.replace(/\/api$/, '');
 
-
-  downloadFile() {
-  const link = document.createElement('a');
-  link.href = this.formdata.idproofphoto; // The base64 string includes the data: mime type
-  link.download = 'idproof';
-  link.click();
-}
-
-
-  filltheform(data:any){
-    let mainData = JSON.parse(data.data);
-    this.formdata=mainData.formData;
-    if(!this.formdata){
-      alert('Data is not consitent.');
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.registerId = id;
+      this.participantMode = false;
+      this.loadDetail();
+    } else {
+      this.participantMode = true;
+      this.loadMyApplication();
     }
-    console.log({'formData':this.formdata});
-    console.log({'mainData':mainData});
-    console.log({'Fill the form':data});
-    this.registerForm.controls['role'].setValue(data.applyingFor);
-    this.selectedRole=data.applyingFor;
-    this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(this.formdata.profileimage);
-    this.registerForm.controls['idproofdoctype'].setValue(this.formdata.idproofdoctype);
-    this.IdProofSeelcted=this.formdata.idproofdoctype;
-    this.selectedNomination=this.formdata.nominatedthrough;
-    this.registerForm.controls['docnumber'].setValue(this.formdata.docnumber);
-    this.registerForm.controls['nameondocument'].setValue(this.formdata.nameondocument);
-    this.registerForm.controls['nominatedthrough'].setValue(this.formdata.nominatedThrough);
-    this.registerForm.controls['consultantorg'].setValue(this.formdata.consultantorg);
-    this.registerForm.controls['accessorcbidcra'].setValue(this.formdata.accessorcbidcra);
-    this.registerForm.controls['coordinatorname'].setValue(this.formdata.coordinatorname);
-    this.registerForm.controls['coordinatoremail'].setValue(this.formdata.coordinatoremail);
-    this.registerForm.controls['coordinatorphone'].setValue(this.formdata.coordinatorphone);
-
-    this.registerForm.controls['FirstName'].setValue(this.formdata.FirstName);
-    this.registerForm.controls['MobileNo'].setValue(this.formdata.MobileNo);
-    this.registerForm.controls['MiddleName'].setValue(this.formdata.MiddleName);
-    this.registerForm.controls['LastName'].setValue(this.formdata.LastName);
-    this.registerForm.controls['LastName'].setValue(this.formdata.LastName);
-    this.registerForm.controls['ParentName'].setValue(this.formdata.ParentName);
-
-    this.registerForm.controls['Mailingaddress'].setValue(this.formdata.Mailingaddress);
-    this.registerForm.controls['State'].setValue(this.formdata.State);
-    this.registerForm.controls['District'].setValue(this.formdata.District);
-    this.registerForm.controls['City'].setValue(this.formdata.City);
-    this.registerForm.controls['Pincode'].setValue(this.formdata.Pincode);
-    this.registerForm.controls['MDMobile'].setValue(this.formdata.MDMobile);
-    this.registerForm.controls['Email'].setValue(this.formdata.Email);
-
-    this.registerForm.controls['PrimaryLanguage'].setValue(this.formdata.PrimaryLanguage);
-    this.speakinglangSelect = this.formdata.PrimaryLanguage
-    this.registerForm.controls['PrimaryLangOthers'].setValue(this.formdata.PrimaryLangOthers);
-    this.registerForm.controls['WritingLangOthers'].setValue(this.formdata.WritingLangOthers);
-    this.registerForm.controls['WritingLanguage'].setValue(this.formdata.WritingLanguage);
-    this.writinglangSelect = this.formdata.WritingLanguage
-
-    this.qualificationCollection=mainData.qualification;
-    this.experienceCollection = mainData.experience;
-    this.skillsCollection=mainData.skills
-    
-    
-    
-    //this.IdProofSeelcted=formData.docnumber;
   }
 
-
-
-  createForm(){
-    this.registerForm = this.fb.group({
-      // email: ['', [Validators.required,,Validators.email]],
-      // mobile: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],      
-      role: ['', [Validators.required]],
-      profileimage: ['', [Validators.required]],
-      idproofdoctype: ['', [Validators.required]],
-      docnumber: ['', [Validators.required]],
-      nameondocument: ['', [Validators.required]],
-      nominatedthrough: ['', [Validators.required]],
-      accessorcbidcra: [''],
-      consultantorg: [''],
-      coordinatorname: [''],
-      coordinatoremail: [''],
-      coordinatorphone: [''],
-      idproofphoto: ['', [Validators.required]],      
-      FirstName: ['', [Validators.required]],
-      MiddleName: [''],
-      LastName: ['', [Validators.required]],
-      MobileNo: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
-      DOB: ['', [Validators.required]],
-      ParentName: ['', [Validators.required]],
-      Mailingaddress: ['', [Validators.required]],
-      State: ['', [Validators.required]],
-      District: ['', [Validators.required]],
-      City: ['', [Validators.required]],
-      Email: ['', [Validators.required,,Validators.email]],
-      Pincode: ['', [Validators.required]],
-      MDMobile: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
-      PrimaryLanguage: ['', [Validators.required]],
-      PrimaryLangOthers: [''],
-      WritingLanguage: ['', [Validators.required]],
-      WritingLangOthers: ['', ],
-    });
-  }
-
-  onRegisterPost(){
-    console.log(this.registerForm);
-    console.log(this.registerForm.value);
-    this.registerForm.markAllAsTouched(); 
-    if (this.registerForm.invalid){
-      this.setErrorMessage("Fields marked in * are mandatory to fill.");
-      return;
-    }
-    this.validateQualifications();
-    this.validateExperiences();
-    this.validateDisciplines();
-    var allData = this.convertData(this.registerForm.value);
-    allData.data=JSON.stringify(allData);
-    this.authservice.postRegisterData(allData).subscribe({
-      next:(res:any)=>{
-        console.log({'res':res});
-        this.successmessage= "We appreciate your time in filling up the application for the Training Program.Your application will be shortly processed. Please note that participation is  based on fulfilling the Eligibility Criteria and subjected to the availability of seat in the preferred Training Program. We will soon get back to you, once your application gets shortlisted. Your registered email id is "+this.registerForm.value.Email+"."
+  loadDetail() {
+    this.loading = true;
+    this.authService.getRegisterDetailData(this.registerId).subscribe({
+      next: (res: any) => {
+        this.detail = res;
+        this.parseJsonData(res.data);
+        this.loading = false;
       },
-      error:(err)=>{  
-        //console.log({'err':err})
-        this.setErrorMessage(err.error ? err.error:'Fail to save registration data.');
-      }
-    });
-   }
-
-   validateQualifications(){
-      if(this.qualificationCollection.length <=0){
-        this.setErrorMessage("Education qualification required.");
-        return;
-      }
-   }
-
-   validateExperiences(){
-      if(this.selectedRole == "Assessor" && this.experienceCollection.length < 3){
-          this.setErrorMessage("Please select Details of the Other relevant training for Assessor.");
-          return;
-      }
-
-      if(this.selectedRole == "ZEDConsultant" && this.experienceCollection.length < 2){
-          this.setErrorMessage("Please select Details of the Other relevant training for Consultant.");
-          return;
-      }
-   }
-
-   validateDisciplines(){
-      if(this.selectedRole == "ZEDConsultant" && this.selectedNomination == 'Freelancer' && this.skillsCollection.length < 10){
-          this.setErrorMessage("Please select at least 10 Disciplines.");
-        return;
-      }
-      else if(this.skillsCollection.length < 3){
-          this.setErrorMessage("Please select at least 3 Disciplines.");
-        return;
-      }
-
-    //Check Group
-        var groupA= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'A');
-        if(!groupA){
-          this.setErrorMessage("Please select at least 1 Discipline from Group A.");
-           return;
-        }
-
-        var groupB= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'B');
-        if(!groupB){
-          this.setErrorMessage("Please select at least 1 Discipline from Group B.");
-           return;
-        }
-
-        var groupC= this.skillsCollection.find((s:any)=> s.disciplinegroup == 'C');
-        if(!groupC){
-          this.setErrorMessage("Please select at least 1 Discipline from Group C.");
-           return;
-        }
-   }
-
-
-   setErrorMessage(message:string){
-      this.errormessage=message;
-      setTimeout(() => {
-        this.errormessage='';
-      }, 5000);
-   }
-
-   convertData(formData:any){
-      let newObj={
-          data:'',
-          AadhaarNo:formData.MobileNo,
-          Agency:'64',
-          ApplyingFor:formData.role,
-          AreaOfKnowledgeOrExpertise:(this.experienceCollection.length ? this.experienceCollection.map((dt:any) => dt.knowledge).join(', '):''),
-          CBIBCRAName:formData.accessorcbidcra,
-          City:formData.City,
-          ContactNumber:formData.MDMobile,
-          CoordinatorEmail:formData.coordinatoremail,
-          CoordinatorName:formData.coordinatorname,
-          CoordinatorPhone:formData.coordinatorphone,
-          DOB:formData.DOB,
-          District:formData.District,
-          Email:formData.Email,
-          Name:formData.FirstName,
-          NominatedThrough:formData.nominatedthrough,
-          SpokenLanguagePrimary:formData.PrimaryLanguage,
-          State:formData.State,
-          WrittenLanguagePrimary:formData.WritingLanguage,
-          ZedDisciplines:(this.skillsCollection.length ? this.skillsCollection.map((dt:any) => dt.discipline).join(', '):''),
-          experienceCollection:this.experienceCollection,
-          qualificationCollection:this.qualificationCollection,
-          skillsCollection:this.skillsCollection
-      };
-    return  newObj;
-   }
-
-   onTermAccept(value:any){
-    console.log(value);
-    console.log({'isaccepted':this.isaccepted});
-   }
-
-  bindDropDowns(){
-    this.BindDDDocType();
-    this.BindStateType();
-    this.BindLanguage();
-  }
-
-  handleDOBChange(event: any){
-  this.registerForm.controls['DOB'].setValue(event.dateStr);
-  }
-
-  BindDDDocType(){
-    var options = this.helper.getIDProofDocumentType();
-    options.forEach((element:string) => {
-      this.IDProofDocumentTypeOptions.push({label:element,value:element});
+      error: () => { this.loading = false; }
     });
   }
 
-  BindLanguage(){
-    var languages = this.helper.getLanguage();
-    languages.forEach(lang => {
-        this.languageOptions.push({label:lang,value:lang});
-    });
-  }
-
-  BindStateType(){
-    var options = this.helper.getAllStates().subscribe({
-      next:(response:any)=>{ 
-        response.forEach((element:any) => {
-            this.StateOptions.push({value:element.stateID,label: element.stateName});
-          });
+  loadMyApplication() {
+    this.loading = true;
+    this.participantService.getMyApplication().subscribe({
+      next: (res: any) => {
+        this.detail = res;
+        this.parseJsonData(res.data);
+        this.loading = false;
       },
-      error:(error)=>{ 
-      }
-    });    
+      error: () => { this.loading = false; }
+    });
   }
 
-  loadDistrictByStates(stateId:string){
-    this.districtOptions=[];
-    this.helper.getDistrictByStates(stateId).subscribe({
-        next:(response:any)=>{
-          console.log({'response district':response});
-          response.forEach((element:any) => {
-            this.districtOptions.push({value:element.districtname,label: element.districtname});
-          });
+  private parseJsonData(raw: string | null) {
+    if (!raw) return;
+    try {
+      const parsed = JSON.parse(raw);
+      this.formData           = parsed.formData           ?? {};
+      this.qualifications     = parsed.qualification      ?? [];
+      this.experience         = parsed.experience         ?? [];
+      this.industryExperience = parsed.industryExperience ?? [];
+      this.skills             = parsed.skills             ?? [];
+      this.roleExperience     = parsed.roleExperience     ?? {};
+    } catch {}
+  }
+
+  setTab(tab: string) { this.activeTab = tab; }
+
+  getStatusClass(status: string): string {
+    const base = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium';
+    if (status === 'APPROVED') return `${base} bg-green-100 text-green-800`;
+    if (status === 'REJECTED') return `${base} bg-red-100 text-red-800`;
+    return `${base} bg-yellow-100 text-yellow-800`;
+  }
+
+  getStatusLabel(status: string): string {
+    if (status === 'APPROVED') return 'Accepted';
+    if (status === 'REJECTED') return 'Rejected';
+    return 'Pending';
+  }
+
+  canApprove(): boolean {
+    return this.detail?.status !== 'APPROVED' &&
+      (this.helperService.IsSuperAdmin() || this.helperService.IsCategoryAdmin());
+  }
+
+  canReject(): boolean {
+    return this.detail?.status !== 'REJECTED' &&
+      (this.helperService.IsSuperAdmin() || this.helperService.IsCategoryAdmin());
+  }
+
+  canEdit(): boolean {
+    return this.participantMode && this.detail?.status !== 'APPROVED';
+  }
+
+  accept() {
+    if (!confirm('Accept this application?')) return;
+    this.facultyService
+      .updateRegistrationRecordStatus({ id: +this.registerId, status: 'APPROVED', comment: '' })
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Application accepted successfully.';
+          this.loadDetail();
+          setTimeout(() => (this.successMessage = ''), 5000);
         },
-        error: (error:any) => {console.error('Error:', error)
-        //this.errormessage='Login failed. Please try again';//error.message;
-        
-      }
-    });
+      });
   }
 
-  nominatedthrough(value:any){
-    this.registerForm.controls['idproofphoto'].setValue(value);
+  openRejectModal() {
+    this.statusComment = '';
+    this.statusCommentBtnClick = false;
+    this.isOpen = true;
   }
 
-  handleIDProofDocTypeSelectChange(value:any){
-    console.log({'value':value});
-    this.IdProofSeelcted=value;
-    this.registerForm.controls['idproofdoctype'].setValue(value);
+  closeModal() {
+    this.isOpen = false;
+    this.statusComment = '';
+    this.statusCommentBtnClick = false;
   }
 
-
-handlePrimaryLangSelectChange(value:any){
-    console.log({'value':value});
-    this.speakinglangSelect=value;
-    this.registerForm.controls['PrimaryLanguage'].setValue(value);
+  confirmReject() {
+    this.statusCommentBtnClick = true;
+    if (!this.statusComment) return;
+    this.facultyService
+      .updateRegistrationRecordStatus({ id: +this.registerId, status: 'REJECTED', comment: this.statusComment })
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Application rejected.';
+          this.closeModal();
+          this.loadDetail();
+          setTimeout(() => (this.successMessage = ''), 5000);
+        },
+      });
   }
 
-  handlePrimaryWriteLangSelectChange(value:any){
-    console.log({'value':value});
-    this.writinglangSelect=value;
-    this.registerForm.controls['WritingLanguage'].setValue(value);
-  }
-
-
-  handleStateChange(value:any){
-    console.log({'value':value});
-    this.SelectedState=value;
-    this.districtSelect=''
-    var st = this.StateOptions.find((s:any)=> s.value == value);
-    console.log({'st':st});
-    if(st){
-      this.registerForm.controls['State'].setValue(st.label);
+  goBack() {
+    if (this.participantMode) {
+      this.router.navigate(['/participantdashboard']);
+    } else {
+      this.router.navigate(['/mtatcttrainer']);
     }
-    
-
-    this.loadDistrictByStates(this.SelectedState);
   }
 
-  handleDistrictChange(value:any){
-    console.log({'value':value});
-    this.districtSelect=value;
-    this.registerForm.controls['District'].setValue(value);
-    
+  goToEdit() {
+    this.router.navigate(['/register'], { queryParams: { edit: 'true' } });
   }
 
-
-
-selectedRole: string = 'option2';
-  handleRadioChange(value: string) {
-    console.log(value,'role value')
-    this.selectedRole = value;
-    this.registerForm.controls['role'].setValue(value);
+  fileUrl(path: string): string {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    return this.fileServerBase + path;
   }
-
-  selectedNomination: string = 'option2';
-  handleNominationRadioChange(value: string) {
-    console.log(value,'Nomination value')
-    this.selectedNomination = value;
-    this.registerForm.controls['nominatedthrough'].setValue(value);
-  }
-
-
-async  handlePhotoChange(event: Event){
- const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    console.log('Selected file:', file);
-    if (file) {
-      // Convert bytes to KB: 1 KB = 1024 bytes
-      var kbsize= Math.round(file.size / 1024);
-      console.log({'kbsize':kbsize});
-      if(kbsize > 2000){
-        alert('File size is greater than 2000kb');    
-        return    
-      }
-
-      if (!file.type.startsWith('image/')) {
-    return;
-  }
-  
-  this.imagePreview = URL.createObjectURL(file);
-      this.IdProofPhoto=file;      
-    //this.registerForm.controls['profileimage'].setValue(file);
-    this.registerForm.controls['profileimage'].setValue(await this.helper.convertFileToBase64(file));
-    }
 }
-
-async handleIdProofPhotoChange(event: Event){
- const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-    if (file) {
-      var kbsize= Math.round(file.size / 1024);
-      if(kbsize > 500){
-        alert('File size is greater than 500kb');    
-        return    
-      }
-      this.IdProofPhoto=file;
-      console.log('Selected file:', file.name);
-      //this.registerForm.controls['idproofphoto'].setValue(file);
-      this.registerForm.controls['idproofphoto'].setValue(await this.helper.convertFileToBase64(file));
-    }
-}
-
-
-   onFacultySelected(tempUser: any): void {
-    //this.selectedFaculty = faculty;
-    console.log({'this.registerForm':this.registerForm});
-    console.log('Parent received faculty:', tempUser);
-    this.registerForm.controls['MDMobile'].setValue(tempUser.mobile);
-    this.registerForm.controls['Email'].setValue(tempUser.email);
-    this.email=tempUser.email;
-    this.contactno=tempUser.mobile;
-    this.post=tempUser.applyfor;
-    this.handleRadioChange(tempUser.applyfor);
-  }
-
-   onCollectQualification(qualifications: any): void {
-    //this.selectedFaculty = faculty;
-    this.qualificationCollection=qualifications;
-    console.log('qualifications received:', qualifications);
-    
-  }
-
-   onCollectExperience(experience: any): void {
-    //this.selectedFaculty = faculty;
-    this.experienceCollection=experience;
-    console.log('experience received:', experience);    
-  }
-
-   onCollectSkills(skills: any): void {
-    this.skillsCollection=skills;
-    console.log('skills received:', skills);    
-  }
-
-}
-

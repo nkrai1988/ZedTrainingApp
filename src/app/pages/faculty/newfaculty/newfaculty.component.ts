@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { ButtonComponent } from '../../../shared/components/ui/button/button.component';
@@ -12,6 +12,7 @@ import { CoordinatorService } from '../../../services/coordinator.service';
 import { FileInputComponent } from '../../../shared/components/form/input/file-input.component';
 import { RadioComponent } from '../../../shared/components/form/input/radio.component';
 import { FacultyService } from '../../../services/faculty.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-newfaculty',
@@ -29,7 +30,7 @@ import { FacultyService } from '../../../services/faculty.service';
   templateUrl: './newfaculty.component.html',
   styles: ``
 })
-export class NewfacultyComponent implements OnInit {
+export class NewfacultyComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,private helperService:HelperService,private service:FacultyService,private router: Router,private route:ActivatedRoute){
 
@@ -59,19 +60,23 @@ export class NewfacultyComponent implements OnInit {
   timeValue = '';
   cardNumber = '';
   id='';
-checkedValue='';
-resumefile:any;
+  checkedValue='';
+  resumefile:any;
+  private subscription: Subscription = new Subscription();
+  private currentCategoryId: number | null = null;
 
-  
-  ngOnInit() {  
-    this.createForm();    
-    // this.route.params.subscribe(params => {      
-    //   if(params['id']){
-    //      this.id = params['id'];
-    //      this.getAgencyDetail(this.id);
-    //   }
-    // });  
-    
+  ngOnInit() {
+    this.createForm();
+    this.subscription.add(
+      this.helperService.category$.subscribe(val => {
+        this.currentCategoryId = val;
+        this.detailForm.controls['orgCategory'].setValue(val);
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   
@@ -86,14 +91,14 @@ resumefile:any;
       email: ['', [Validators.required, Validators.email]],
       phoneno: ['', [Validators.required,Validators.pattern(/^\d{10}$/)]],
       adhaarNo: ['', [Validators.pattern(/^\d{12}$/)]],
-      orgCategory: [this.helperService.getOrgCategory() || ''],
+      orgCategory: [null],
     });
   }
 
   get f() { return this.detailForm.controls; }
 
   clearForm(){
-    this.detailForm.reset()
+    this.detailForm.reset({ orgCategory: this.currentCategoryId });
   }
 
   

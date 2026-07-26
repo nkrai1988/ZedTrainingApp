@@ -34,6 +34,7 @@
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Email</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Mobile</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Category</th>
+          <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Sub-Categories</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Password</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
           <th class="px-6 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Action</th>
@@ -61,8 +62,19 @@
 
           <td class="px-6 py-3.5">
             <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-              {{ row.orgCategory }}
+              {{ row.orgCategoryLabel || '—' }}
             </span>
+          </td>
+
+          <td class="px-6 py-3.5">
+            <div class="flex flex-wrap gap-1">
+              <span *ngFor="let sub of row.subCategories"
+                    class="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-500/10 dark:text-violet-400">
+                {{ sub.label }}
+              </span>
+              <span *ngIf="!row.subCategories || row.subCategories.length === 0"
+                    class="text-sm text-gray-400">—</span>
+            </div>
           </td>
 
           <td class="px-6 py-3.5">

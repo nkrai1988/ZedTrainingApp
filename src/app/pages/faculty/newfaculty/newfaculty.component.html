@@ -28,7 +28,7 @@
   <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
     <!-- Card 1 -->
-    <app-component-card title="Faculty Details">
+    <app-component-card title="Trainer Details">
       <div class="space-y-6">
 
         <div>
@@ -108,7 +108,7 @@
   </div>
 
   <div class="flex items-center gap-3 px-2 mt-6 justify-end">
-    <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Clear</app-button>
+    <app-button size="md" (btnClick)="clearForm()" variant="outline" [disabled]="isSubmitting">Cancel</app-button>
     <app-button size="md" (btnClick)="onSubmit()" [disabled]="isSubmitting">{{ isSubmitting ? 'Processing...' : 'Save Changes' }}</app-button>
   </div>
 </form>

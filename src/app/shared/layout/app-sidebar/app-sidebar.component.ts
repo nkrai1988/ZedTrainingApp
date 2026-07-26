@@ -14,6 +14,7 @@ type NavItem = {
   path?: string;
   new?: boolean;
   roleaccess?:any[];
+  sectionLabel?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean,roleaccess?:any[]; }[];
 };
 
@@ -37,15 +38,6 @@ export class AppSidebarComponent {
       name: "Change Password",
       path: "/changepassword",
       roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency,AppRoles.Coordinator]
-    },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z" fill="currentColor"></path></svg>`,
-      name: "Dashboard",
-      path: "/dashboard",
-      // subItems: [
-      //   { name: "Dashboard", path: "/" },
-      // ],
-      roleaccess:[AppRoles.SuperAdmin]
     },
     {
       icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path></svg>`,
@@ -135,27 +127,27 @@ export class AppSidebarComponent {
         ],
       roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]
     },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
-    //   name: "Org Categories",
-    //   path: "/orgcategories",
-    //   subItems: [
-    //     { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
-    //   ],
-    //   roleaccess: [AppRoles.SuperAdmin]
-    // },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
-    //   name: "Category Admins",
-    //   path: "/categoryadmins",
-    //   subItems: [
-    //     { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
-    //   ],
-    //   roleaccess: [AppRoles.SuperAdmin]
-    // },
+    {
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
+      name: "Org Categories",
+      path: "/orgcategories",
+      subItems: [
+        { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
+    },
+    {
+      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
+      name: "Category Admins",
+      path: "/categoryadmins",
+      subItems: [
+        { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
+    },
     
     // {
     //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,
@@ -353,238 +345,193 @@ export class AppSidebarComponent {
   }
 
   getTrainingLinks(){
+   const ICON_DASHBOARD = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z" fill="currentColor"></path></svg>`;
+   const ICON_PERSON = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path></svg>`;
+   const ICON_USER_CIRCLE = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`;
+   const ICON_KEY = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.75 1.5a6.75 6.75 0 0 0-6.685 7.576 1 1 0 0 1-.295.908l-6.205 6.205a1.5 1.5 0 0 0-.44 1.06v2.25c0 .414.336.75.75.75h2.25a.75.75 0 0 0 .75-.75v-.75h.75a.75.75 0 0 0 .75-.75v-.75h.75a.75.75 0 0 0 .531-.22l.367-.368a1 1 0 0 1 .908-.295A6.75 6.75 0 1 0 15.75 1.5Zm0 3a.75.75 0 0 0 0 1.5A2.25 2.25 0 0 1 18 8.25a.75.75 0 0 0 1.5 0 3.75 3.75 0 0 0-3.75-3.75Z" fill="currentColor"/></svg>`;
+   const ICON_BUILDING = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.75 21a.75.75 0 0 1 0-1.5h.75V4.5A.75.75 0 0 1 5.25 3.75h13.5a.75.75 0 0 1 .75.75v15h.75a.75.75 0 0 1 0 1.5H3.75ZM7.5 20.25h3V18a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 .75.75v2.25h3V5.25h-9v15ZM9 8.25A.75.75 0 0 1 9.75 7.5h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 9 8.25Zm.75 3a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM9 16.5a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 9 16.5Zm4.5-8.25a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 4.5a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75Zm.75 3a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Z" fill="currentColor"/></svg>`;
+   const ICON_CALENDAR = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 7.5H3.75v9a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-9ZM3.75 7.5v.75h16.5V7.5a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5Z" fill="currentColor"/></svg>`;
+   const ICON_PACKAGE = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor"></path></svg>`;
+   const ICON_CLIPBOARD = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+   const ICON_DOC = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`;
+   const ICON_UPLOAD = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16.5C4 18.985 6.015 21 8.5 21H15.5C17.985 21 20 18.985 20 16.5M4 16.5V14M20 16.5V14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="3" y="3" width="18" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>`;
+   const ICON_UPLOAD_ARROW = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.75 16.5V5.56066L15.4697 8.28033C15.7626 8.57322 16.2374 8.57322 16.5303 8.28033C16.8232 7.98744 16.8232 7.51256 16.5303 7.21967L12.5303 3.21967C12.2374 2.92678 11.7626 2.92678 11.4697 3.21967L7.46967 7.21967C7.17678 7.51256 7.17678 7.98744 7.46967 8.28033C7.76256 8.57322 8.23744 8.57322 8.53033 8.28033L11.25 5.56066V16.5C11.25 16.9142 11.5858 17.25 12 17.25C12.4142 17.25 12.75 16.9142 12.75 16.5ZM3 15.75C3 15.3358 3.33579 15 3.75 15C4.16421 15 4.5 15.3358 4.5 15.75V19.5C4.5 19.9142 4.83579 20.25 5.25 20.25H18.75C19.1642 20.25 19.5 19.9142 19.5 19.5V15.75C19.5 15.3358 19.8358 15 20.25 15C20.6642 15 21 15.3358 21 15.75V19.5C21 20.7426 19.9926 21.75 18.75 21.75H5.25C4.00736 21.75 3 20.7426 3 19.5V15.75Z" fill="currentColor"></path></svg>`;
+   const ICON_PENCIL = `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2806 2.71967C20.9877 2.42678 20.5128 2.42678 20.2199 2.71967L18.4697 4.46967C18.3334 4.60602 18.2573 4.79026 18.2573 4.98223V5.96965L12.5302 11.6968C12.2373 11.9896 12.2373 12.4645 12.5302 12.7574C12.8231 13.0503 13.298 13.0503 13.5909 12.7574L19.318 7.03027H20.3054C20.4973 7.03027 20.6816 6.95421 20.8179 6.81786L22.5679 5.06786C22.8608 4.77496 22.8608 4.30009 22.5679 4.00719L21.2806 2.71967ZM4 5.25C3.58579 5.25 3.25 5.58579 3.25 6V20C3.25 20.4142 3.58579 20.75 4 20.75H18C18.4142 20.75 18.75 20.4142 18.75 20V12C18.75 11.5858 19.0858 11.25 19.5 11.25C19.9142 11.25 20.25 11.5858 20.25 12V20C20.25 21.2426 19.2426 22.25 18 22.25H4C2.75736 22.25 1.75 21.2426 1.75 20V6C1.75 4.75736 2.75736 3.75 4 3.75H12C12.4142 3.75 12.75 4.08579 12.75 4.5C12.75 4.91421 12.4142 5.25 12 5.25H4Z" fill="currentColor"></path></svg>`;
+
    return [
+    // ── CORE ─────────────────────────────────────────────────────────
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      name: "Change Password",
-      path: "/changepassword",
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency,AppRoles.Coordinator] 
-    },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V8.99998C3.25 10.2426 4.25736 11.25 5.5 11.25H9C10.2426 11.25 11.25 10.2426 11.25 8.99998V5.5C11.25 4.25736 10.2426 3.25 9 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H9C9.41421 4.75 9.75 5.08579 9.75 5.5V8.99998C9.75 9.41419 9.41421 9.74998 9 9.74998H5.5C5.08579 9.74998 4.75 9.41419 4.75 8.99998V5.5ZM5.5 12.75C4.25736 12.75 3.25 13.7574 3.25 15V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H9C10.2426 20.75 11.25 19.7427 11.25 18.5V15C11.25 13.7574 10.2426 12.75 9 12.75H5.5ZM4.75 15C4.75 14.5858 5.08579 14.25 5.5 14.25H9C9.41421 14.25 9.75 14.5858 9.75 15V18.5C9.75 18.9142 9.41421 19.25 9 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15ZM12.75 5.5C12.75 4.25736 13.7574 3.25 15 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.99998C20.75 10.2426 19.7426 11.25 18.5 11.25H15C13.7574 11.25 12.75 10.2426 12.75 8.99998V5.5ZM15 4.75C14.5858 4.75 14.25 5.08579 14.25 5.5V8.99998C14.25 9.41419 14.5858 9.74998 15 9.74998H18.5C18.9142 9.74998 19.25 9.41419 19.25 8.99998V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H15ZM15 12.75C13.7574 12.75 12.75 13.7574 12.75 15V18.5C12.75 19.7426 13.7574 20.75 15 20.75H18.5C19.7426 20.75 20.75 19.7427 20.75 18.5V15C20.75 13.7574 19.7426 12.75 18.5 12.75H15ZM14.25 15C14.25 14.5858 14.5858 14.25 15 14.25H18.5C18.9142 14.25 19.25 14.5858 19.25 15V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15C14.5858 19.25 14.25 18.9142 14.25 18.5V15Z" fill="currentColor"></path></svg>`,
+      icon: ICON_DASHBOARD,
       name: "Dashboard",
       path: "/dashboard",
-      // subItems: [
-      //   { name: "Dashboard", path: "/" },
-      // ],
-      roleaccess:[AppRoles.SuperAdmin]
+      sectionLabel: 'CORE',
+      roleaccess: [AppRoles.SuperAdmin]
     },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C9.10051 2.75 6.75 5.10051 6.75 8C6.75 10.8995 9.10051 13.25 12 13.25C14.8995 13.25 17.25 10.8995 17.25 8C17.25 5.10051 14.8995 2.75 12 2.75ZM5.25 8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8C18.75 11.7279 15.7279 14.75 12 14.75C8.27208 14.75 5.25 11.7279 5.25 8ZM6.5 17.25C4.42893 17.25 2.75 18.9289 2.75 21V22C2.75 22.4142 2.41421 22.75 2 22.75C1.58579 22.75 1.25 22.4142 1.25 22V21C1.25 18.1005 3.6005 15.75 6.5 15.75H17.5C20.3995 15.75 22.75 18.1005 22.75 21V22C22.75 22.4142 22.4142 22.75 22 22.75C21.5858 22.75 21.25 22.4142 21.25 22V21C21.25 18.9289 19.5711 17.25 17.5 17.25H6.5Z" fill="currentColor"></path></svg>`,
+      icon: ICON_DASHBOARD,
+      name: "Dashboard",
+      path: "/categoryadmindashboard",
+      sectionLabel: 'CORE',
+      roleaccess: [AppRoles.CategoryAdmin]
+    },
+    {
+      icon: ICON_PERSON,
       name: "My Dashboard",
       path: "/participantdashboard",
-      roleaccess:[AppRoles.Participant]
+      roleaccess: [AppRoles.Participant]
     },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 5.5C3.25 4.25736 4.25736 3.25 5.5 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V18.5C20.75 19.7426 19.7426 20.75 18.5 20.75H5.5C4.25736 20.75 3.25 19.7426 3.25 18.5V5.5ZM5.5 4.75C5.08579 4.75 4.75 5.08579 4.75 5.5V8.58325L19.25 8.58325V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H5.5ZM19.25 10.0833H15.416V13.9165H19.25V10.0833ZM13.916 10.0833L10.083 10.0833V13.9165L13.916 13.9165V10.0833ZM8.58301 10.0833H4.75V13.9165H8.58301V10.0833ZM4.75 18.5V15.4165H8.58301V19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5ZM10.083 19.25V15.4165L13.916 15.4165V19.25H10.083ZM15.416 19.25V15.4165H19.25V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15.416Z" fill="currentColor"></path></svg>`,
+      icon: ICON_USER_CIRCLE,
+      name: "Category Admins",
+      path: "/categoryadmins",
+      subItems: [
+        { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
+    },
+    {
+      icon: ICON_KEY,
+      name: "Change Password",
+      path: "/changepassword",
+      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency,AppRoles.Coordinator,AppRoles.CategoryAdmin]
+    },
+    // ── MANAGEMENT ────────────────────────────────────────────────────
+    {
+      icon: ICON_BUILDING,
       name: "Implementing Agency",
       path: "/agencies",
+      sectionLabel: 'MANAGEMENT',
       subItems: [
-        { name: "View Implementing Agency", path: "/agencies",roleaccess:[AppRoles.SuperAdmin] },
-        { name: "Create Implementing Agency", path: "/agenciesdetail",roleaccess:[AppRoles.SuperAdmin]},
+        { name: "View Implementing Agency", path: "/agencies", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "Create Implementing Agency", path: "/agenciesdetail", roleaccess: [AppRoles.SuperAdmin] },
       ],
-      roleaccess:[AppRoles.SuperAdmin]
+      roleaccess: [AppRoles.SuperAdmin]
     },
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      name: "View Curriculum",
-      path: "/curriculum",  
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]    
+      icon: ICON_BUILDING,
+      name: "Implementing Agency",
+      path: "/agencies",
+      sectionLabel: 'MANAGEMENT',
+      subItems: [
+        { name: "View Implementing Agency", path: "/agencies", roleaccess: [AppRoles.CategoryAdmin] },
+        { name: "Create Implementing Agency", path: "/agenciesdetail", roleaccess: [AppRoles.CategoryAdmin] },
+      ],
+      roleaccess: [AppRoles.CategoryAdmin]
     },
+    // -- MANAGEMENT continuation -------------------------------------
+    { icon: ICON_CALENDAR, name: "View Curriculum", path: "/curriculum", roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency, AppRoles.CategoryAdmin] },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor"></path></svg>`,
+      icon: ICON_PACKAGE,
       name: "View Programmes",
       path: "/programme",
       subItems: [
-        { name: "View Programmes", path: "/programme" ,roleaccess:[AppRoles.Agency,AppRoles.Coordinator]},
-        { name: "All Programmes", path: "/adminprogramme",roleaccess:[AppRoles.SuperAdmin]},
-        { name: "New Programme", path: "/newprogramme", roleaccess:[AppRoles.Agency] },
+        { name: "View Programmes", path: "/programme", roleaccess: [AppRoles.Agency, AppRoles.Coordinator] },
+        { name: "All Programmes", path: "/adminprogramme", roleaccess: [AppRoles.SuperAdmin] },
+        { name: "New Programme", path: "/newprogramme", roleaccess: [AppRoles.Agency] },
       ],
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency,AppRoles.Coordinator] 
+      roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency, AppRoles.Coordinator]
     },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.665 3.75618C11.8762 3.65061 12.1247 3.65061 12.3358 3.75618L18.7807 6.97853L12.3358 10.2009C12.1247 10.3064 11.8762 10.3064 11.665 10.2009L5.22014 6.97853L11.665 3.75618ZM4.29297 8.19199V16.0946C4.29297 16.3787 4.45347 16.6384 4.70757 16.7654L11.25 20.0365V11.6512C11.1631 11.6205 11.0777 11.5843 10.9942 11.5425L4.29297 8.19199ZM12.75 20.037L19.2933 16.7654C19.5474 16.6384 19.7079 16.3787 19.7079 16.0946V8.19199L13.0066 11.5425C12.9229 11.5844 12.8372 11.6207 12.75 11.6515V20.037ZM13.0066 2.41453C12.3732 2.09783 11.6277 2.09783 10.9942 2.41453L4.03676 5.89316C3.27449 6.27429 2.79297 7.05339 2.79297 7.90563V16.0946C2.79297 16.9468 3.27448 17.7259 4.03676 18.1071L10.9942 21.5857L11.3296 20.9149L10.9942 21.5857C11.6277 21.9024 12.3732 21.9024 13.0066 21.5857L19.9641 18.1071C20.7264 17.7259 21.2079 16.9468 21.2079 16.0946V7.90563C21.2079 7.05339 20.7264 6.27429 19.9641 5.89316L13.0066 2.41453Z" fill="currentColor"></path></svg>`,
+      icon: ICON_PACKAGE,
+      name: "View Programmes",
+      path: "/adminprogramme",
+      roleaccess: [AppRoles.CategoryAdmin]
+    },
+    { icon: ICON_PERSON, name: "Trainer Management", path: "/zedfaculty", roleaccess: [AppRoles.CategoryAdmin] },
+    { icon: ICON_CLIPBOARD, name: "Questionnaire", path: "/masterquestionnaire", roleaccess: [AppRoles.SuperAdmin] },
+    { icon: ICON_DOC, name: "QC Approval", path: "/qcapproval", roleaccess: [AppRoles.SuperAdmin] },
+    {
+      icon: ICON_PACKAGE,
       name: "Coordinators",
       path: "/Coordinators",
       subItems: [
-        { name: "Coordinators", path: "/coordinators",roleaccess:[AppRoles.Agency] },
-        { name: "New Coordinator", path: "/newcoordinator",roleaccess:[AppRoles.Agency] },
+        { name: "Coordinators", path: "/coordinators", roleaccess: [AppRoles.Agency] },
+        { name: "New Coordinator", path: "/newcoordinator", roleaccess: [AppRoles.Agency] },
       ],
-      roleaccess:[AppRoles.Agency]
+      roleaccess: [AppRoles.Agency]
     },
+    // -- REPORTS & STATUS ---------------------------------------------
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      name: "QC Approval",
-      path: "/qcapproval",  
-      roleaccess:[AppRoles.SuperAdmin]    
-    },
-    
-    {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
+      icon: ICON_DOC,
       name: "View Report",
-      path: "/viewreport",  
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]     
+      path: "/viewreport",
+      sectionLabel: 'REPORTS & STATUS',
+      subItems: [
+        { name: "View Report", path: "/viewreport", roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency] },
+        { name: "Summary Report", path: "/summaryreport", roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency]
     },
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      name: "Summary Report",
-      path: "/summaryreport",  
-      roleaccess:[AppRoles.SuperAdmin]     
+      icon: ICON_CLIPBOARD,
+      name: "QC Approval",
+      path: "/qcapproval",
+      sectionLabel: 'REPORTS & STATUS',
+      subItems: [
+        { name: "QC Approval", path: "/qcapproval", roleaccess: [AppRoles.CategoryAdmin] },
+      ],
+      roleaccess: [AppRoles.CategoryAdmin]
     },
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      name: "Faculty",
+      icon: ICON_DOC,
+      name: "View Report",
+      path: "/viewreport",
+      subItems: [
+        { name: "View Report", path: "/viewreport", roleaccess: [AppRoles.CategoryAdmin] },
+        { name: "Summary Report", path: "/summaryreport", roleaccess: [AppRoles.CategoryAdmin] },
+      ],
+      roleaccess: [AppRoles.CategoryAdmin]
+    },
+    {
+      icon: ICON_DOC,
+      name: "Trainers",
       path: "/zedfaculty",
       subItems: [
-        { name: "Faculty", path: "/zedfaculty",roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency] },
-        { name: "New Faculty", path: "/addfaculty",roleaccess:[AppRoles.SuperAdmin] },],
-      roleaccess:[AppRoles.SuperAdmin,AppRoles.Agency]     
+        { name: "Trainers", path: "/zedfaculty", roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency] },
+        { name: "New Trainer", path: "/addfaculty", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency]
     },
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
+      icon: ICON_DOC,
       name: "MT/AT/CT",
-      path: "/mtatcttrainer",  
+      path: "/mtatcttrainer",
       subItems: [
-        { name: "MT/AT/CT", path: "/mtatcttrainer",roleaccess:[AppRoles.SuperAdmin]}
-        ],
-      roleaccess:[AppRoles.SuperAdmin]     
+        { name: "MT/AT/CT", path: "/mtatcttrainer", roleaccess: [AppRoles.SuperAdmin] },
+      ],
+      roleaccess: [AppRoles.SuperAdmin]
     },
     {
-     icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
+      icon: ICON_DOC,
       name: "Certificates",
       path: "/certificates",
       subItems: [
-        { name: "Certificates", path: "/certificates", roleaccess:[AppRoles.SuperAdmin] }
-        ],
-      roleaccess:[AppRoles.SuperAdmin]
-    },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C12.4142 1.25 12.75 1.58579 12.75 2V3.32698C13.5904 3.47668 14.3889 3.75916 15.1206 4.15224L16.0555 3.21734C16.3484 2.92445 16.8233 2.92445 17.1162 3.21734L20.7827 6.88388C21.0756 7.17678 21.0756 7.65165 20.7827 7.94454L19.8478 8.87944C20.2409 9.61112 20.5233 10.4096 20.673 11.25H22C22.4142 11.25 22.75 11.5858 22.75 12C22.75 12.4142 22.4142 12.75 22 12.75H20.673C20.5233 13.5904 20.2409 14.3889 19.8478 15.1206L20.7827 16.0555C21.0756 16.3484 21.0756 16.8233 20.7827 17.1162L17.1162 20.7827C16.8233 21.0756 16.3484 21.0756 16.0555 20.7827L15.1206 19.8478C14.3889 20.2409 13.5904 20.5233 12.75 20.673V22C12.75 22.4142 12.4142 22.75 12 22.75C11.5858 22.75 11.25 22.4142 11.25 22V20.673C10.4096 20.5233 9.61112 20.2409 8.87944 19.8478L7.94454 20.7827C7.65165 21.0756 7.17678 21.0756 6.88388 20.7827L3.21734 17.1162C2.92445 16.8233 2.92445 16.3484 3.21734 16.0555L4.15224 15.1206C3.75916 14.3889 3.47668 13.5904 3.32698 12.75H2C1.58579 12.75 1.25 12.4142 1.25 12C1.25 11.5858 1.58579 11.25 2 11.25H3.32698C3.47668 10.4096 3.75916 9.61112 4.15224 8.87944L3.21734 7.94454C2.92445 7.65165 2.92445 7.17678 3.21734 6.88388L6.88388 3.21734C7.17678 2.92445 7.65165 2.92445 7.94454 3.21734L8.87944 4.15224C9.61112 3.75916 10.4096 3.47668 11.25 3.32698V2C11.25 1.58579 11.5858 1.25 12 1.25ZM12 8.25C9.92893 8.25 8.25 9.92893 8.25 12C8.25 14.0711 9.92893 15.75 12 15.75C14.0711 15.75 15.75 14.0711 15.75 12C15.75 9.92893 14.0711 8.25 12 8.25ZM6.75 12C6.75 9.10051 9.10051 6.75 12 6.75C14.8995 6.75 17.25 9.10051 17.25 12C17.25 14.8995 14.8995 17.25 12 17.25C9.10051 17.25 6.75 14.8995 6.75 12Z" fill="currentColor"></path></svg>`,
-    //   name: "Reg. Form Config",
-    //   path: "/registration-config",
-    //   subItems: [
-    //     { name: "Registration Form Config", path: "/registration-config", roleaccess: [AppRoles.SuperAdmin] }
-    //   ],
-    //   roleaccess: [AppRoles.SuperAdmin]
-    // },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 6A2.75 2.75 0 0 1 7 3.25h3.379a2.75 2.75 0 0 1 1.944.805l6.879 6.879a2.75 2.75 0 0 1 0 3.889l-3.379 3.378a2.75 2.75 0 0 1-3.889 0L5.055 11.323A2.75 2.75 0 0 1 4.25 9.379V6Zm2.75-1.25c-.69 0-1.25.56-1.25 1.25v3.379c0 .331.132.65.366.884l6.879 6.878a1.25 1.25 0 0 0 1.768 0l3.378-3.378a1.25 1.25 0 0 0 0-1.768L11.262 5.116a1.25 1.25 0 0 0-.883-.366H7ZM9 7.25a1.75 1.75 0 1 0 0 3.5 1.75 1.75 0 0 0 0-3.5Z" fill="currentColor"/></svg>`,
-    //   name: "Org Categories",
-    //   path: "/orgcategories",
-    //   subItems: [
-    //     { name: "View Categories", path: "/orgcategories", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "New Category", path: "/neworgcategory", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "Add Sub Category", path: "/addsubcategory", roleaccess: [AppRoles.SuperAdmin] },
-    //   ],
-    //   roleaccess: [AppRoles.SuperAdmin]
-    // },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.75a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5ZM7.25 7a4.75 4.75 0 1 1 9.5 0 4.75 4.75 0 0 1-9.5 0ZM4.25 20c0-3.176 2.574-5.75 5.75-5.75h4c3.176 0 5.75 2.574 5.75 5.75a.75.75 0 0 1-1.5 0A4.25 4.25 0 0 0 14 15.75h-4A4.25 4.25 0 0 0 5.75 20a.75.75 0 0 1-1.5 0Z" fill="currentColor"/></svg>`,
-    //   name: "Category Admins",
-    //   path: "/categoryadmins",
-    //   subItems: [
-    //     { name: "View Admins", path: "/categoryadmins", roleaccess: [AppRoles.SuperAdmin] },
-    //     { name: "New Admin", path: "/newcategoryadmin", roleaccess: [AppRoles.SuperAdmin] },
-    //   ],
-    //   roleaccess: [AppRoles.SuperAdmin]
-    // },
-
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,
-    //   name: "QC Approval",
-    //   path: "/d",
-      
-    // },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,
-      name: "Organising Partners",
-      path: "/organisingpartners",
-      roleaccess:[AppRoles.Agency]
-    },
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C11.5858 2 11.25 2.33579 11.25 2.75V12C11.25 12.4142 11.5858 12.75 12 12.75H21.25C21.6642 12.75 22 12.4142 22 12C22 6.47715 17.5228 2 12 2ZM12.75 11.25V3.53263C13.2645 3.57761 13.7659 3.66843 14.25 3.80098V3.80099C15.6929 4.19606 16.9827 4.96184 18.0104 5.98959C19.0382 7.01734 19.8039 8.30707 20.199 9.75C20.3316 10.2341 20.4224 10.7355 20.4674 11.25H12.75ZM2 12C2 7.25083 5.31065 3.27489 9.75 2.25415V3.80099C6.14748 4.78734 3.5 8.0845 3.5 12C3.5 16.6944 7.30558 20.5 12 20.5C15.9155 20.5 19.2127 17.8525 20.199 14.25H21.7459C20.7251 18.6894 16.7492 22 12 22C6.47715 22 2 17.5229 2 12Z" fill="currentColor"></path></svg>`,
-      name: "Reports",
-      path: "/e",
-      subItems: [
-        { name: "View Report", path: "/g" },
-        { name: "View Summary", path: "/h" },
+        { name: "Certificates", path: "/certificates", roleaccess: [AppRoles.SuperAdmin, AppRoles.CategoryAdmin] },
       ],
-    }, 
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z" fill="currentColor"></path></svg>`,
-      name: "Faculty",
-      path: "/f",
-      subItems: [
-        { name: "Faculty", path: "/b" },
-        { name: "MC/AT/CT", path: "/c" },
-        { name: "Potencial Faculty/SME", path: "/d" },
-      ],
-    },  
-    {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14 2.75C14 2.33579 14.3358 2 14.75 2C15.1642 2 15.5 2.33579 15.5 2.75V5.73291L17.75 5.73291H19C19.4142 5.73291 19.75 6.0687 19.75 6.48291C19.75 6.89712 19.4142 7.23291 19 7.23291H18.5L18.5 12.2329C18.5 15.5691 15.9866 18.3183 12.75 18.6901V21.25C12.75 21.6642 12.4142 22 12 22C11.5858 22 11.25 21.6642 11.25 21.25V18.6901C8.01342 18.3183 5.5 15.5691 5.5 12.2329L5.5 7.23291H5C4.58579 7.23291 4.25 6.89712 4.25 6.48291C4.25 6.0687 4.58579 5.73291 5 5.73291L6.25 5.73291L8.5 5.73291L8.5 2.75C8.5 2.33579 8.83579 2 9.25 2C9.66421 2 10 2.33579 10 2.75L10 5.73291L14 5.73291V2.75ZM7 7.23291L7 12.2329C7 14.9943 9.23858 17.2329 12 17.2329C14.7614 17.2329 17 14.9943 17 12.2329L17 7.23291L7 7.23291Z" fill="currentColor"></path></svg>`,
-      name: "Coordinators/Partners",
-      path: "/g",
-      subItems: [
-        { name: "Coordinators", path: "/i" },
-        { name: "New Coordinators", path: "/j" },
-        { name: "Organising Partners", path: "/k" },
-      ],
-    },  
-    {
-      icon: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V9V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V9V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM8 5.25H5.5C5.08579 5.25 4.75 5.58579 4.75 6V8.25H19.25V6C19.25 5.58579 18.9142 5.25 18.5 5.25H16H8ZM19.25 9.75H4.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75Z" fill="currentColor"></path></svg>`,
-      name: "Certificate",
-      path: "/certificates",
+      roleaccess: [AppRoles.SuperAdmin, AppRoles.CategoryAdmin]
     },
+    { icon: ICON_DOC, name: "MT/AT/CT", path: "/mtatcttrainer", roleaccess: [AppRoles.CategoryAdmin] },
+    { icon: ICON_UPLOAD, name: "Upload Documents", path: "/uploaddocuments", roleaccess: [AppRoles.SuperAdmin] },
+    { icon: ICON_DOC, name: "Organising Partners", path: "/organisingpartners", roleaccess: [AppRoles.Agency] },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.75 16.5V5.56066L15.4697 8.28033C15.7626 8.57322 16.2374 8.57322 16.5303 8.28033C16.8232 7.98744 16.8232 7.51256 16.5303 7.21967L12.5303 3.21967C12.2374 2.92678 11.7626 2.92678 11.4697 3.21967L7.46967 7.21967C7.17678 7.51256 7.17678 7.98744 7.46967 8.28033C7.76256 8.57322 8.23744 8.57322 8.53033 8.28033L11.25 5.56066V16.5C11.25 16.9142 11.5858 17.25 12 17.25C12.4142 17.25 12.75 16.9142 12.75 16.5ZM3 15.75C3 15.3358 3.33579 15 3.75 15C4.16421 15 4.5 15.3358 4.5 15.75V19.5C4.5 19.9142 4.83579 20.25 5.25 20.25H18.75C19.1642 20.25 19.5 19.9142 19.5 19.5V15.75C19.5 15.3358 19.8358 15 20.25 15C20.6642 15 21 15.3358 21 15.75V19.5C21 20.7426 19.9926 21.75 18.75 21.75H5.25C4.00736 21.75 3 20.7426 3 19.5V15.75Z" fill="currentColor"></path></svg>`,
+      icon: ICON_UPLOAD_ARROW,
       name: "Upload Participants",
       path: "/uploadbatches",
       subItems: [
-        { name: "Upload Participants", path: "/uploadbatches", roleaccess: [AppRoles.Agency,AppRoles.Coordinator] }
+        { name: "Upload Participants", path: "/uploadbatches", roleaccess: [AppRoles.Agency, AppRoles.Coordinator] },
       ],
-      roleaccess: [AppRoles.Agency,AppRoles.Coordinator]
+      roleaccess: [AppRoles.Agency, AppRoles.Coordinator]
     },
     {
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2806 2.71967C20.9877 2.42678 20.5128 2.42678 20.2199 2.71967L18.4697 4.46967C18.3334 4.60602 18.2573 4.79026 18.2573 4.98223V5.96965L12.5302 11.6968C12.2373 11.9896 12.2373 12.4645 12.5302 12.7574C12.8231 13.0503 13.298 13.0503 13.5909 12.7574L19.318 7.03027H20.3054C20.4973 7.03027 20.6816 6.95421 20.8179 6.81786L22.5679 5.06786C22.8608 4.77496 22.8608 4.30009 22.5679 4.00719L21.2806 2.71967ZM4 5.25C3.58579 5.25 3.25 5.58579 3.25 6V20C3.25 20.4142 3.58579 20.75 4 20.75H18C18.4142 20.75 18.75 20.4142 18.75 20V12C18.75 11.5858 19.0858 11.25 19.5 11.25C19.9142 11.25 20.25 11.5858 20.25 12V20C20.25 21.2426 19.2426 22.25 18 22.25H4C2.75736 22.25 1.75 21.2426 1.75 20V6C1.75 4.75736 2.75736 3.75 4 3.75H12C12.4142 3.75 12.75 4.08579 12.75 4.5C12.75 4.91421 12.4142 5.25 12 5.25H4Z" fill="currentColor"></path></svg>`,
+      icon: ICON_PENCIL,
       name: "Practical Scores",
       path: "/practicalscoresbatches",
       subItems: [
-        { name: "Practical Scores", path: "/practicalscoresbatches", roleaccess: [AppRoles.Coordinator] }
+        { name: "Practical Scores", path: "/practicalscoresbatches", roleaccess: [AppRoles.Coordinator] },
       ],
       roleaccess: [AppRoles.Coordinator]
     },
-    // {
-    //   icon: `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V9V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V9V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM8 5.25H5.5C5.08579 5.25 4.75 5.58579 4.75 6V8.25H19.25V6C19.25 5.58579 18.9142 5.25 18.5 5.25H16H8ZM19.25 9.75H4.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75Z" fill="currentColor"></path></svg>`,
-    //   name: "Calendar",
-    //   path: "/calendar",
-    // },
-    // {
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 3.5C7.30558 3.5 3.5 7.30558 3.5 12C3.5 14.1526 4.3002 16.1184 5.61936 17.616C6.17279 15.3096 8.24852 13.5955 10.7246 13.5955H13.2746C15.7509 13.5955 17.8268 15.31 18.38 17.6167C19.6996 16.119 20.5 14.153 20.5 12C20.5 7.30558 16.6944 3.5 12 3.5ZM17.0246 18.8566V18.8455C17.0246 16.7744 15.3457 15.0955 13.2746 15.0955H10.7246C8.65354 15.0955 6.97461 16.7744 6.97461 18.8455V18.856C8.38223 19.8895 10.1198 20.5 12 20.5C13.8798 20.5 15.6171 19.8898 17.0246 18.8566ZM2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM11.9991 7.25C10.8847 7.25 9.98126 8.15342 9.98126 9.26784C9.98126 10.3823 10.8847 11.2857 11.9991 11.2857C13.1135 11.2857 14.0169 10.3823 14.0169 9.26784C14.0169 8.15342 13.1135 7.25 11.9991 7.25ZM8.48126 9.26784C8.48126 7.32499 10.0563 5.75 11.9991 5.75C13.9419 5.75 15.5169 7.32499 15.5169 9.26784C15.5169 11.2107 13.9419 12.7857 11.9991 12.7857C10.0563 12.7857 8.48126 11.2107 8.48126 9.26784Z" fill="currentColor"></path></svg>`,
-    //   name: "User Profile",
-    //   path: "/profile",
-    // },
-    {
-      name: "Forms",
-      icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z" fill="currentColor"></path></svg>`,
-      subItems: [
-        { name: "Form Elements", path: "/form-elements", pro: false }
-      ],
-    },
-    // {
-    //   name: "Tables",
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 5.5C3.25 4.25736 4.25736 3.25 5.5 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V18.5C20.75 19.7426 19.7426 20.75 18.5 20.75H5.5C4.25736 20.75 3.25 19.7426 3.25 18.5V5.5ZM5.5 4.75C5.08579 4.75 4.75 5.08579 4.75 5.5V8.58325L19.25 8.58325V5.5C19.25 5.08579 18.9142 4.75 18.5 4.75H5.5ZM19.25 10.0833H15.416V13.9165H19.25V10.0833ZM13.916 10.0833L10.083 10.0833V13.9165L13.916 13.9165V10.0833ZM8.58301 10.0833H4.75V13.9165H8.58301V10.0833ZM4.75 18.5V15.4165H8.58301V19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5ZM10.083 19.25V15.4165L13.916 15.4165V19.25H10.083ZM15.416 19.25V15.4165H19.25V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H15.416Z" fill="currentColor"></path></svg>`,
-    //   subItems: [
-    //     { name: "Basic Tables", path: "/basic-tables", pro: false },
-    //   ],
-    // },
-    // {
-    //   name: "Pages",
-    //   icon: `<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.50391 4.25C8.50391 3.83579 8.83969 3.5 9.25391 3.5H15.2777C15.4766 3.5 15.6674 3.57902 15.8081 3.71967L18.2807 6.19234C18.4214 6.333 18.5004 6.52376 18.5004 6.72268V16.75C18.5004 17.1642 18.1646 17.5 17.7504 17.5H16.248V17.4993H14.748V17.5H9.25391C8.83969 17.5 8.50391 17.1642 8.50391 16.75V4.25ZM14.748 19H9.25391C8.01126 19 7.00391 17.9926 7.00391 16.75V6.49854H6.24805C5.83383 6.49854 5.49805 6.83432 5.49805 7.24854V19.75C5.49805 20.1642 5.83383 20.5 6.24805 20.5H13.998C14.4123 20.5 14.748 20.1642 14.748 19.75L14.748 19ZM7.00391 4.99854V4.25C7.00391 3.00736 8.01127 2 9.25391 2H15.2777C15.8745 2 16.4468 2.23705 16.8687 2.659L19.3414 5.13168C19.7634 5.55364 20.0004 6.12594 20.0004 6.72268V16.75C20.0004 17.9926 18.9931 19 17.7504 19H16.248L16.248 19.75C16.248 20.9926 15.2407 22 13.998 22H6.24805C5.00541 22 3.99805 20.9926 3.99805 19.75V7.24854C3.99805 6.00589 5.00541 4.99854 6.24805 4.99854H7.00391Z" fill="currentColor"></path></svg>`,
-    //   subItems: [
-    //     { name: "Blank Page", path: "/blank", pro: false },
-    //     { name: "404 Error", path: "/error-404", pro: false },
-    //   ],
-    // },
   ];
   }
 

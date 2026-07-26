@@ -17,14 +17,24 @@ getTrainerList(id:string){
    return this.api.getSimple(APPURLs.trainerlist+query);  
   }
 
-  getFacultyList(id:string, orgCategory:string=''){
-  let query ="?id="+id+"&orgCategory="+encodeURIComponent(orgCategory);
+  getFacultyList(id:string, orgCategory: number | null = null){
+  let query ="?id="+id;
+  if(orgCategory != null) query += "&orgCategory="+orgCategory;
    return this.api.getSimple(APPURLs.facultylist+query);
   }
 
-  getRegistrationList(status:string){
-    let query = "?status="+status;
-   return this.api.getSimple(APPURLs.registrationlist+query);  
+  getRegistrationList(status: string, orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+    let query = '?status=' + status;
+    if (orgCategoryId) query += '&orgCategoryId=' + orgCategoryId;
+    if (orgSubCategoryId) query += '&orgSubCategoryId=' + orgSubCategoryId;
+    return this.api.getSimple(APPURLs.registrationlist + query);
+  }
+
+  exportRegistrations(status: string, orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+    let query = '?status=' + status;
+    if (orgCategoryId) query += '&orgCategoryId=' + orgCategoryId;
+    if (orgSubCategoryId) query += '&orgSubCategoryId=' + orgSubCategoryId;
+    return this.api.getTestFile(APPURLs.registrationexport + query);
   }
 
   updateRegistrationRecordStatus(statusDetail:any){    

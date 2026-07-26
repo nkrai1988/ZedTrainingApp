@@ -11,7 +11,8 @@
 // }
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, combineLatest } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { AgencyService } from '../../../services/agencies.service';
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -53,10 +54,13 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
    templateUrl: './admin-programm-list.component.html',
    styleUrl: './admin-programm-list.component.css',
 })
-export class AdminProgrammListComponent {
+export class AdminProgrammListComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService, private trainingService:TrainingService){
 
     }
+  private currentCategoryId: number | null = null;
+  private currentSubCategoryId: number | null = null;
+  private subscription: Subscription = new Subscription();
 
     filterForm!: FormGroup;
     dataLoadProgress=false;
@@ -135,15 +139,26 @@ handleStatusSelectChange(value: string) {
     ngOnInit(){
       this.createForm();
       this.loadStatus();
-      this.getProgrammesFromServer();
       this.loadStates();
       this.loadProgrammeType();
-      this.loadAgencies();
+      this.subscription.add(
+        combineLatest([this.helperService.category$, this.helperService.subCategory$])
+          .subscribe(([category, subCategory]) => {
+            this.currentCategoryId = category;
+            this.currentSubCategoryId = subCategory;
+            this.loadAgencies();
+            this.getProgrammesFromServer();
+          })
+      );
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
     }
 
     loadAgencies(){
     this.agenciesOptions=[];
-    this.programmeservice.getActiveAgencyList(this.helperService.getOrgCategory() || '').subscribe({
+    this.programmeservice.getActiveAgencyList(this.currentCategoryId).subscribe({
         next:(response:any)=>{
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});
@@ -189,7 +204,7 @@ handleStatusSelectChange(value: string) {
     console.log(this.filterForm.value)
     if(this.helperService.IsSuperAdmin()){
       this.dataLoadProgress=true;
-      this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory() || '').subscribe({
+      this.programmeservice.getAdminProgrammeList(this.currentCategoryId, this.currentSubCategoryId).subscribe({
         next:(response:any[])=>{
           this.programmeList=response;
           let tempListData= response;
@@ -343,7 +358,11 @@ handleStatusSelectChange(value: string) {
 
   getProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getProgrammeList(this.helperService.getUserEmail()).subscribe({
+    let centerId = '';
+    if (this.helperService.IsAgency() || this.helperService.IsCoordinator()) {
+      centerId = this.helperService.getUserEmail();
+    }
+    this.programmeservice.getProgrammeList(centerId, this.currentCategoryId, this.currentSubCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -352,13 +371,12 @@ handleStatusSelectChange(value: string) {
       error:(err:any)=>{
         this.dataLoadProgress=false;
       }
-    
-    });    
+    });
   }
 
   getAdminProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory() || '').subscribe({
+    this.programmeservice.getAdminProgrammeList(this.currentCategoryId, this.currentSubCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -367,8 +385,7 @@ handleStatusSelectChange(value: string) {
       error:(err:any)=>{
         this.dataLoadProgress=false;
       }
-    
-    });    
+    });
   }
 
   loadStates(){

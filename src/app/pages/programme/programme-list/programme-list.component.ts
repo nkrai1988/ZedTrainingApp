@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, combineLatest } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { BasicTableTwoComponent } from '../../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { AgencyService } from '../../../services/agencies.service';
@@ -49,10 +50,13 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
   templateUrl: './programme-list.component.html',
   styleUrl: './programme-list.component.css',
 })
-export class ProgrammeListComponent {
+export class ProgrammeListComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService){
 
     }
+  private currentCategoryId: number | null = null;
+  private currentSubCategoryId: number | null = null;
+  private subscription: Subscription = new Subscription();
 
     filterForm!: FormGroup;
     dataLoadProgress=false;
@@ -114,8 +118,19 @@ handleStatusSelectChange(value: string) {
     ngOnInit(){
       this.createForm();
       this.loadStatus();
-      this.getProgrammesFromServer();
       this.loadStates();
+      this.subscription.add(
+        combineLatest([this.helperService.category$, this.helperService.subCategory$])
+          .subscribe(([category, subCategory]) => {
+            this.currentCategoryId = category;
+            this.currentSubCategoryId = subCategory;
+            this.getProgrammesFromServer();
+          })
+      );
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
     }
 
     getProgrammesFromServer(){
@@ -268,7 +283,13 @@ handleStatusSelectChange(value: string) {
 
   getProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getProgrammeList(this.helperService.getUserEmail(), this.helperService.getOrgCategory()).subscribe({
+    let centerId = '';
+    if (this.helperService.IsAgency() || this.helperService.IsCoordinator()) {
+      centerId = this.helperService.getUserEmail();
+    }
+    // Category Admin sees all subcategories in their category; Agency/Coordinator filtered to their own subcategory
+    const subCategoryFilter = this.helperService.IsCategoryAdmin() ? null : this.currentSubCategoryId;
+    this.programmeservice.getProgrammeList(centerId, this.currentCategoryId, subCategoryFilter).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -277,13 +298,13 @@ handleStatusSelectChange(value: string) {
       error:(err:any)=>{
         this.dataLoadProgress=false;
       }
-    
-    });    
+
+    });
   }
 
   getAdminProgrammes(){
     this.dataLoadProgress=true;
-    this.programmeservice.getAdminProgrammeList(this.helperService.getOrgCategory()).subscribe({
+    this.programmeservice.getAdminProgrammeList(this.currentCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.programmeList=response;
@@ -292,8 +313,8 @@ handleStatusSelectChange(value: string) {
       error:(err:any)=>{
         this.dataLoadProgress=false;
       }
-    
-    });    
+
+    });
   }
 
   loadStates(){

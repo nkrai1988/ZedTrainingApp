@@ -12,8 +12,9 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getAgencyList(status:string, orgCategory:string=''){
-  let query ="?status="+status+"&orgCategory="+encodeURIComponent(orgCategory);
+getAgencyList(status:string, orgCategory: number | null = null){
+  let query ="?status="+status;
+  if(orgCategory != null) query += "&orgCategory="+orgCategory;
    return this.api.getSimple(APPURLs.coordinatorlist+query);
   }
 
@@ -28,7 +29,7 @@ getAgencyList(status:string, orgCategory:string=''){
   }
 
 postAgency(detail:any){
-    return this.api.postSimpleWithHeader(APPURLs.agencypost,detail);  
+    return this.api.postSimpleWithHeader(APPURLs.coordinatorpost,detail);
 }
 
 editAgency(detail:any){

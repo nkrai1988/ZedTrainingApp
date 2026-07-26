@@ -10,12 +10,12 @@ export class RegistrationStepConfigService {
 
   constructor(private api: ApiService) {}
 
-  getStepsForParticipant(category: string, subcategory: string): Observable<any[]> {
-    return this.api.getSimple(`${APPURLs.registrationSteps}?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}`);
+  getStepsForParticipant(category: string | null, subcategory: string | null): Observable<any[]> {
+    return this.api.getSimple(`${APPURLs.registrationSteps}?category=${category ?? ''}&subcategory=${subcategory ?? ''}`);
   }
 
-  getStepsForAdmin(category: string, subcategory: string): Observable<any[]> {
-    return this.api.getSimple(`${APPURLs.registrationStepsAdmin}?category=${encodeURIComponent(category)}&subcategory=${encodeURIComponent(subcategory)}`);
+  getStepsForAdmin(category: string | null, subcategory: string | null): Observable<any[]> {
+    return this.api.getSimple(`${APPURLs.registrationStepsAdmin}?category=${category ?? ''}&subcategory=${subcategory ?? ''}`);
   }
 
   toggleStep(stepKey: string, categoryValue: string, subCategoryValue: string, isEnabled: boolean): Observable<any> {

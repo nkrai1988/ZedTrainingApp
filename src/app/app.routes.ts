@@ -59,6 +59,10 @@ import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-
 import { ParticipantVerifyEmailComponent } from './pages/auth-pages/participant-verify-email/participant-verify-email.component';
 import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
 import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
+import { MyProgrammesComponent } from './pages/participants/my-programmes/my-programmes.component';
+import { MyCertificatesComponent } from './pages/participants/my-certificates/my-certificates.component';
+import { MyProfileComponent } from './pages/participants/my-profile/my-profile.component';
+import { ParticipantChangePasswordComponent } from './pages/participants/change-password/participant-change-password.component';
 import { AssessmentComponent } from './pages/assessment/assessment.component';
 import { CandidatesListComponent } from './pages/participants/candidates-list/candidates-list.component';
 import { QuestionnaireComponent } from './pages/questionnaire/questionnaire.component';
@@ -70,6 +74,9 @@ import { CategoryAdminFormComponent } from './pages/category-admin/category-admi
 import { RegistrationConfigComponent } from './pages/registration-config/registration-config.component';
 import { PracticalScoresBatchesComponent } from './pages/participants/practical-scores-batches/practical-scores-batches.component';
 import { PracticalScoresComponent } from './pages/participants/practical-scores/practical-scores.component';
+import { UploadDocumentsComponent } from './pages/upload-documents/upload-documents.component';
+import { MasterQuestionnaireComponent } from './pages/master-questionnaire/master-questionnaire.component';
+import { CategoryAdminDashboardComponent } from './pages/dashboard/category-admin-dashboard/category-admin-dashboard.component';
 
 export const routes: Routes = [
   {
@@ -104,6 +111,13 @@ export const routes: Routes = [
         pathMatch: 'full',
         title:'Training Solution',
         canActivate:[AuthGuard]
+      },
+      {
+        path: 'categoryadmindashboard',
+        component: CategoryAdminDashboardComponent,
+        pathMatch: 'full',
+        title: 'Category Admin Dashboard',
+        canActivate: [AuthGuard]
       },
       {
         path: 'agencies',
@@ -446,6 +460,20 @@ export const routes: Routes = [
         title: 'Update Practical Scores',
         canActivate: [AuthGuard]
       },
+      {
+        path: 'uploaddocuments',
+        component: UploadDocumentsComponent,
+        pathMatch: 'full',
+        title: 'Upload Documents',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'masterquestionnaire',
+        component: MasterQuestionnaireComponent,
+        pathMatch: 'full',
+        title: 'Questionnaire',
+        canActivate: [AuthGuard]
+      },
     ]
   },
   // participant layout
@@ -466,6 +494,41 @@ export const routes: Routes = [
         component: MasterRegisterComponent,
         pathMatch: 'full',
         title: 'Register',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'participant/myapplication',
+        component: RegisterDetailComponent,
+        pathMatch: 'full',
+        title: 'My Application',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'participant/programmes',
+        component: MyProgrammesComponent,
+        pathMatch: 'full',
+        title: 'My Programmes',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'participant/certificates',
+        component: MyCertificatesComponent,
+        pathMatch: 'full',
+        title: 'My Certificates',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'participant/profile',
+        component: MyProfileComponent,
+        pathMatch: 'full',
+        title: 'My Profile',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'participant/changepassword',
+        component: ParticipantChangePasswordComponent,
+        pathMatch: 'full',
+        title: 'Change Password',
         canActivate: [AuthGuard]
       },
     ]

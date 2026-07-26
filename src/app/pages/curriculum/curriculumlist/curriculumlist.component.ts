@@ -61,10 +61,12 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
     dataLoadProgress = false;
     isOpen = false;
     modelItem:any;
-    programmetype='';
+    programmetype='ZEDTP';
     programmename='';
     newProgrammeclicked=false;
-    orgCategory = '';
+    orgCategoryId: number | null = null;
+    orgCategoryName: string | null = null;
+    orgSubCategoryId: number | null = null;
     private subscription: Subscription = new Subscription();
   openModal(row:any) {
     this.modelItem=row;
@@ -82,18 +84,23 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
     programmetypeOptions:any=[];
     ngOnInit() {
       this.loadProgrammeType();
-      
-      if (this.helperService.IsMasterAdmin()) {
-        
-        this.subscription = this.helperService.category$.subscribe(val => {
-          this.orgCategory = val;
+
+      this.subscription.add(
+        this.helperService.category$.subscribe(val => {
+          this.orgCategoryId = val;
           this.getCurriculum();
-        });
-      } else {
-        this.orgCategory = this.helperService.getOrgCategory() || '';
-        
-        this.getCurriculum();
-      }
+        })
+      );
+      this.subscription.add(
+        this.helperService.categoryName$.subscribe(val => {
+          this.orgCategoryName = val;
+        })
+      );
+      this.subscription.add(
+        this.helperService.subCategory$.subscribe(val => {
+          this.orgSubCategoryId = val;
+        })
+      );
     }
 
     ngOnDestroy() {
@@ -102,17 +109,31 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
 
     clearForm(){
       this.programmename='';
-      this.programmetype='';
+      this.programmetype='ZEDTP';
       this.newProgrammeclicked=false;
-      
     }
 
     onDataSubmit(){
       this.newProgrammeclicked=true;
-      console.log(this.programmename,this.programmetype);
-      if(this.programmename && this.programmetype){
+      if (!this.orgCategoryId) {
+        this.errormessage = 'Organisation category is not available. Please re-login and try again.';
+        setTimeout(() => { this.errormessage = ''; }, 5000);
+        return;
+      }
+      if (!this.orgSubCategoryId) {
+        this.errormessage = 'Please select a Sub Category from the top header dropdown before adding a curriculum.';
+        setTimeout(() => { this.errormessage = ''; }, 5000);
+        return;
+      }
+      if(this.programmename){
         this.newProgrammeclicked=false;
-          this.service.postCurriculum({ProgrammeType:this.programmetype,ProgrammeName:this.programmename,OrgCategory:this.orgCategory}).subscribe(
+          this.service.postCurriculum({
+            ProgrammeType: this.programmetype,
+            ProgrammeName: this.programmename,
+            OrgCategory: this.orgCategoryName,
+            OrgCategoryId: this.orgCategoryId,
+            OrgSubCategoryId: this.orgSubCategoryId
+          }).subscribe(
             {
               next:(response:any[])=>{
               this.successmessage ="New Curriculum added successfully.";
@@ -174,7 +195,7 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
 
     getCurriculum(){
     this.dataLoadProgress=true;
-    this.service.getCurriculumList(this.checkedValue, this.orgCategory).subscribe({
+    this.service.getCurriculumList(this.checkedValue, this.orgCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.dataLoadProgress=false;

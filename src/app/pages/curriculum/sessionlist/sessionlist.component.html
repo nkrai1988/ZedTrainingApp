@@ -1,141 +1,95 @@
 <div *ngIf="successmessage">
-    <app-component-card title="Success.">
-      <div>
-        <app-alert
-          variant="success"
-          title="Success Message"
-          [message]="successmessage"
-          [showLink]="false"
-          linkHref="/"
-          linkText="Learn more"
-        />
-      </div>      
-    </app-component-card>
-  </div>
-
-  <div *ngIf="errormessage">
-    <app-component-card title="Failed.">
-      <div>
-        <app-alert
-          variant="error"
-          title="Success Message"
-          [message]="errormessage"
-          [showLink]="false"
-          linkHref="/"
-          linkText="Learn more"
-        />
-      </div>      
-    </app-component-card>
-  </div>
-
-  <app-component-card title="New Session" backUrl="/curriculum" backLabel="Back to Curriculum" >
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2" *ngIf="helperService.IsSuperAdmin()">
-    <div class="space-y-6">    
-      <div>
-      <app-label>Session Name:</app-label>
-      <div class="relative">
-        <input [(ngModel)]="sessionname"   type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-        <p *ngIf="newProgrammeclicked && (sessionname == '')" class="mt-1.5 text-xs text-error-500">Session Name is required.</p>
-        </div>
-    </div> 
-    </div>    
-    <div class="space-y-6">
-        <br/>
-        <app-button size="sm" (btnClick)="onDataSubmit()" >Add New</app-button>
-    </div>
-    </div>
-    
-  </app-component-card><br/>
-
-<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-  <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+  <app-component-card>
     <div>
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-      Session List
-      </h3>
+      <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
     </div>
+  </app-component-card>
+</div>
+
+<div *ngIf="errormessage">
+  <app-component-card>
+    <div>
+      <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
+    </div>
+  </app-component-card>
+</div>
+
+<app-component-card>
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">New Session</h3>
+    <a routerLink="/curriculum" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+      </svg>
+      Back to curriculum
+    </a>
+  </div>
+  <div *ngIf="helperService.IsSuperAdmin()">
+    <app-label>Session Name:</app-label>
+    <div class="flex items-center gap-3 mt-1.5">
+      <input
+        [(ngModel)]="sessionname"
+        type="text"
+        placeholder="Enter Session Name:"
+        class="form-control h-11 flex-1 rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+      >
+      <app-button size="md" (btnClick)="onDataSubmit()">Add New</app-button>
+    </div>
+    <p *ngIf="newProgrammeclicked && (sessionname == '')" class="mt-1.5 text-xs text-error-500">Session Name is required.</p>
+  </div>
+</app-component-card>
+
+<br/>
+
+<div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+  <div class="px-6 mb-4">
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Session List</h3>
   </div>
 
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+      <thead class="border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
-                </span>
-              </div>
-            </div>
-          </th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Session Code</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Session Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Topic Code</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Topic Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start" *ngIf="helperService.IsSuperAdmin()">Action</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S. NO.</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">SESSION CODE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">SESSION NAME</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">TOPIC CODE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">TOPIC NAME</th>
+          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
         </tr>
       </thead>
       <tbody>
         @for (row of dataRow; track $index) {
-        <tr>
-          <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                  {{ $index+1 }}
-                </span>
-              </div>
-            </div>
+        <tr class="border-t border-gray-100 dark:border-white/[0.05]">
+          <td class="px-6 py-3.5">
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index + 1 }}</span>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <a *ngIf="helperService.IsSuperAdmin()" (click)="gotoTopics(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{row.nosCode}}                  
-                </a>
-                <span *ngIf="!helperService.IsSuperAdmin()" class="text-gray-500 text-theme-sm dark:text-gray-400">
-                  {{row.nosCode }}
-                </span>
-              </div>
-            </div>
+          <td class="px-6 py-3.5">
+            <a (click)="gotoTopics(row)" class="click-link text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 cursor-pointer">
+              {{ row.nosCode }}
+            </a>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.nosName }}
-            </p>
+          <td class="px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.nosName }}</p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.pcCode }}
-            </p>
+          <td class="px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.pcCode }}</p>
           </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.pcName }}
-            </p>
+          <td class="px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.pcName }}</p>
           </td>
-          
-          
-          <td class="px-4 sm:px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
-            @if (row.nosId) {            
-            <!-- <a title="Edit" (click)="openModal(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Edit</a> -->
-              <!-- <button [title]="'Edit'" (click)="openModal(row)">              
-             <ng-content>
-               <svg fill="#000000" width="1em" height="1em" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <title>edit</title>
-                    <path class="clr-i-outline clr-i-outline-path-1" d="M33.87,8.32,28,2.42a2.07,2.07,0,0,0-2.92,0L4.27,23.2l-1.9,8.2a2.06,2.06,0,0,0,2,2.5,2.14,2.14,0,0,0,.43,0L13.09,32,33.87,11.24A2.07,2.07,0,0,0,33.87,8.32ZM12.09,30.2,4.32,31.83l1.77-7.62L21.66,8.7l6,6ZM29,13.25l-6-6,3.48-3.46,5.9,6Z"></path>
-                    <rect x="0" y="0" width="36" height="36" fill-opacity="0"/>
-                </svg>
-               </ng-content>
-              
-            </button> -->
-             <a (click)="openModal(row)" title="Edit" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Edit</a>
+          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
+            @if (row.nosId) {
+            <a
+              (click)="openModal(row)"
+              title="Edit"
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+              Edit
+            </a>
             }
           </td>
         </tr>
@@ -145,43 +99,33 @@
   </div>
 </div>
 
-<!-- Modal -->
-<app-modal
-  [isOpen]="isOpen"
-  (close)="closeModal()"
-  className="max-w-[700px] m-4"
->
-  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
-    <div class="px-2 pr-14">
-      <h4 class="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-        {{qpcode}}
-      </h4>      
+<!-- Edit Modal -->
+<app-modal [isOpen]="isOpen" (close)="closeModal()" className="max-w-[500px] m-4">
+  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[500px] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900">
+
+    <div class="px-6 pt-6 pb-5 border-b border-gray-100 dark:border-white/[0.06]">
+      <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Edit Session</h4>
+      <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ modelItem.nosCode }}</p>
     </div>
-    <form class="flex flex-col" (ngSubmit)="handleSave()">
-      <div class="custom-scrollbar h-[150px] overflow-y-auto px-2 pb-3">
-        <div>
-          <h5 class="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-            
-          </h5>
-          <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">             
-            <div>
-              <label>Session Name</label><br/>              
-                <div class="relative">
-              <input [(ngModel)]="editSessionName" name="modelpt" maxlength="60"  type="text" id="input" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-              <p *ngIf="!editSessionName" class="mt-1.5 text-xs text-error-500">Session Name is required.</p>
-              </div>
-            </div>          
-          </div>
-        </div>        
-      </div>
-      <div class="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-        <app-button
-          size="sm"          
-          (btnClick)="handleSave()"
+
+    <div class="px-6 py-5">
+      <app-label>Session Name:</app-label>
+      <div class="relative mt-1.5">
+        <input
+          [(ngModel)]="editSessionName"
+          name="editSessionName"
+          maxlength="60"
+          type="text"
+          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         >
-          Update
-        </app-button>        
+        <p *ngIf="!editSessionName" class="mt-1.5 text-xs text-error-500">Session Name is required.</p>
       </div>
-    </form>
+    </div>
+
+    <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/[0.06]">
+      <app-button size="sm" variant="outline" (btnClick)="closeModal()">Cancel</app-button>
+      <app-button size="sm" (btnClick)="handleSave()">Update</app-button>
+    </div>
+
   </div>
 </app-modal>

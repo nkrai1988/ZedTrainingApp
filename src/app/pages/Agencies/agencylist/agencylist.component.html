@@ -24,7 +24,7 @@
       <app-radio [id]="'Active'" [name]="'group1'" [value]="'Active'" [checked]="checkedValue === 'Active'"
         [label]="'Active IAs'" [disabled]="false" (valueChange)="handleRadioChange('Active')"/>
       <app-radio [id]="'Blocked'" [name]="'group1'" [value]="'Blocked'" [checked]="checkedValue === 'Blocked'"
-        [label]="'Blocked IAs'" [disabled]="false" (valueChange)="handleRadioChange('Blocked')"/>
+        [label]="'Block IAs'" [disabled]="false" (valueChange)="handleRadioChange('Blocked')"/>
     </div>
     <button (click)="exportExcel()" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-green-600 shadow-theme-xs hover:bg-gray-50 hover:text-green-700 dark:border-gray-700 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-white/[0.03] dark:hover:text-green-300">
       Export to Excel
@@ -40,18 +40,17 @@
               
               <div>
                 <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
+                 S. NO.
                 </span>
               </div>
             </div>
           </th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">Email</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">Mobile No</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">State</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">District</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">Status</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">Action</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">NAME</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">EMAIL ID</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">MOBILE NO.</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">STATE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">DISTRICT</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-4 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
         </tr>
       </thead>
       <tbody>
@@ -68,15 +67,9 @@
             </div>
           </td>
           <td class="px-4 sm:px-3 py-3.5">
-            <div class="flex items-center">
-              
-              <div>
-                <a (click)="openModal(row)" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{ row.firstName }}
-                </a>
-                
-              </div>
-            </div>
+            <a (click)="openModal(row)" class="click-link text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 cursor-pointer">
+              {{ row.organizationName || row.firstName }}
+            </a>
           </td>
           <td class="px-4 sm:px-3 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
@@ -99,28 +92,34 @@
             </p>
           </td>
           <td class="px-4 sm:px-3 py-3.5">
-            <app-badge
-              variant="light"
-              [color]="getStatusBadgeColor(row.isActive)"
-              size="sm"
-            >
-              {{ row.isActive ? 'Active':'Blocked' }}
-            </app-badge>
-          </td>
-          <td class="px-4 sm:px-3 py-3.5">
             @if (row.id) {
-            <button [title]="row.isActive ? 'Block User' : 'Un-Block User'" (click)="changeUserStatus(row)">
-              
-             <ng-content *ngIf="row.isActive">
-               <svg width="1em"  height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-x"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="18" y1="8" x2="23" y2="13"></line><line x1="23" y1="8" x2="18" y2="13"></line></svg>
-               </ng-content>
-               <ng-content *ngIf="!row.isActive">
-              <svg width="1em" height="1em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-check"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-              </ng-content>
-            </button>
-            |
-            <a title="Edit" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400" [routerLink]="['/agenciesdetail', row.email]">
-            Edit</a>
+            <div class="flex items-center gap-2">
+              <button
+                (click)="changeUserStatus(row)"
+                [title]="row.isActive ? 'Block User' : 'Unblock User'"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
+                [ngClass]="row.isActive
+                  ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
+                  : 'border-green-200 bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'">
+                <svg *ngIf="row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+                <svg *ngIf="!row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+                {{ row.isActive ? 'Block' : 'Unblock' }}
+              </button>
+              <a
+                [routerLink]="['/agenciesdetail', row.email]"
+                title="Edit"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </a>
+            </div>
             }
           </td>
         </tr>
@@ -153,13 +152,13 @@
     <!-- Header -->
     <div class="flex items-start justify-between px-6 pt-6 pb-5 border-b border-gray-100 dark:border-white/[0.06]">
       <div>
-        <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">{{ modelItem.firstName }}</h4>
-        <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ modelItem.programmeType }}</p>
-        <app-badge variant="light" [color]="getStatusBadgeColor(modelItem.isActive)" size="sm">
-        {{ modelItem.isActive ? 'Active' : 'Blocked' }}
-      </app-badge>
+        <h4 class="text-xl font-bold text-gray-800 dark:text-white/90">{{ modelItem.organizationName || modelItem.firstName }}</h4>
+        <div class="mt-2">
+          <app-badge variant="light" [color]="getStatusBadgeColor(modelItem.isActive)" size="sm">
+            {{ modelItem.isActive ? 'Active' : 'Blocked' }}
+          </app-badge>
+        </div>
       </div>
-      
     </div>
 
     <!-- Body -->
@@ -167,31 +166,31 @@
 
       <!-- Agency Information -->
       <div>
-        <h5 class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Agency Information</h5>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+        <h5 class="mb-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Agency Information</h5>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-5">
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">Street & City</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.address || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.address || '-' }}</p>
           </div>
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">District</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.districtname || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.districtname || '-' }}</p>
           </div>
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">State</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.stateName || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.stateName || '-' }}</p>
           </div>
           <div>
-            <p class="text-xs text-gray-400 dark:text-gray-500">Pin Code</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.pinCode || '—' }}</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500">Pincode</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.pinCode || '-' }}</p>
           </div>
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">PAN No</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.panNo || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.panNo || '-' }}</p>
           </div>
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">Aadhaar No</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.adhaarNo || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.adhaarNo || '-' }}</p>
           </div>
         </div>
       </div>
@@ -201,23 +200,23 @@
 
       <!-- Authorized Person -->
       <div>
-        <h5 class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Authorized Person</h5>
-        <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+        <h5 class="mb-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Authorized Person</h5>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-5">
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">Name</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.spocName || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.spocName || '-' }}</p>
           </div>
           <div>
             <p class="text-xs text-gray-400 dark:text-gray-500">Mobile No</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.phoneno || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.phoneno || '-' }}</p>
           </div>
           <div class="col-span-2">
             <p class="text-xs text-gray-400 dark:text-gray-500">Email ID</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.email || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.email || '-' }}</p>
           </div>
           <div class="col-span-2">
             <p class="text-xs text-gray-400 dark:text-gray-500">Password</p>
-            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white/90">{{ modelItem.password || '—' }}</p>
+            <p class="mt-1 text-sm font-semibold text-gray-800 dark:text-white/90">{{ modelItem.password || '-' }}</p>
           </div>
         </div>
       </div>
@@ -226,7 +225,7 @@
 
     <!-- Footer -->
     <div class="flex justify-end px-6 py-4 border-t border-gray-100 dark:border-white/[0.06]">
-      <app-button size="sm" variant="outline" (btnClick)="closeModal()">Close</app-button>
+      <app-button size="sm" (btnClick)="closeModal()">Close</app-button>
     </div>
 
   </div>

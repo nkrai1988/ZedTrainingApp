@@ -12,10 +12,13 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getProgrammeList(centerId:string, orgCategory: string = ''){
+getProgrammeList(centerId:string, orgCategory: number | null = null, orgSubCategory: number | null = null){
   let query ="?centerId="+centerId;
-  if(orgCategory){
-    query += '&orgCategory=' + encodeURIComponent(orgCategory);
+  if(orgCategory != null){
+    query += '&orgCategory=' + orgCategory;
+  }
+  if(orgSubCategory != null){
+    query += '&orgSubCategory=' + orgSubCategory;
   }
    return this.api.getSimple(APPURLs.programmelist+query);
   }
@@ -28,8 +31,11 @@ registerAssessorsToBatch(data:any){
   return this.api.postSimple(APPURLs.trainingprogrammeenroll,data);
 }
 
-  getAdminProgrammeList(orgCategory: string = ''){
-    let query = orgCategory ? '?orgCategory=' + encodeURIComponent(orgCategory) : '';
+  getAdminProgrammeList(orgCategory: number | null = null, orgSubCategory: number | null = null){
+    let params: string[] = [];
+    if (orgCategory != null) params.push('orgCategory=' + orgCategory);
+    if (orgSubCategory != null) params.push('orgSubCategory=' + orgSubCategory);
+    let query = params.length > 0 ? '?' + params.join('&') : '';
    return this.api.getSimple(APPURLs.programmenewlist + query);
   }
 
@@ -107,8 +113,8 @@ getQCApprovalList(ptype:string,status:string,agency:string){
   getCoordinatorsList(){  
    return this.api.getSimple(APPURLs.programmecoordinators);  
   }
-  getActiveAgencyList(orgCategory: string = ''){
-    let query = orgCategory ? '?orgCategory=' + encodeURIComponent(orgCategory) : '';
+  getActiveAgencyList(orgCategory: number | null = null){
+    let query = orgCategory != null ? '?orgCategory=' + orgCategory : '';
    return this.api.getSimple(APPURLs.activeagencylist + query);
   }
 

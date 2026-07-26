@@ -1,0 +1,145 @@
+<div class="p-6 md:p-8 min-h-screen flex flex-col">
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="flex-1 flex items-center justify-center">
+    <div class="flex flex-col items-center gap-3 text-gray-400 dark:text-gray-500">
+      <svg class="animate-spin w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+      </svg>
+      <span class="text-sm">Loading profile…</span>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage"
+       class="flex-1 flex items-center justify-center text-red-500 text-sm">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Profile Card -->
+  <div *ngIf="!isLoading && !errorMessage"
+       class="flex-1 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 md:p-8 space-y-8">
+
+    <!-- Card Header -->
+    <div class="flex items-center justify-between">
+      <h1 class="text-xl font-bold text-gray-900 dark:text-white">My Profile</h1>
+    </div>
+
+    <!-- Avatar + Identity -->
+    <div class="flex flex-col items-center gap-3 py-4">
+      <div class="w-24 h-24 rounded-full bg-indigo-100 dark:bg-indigo-500/20 border-2 border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center">
+        <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ initials }}</span>
+      </div>
+      <div class="text-center">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white">{{ fullName }}</h2>
+        <span class="inline-flex items-center mt-1 px-3 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-600 dark:bg-indigo-500/15 dark:text-indigo-400">
+          Participant
+        </span>
+        <p class="text-sm text-gray-400 dark:text-gray-500 mt-1.5">{{ profile.email }}</p>
+      </div>
+    </div>
+
+    <hr class="border-gray-100 dark:border-gray-800" />
+
+    <!-- Personal Information -->
+    <div>
+      <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-5">Personal Information</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ fullName || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Date of Birth</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.dateOfBirth || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Mobile Number</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.mobile || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.email || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Aadhaar Number</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.aadhaarNumber || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">PAN Number</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.panNumber || '—' }}
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Organisation Category</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.orgCategory || '—' }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <hr class="border-gray-100 dark:border-gray-800" />
+
+    <!-- Address Information -->
+    <div>
+      <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-5">Address Information</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Address</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.address || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">PIN Code</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            {{ profile.pinCode || '—' }}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Country</label>
+          <div class="px-3.5 py-2.5 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300">
+            India
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400 dark:text-gray-500">
+    <span>© 2026 Participant Module <span class="font-mono font-semibold">v2.1.0-STABLE</span></span>
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Compliance Standards</a>
+    </div>
+  </footer>
+
+</div>

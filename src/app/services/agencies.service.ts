@@ -12,8 +12,10 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getAgencyList(status:string, orgCategory:string=''){
-  let query ="?status="+status+"&orgCategory="+encodeURIComponent(orgCategory);
+getAgencyList(status:string, orgCategory: number | null = null, subCategoryId: number | null = null){
+  let query ="?status="+status;
+  if(orgCategory != null) query += "&orgCategory="+orgCategory;
+  if(subCategoryId != null) query += "&subCategoryId="+subCategoryId;
    return this.api.getSimple(APPURLs.agencylist+query);
   }
 

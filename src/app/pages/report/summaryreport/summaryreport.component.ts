@@ -69,20 +69,12 @@ export class SummaryreportComponent {
 filterForm!: FormGroup;
   dataLoadProgress=false;
   agenciesOptions:any=[];
-  programmetypeOptions:any=[];
   selectedOptionagency = '';
-  selectedOptionforprogrammetype = '';
+  selectedOptionforprogrammetype = 'ZEDTP';
   selectedStatedOptions:any=[];
   selectedStated='';
   curriculumnOption:any=[];
   curriculumnselect='All';
-
-handleProgrammetypeChange(value: string) {
-    this.selectedOptionforprogrammetype = value;
-    console.log('Selected value:', value);
-    this.loadCurriculum();
-}
-
 
 handleCuricullumnChange(value: string) {
     this.curriculumnselect = value;
@@ -266,13 +258,7 @@ handleStateChange(value: string) {
   }
 
   loadProgrammeType(){
-    this.programmetypeOptions=[];
-    var pt =this.helperService.getUserTraingProgrammeswithValue();    
-    pt.forEach((element:any) => {
-    this.programmetypeOptions.push({value:element.qpCode,label: element.qpName});
-    });
-    this.handleProgrammetypeChange(this.programmetypeOptions[0].value);
-    //Loading the programme for the very first time.
+    this.loadCurriculum();
     this.getProgrammes();
   }
 

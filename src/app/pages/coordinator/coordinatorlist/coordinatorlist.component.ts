@@ -65,17 +65,17 @@ export class CoordinatorlistComponent implements OnDestroy {
   }
     dataRow:any=[];
     successmessage='';
-    orgCategory='';
+    orgCategory: number | null = null;
     ngOnInit(){
-      if (this.helperService.IsMasterAdmin()) {
+      if (this.helperService.IsSuperAdmin()) {
         this.categorySub = this.helperService.category$.subscribe(cat => {
           this.orgCategory = cat;
           this.dataRow = [];
           this.getAgencies();
         });
       } else {
-        this.orgCategory = this.helperService.getOrgCategory() || '';
-        console.log({'this.helperService.masterOrgCategory':this.helperService.masterOrgCategory});
+        this.orgCategory = this.helperService.getOrgCategoryId();
+        console.log({'this.helperService.masterOrgCategoryId':this.helperService.masterOrgCategoryId});
         console.log({'this.orgCategory':this.orgCategory});
         this.getAgencies();
       } 

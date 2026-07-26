@@ -1,0 +1,388 @@
+<!-- ── §9A Training as Faculty ──────────────────────────────────────────────── -->
+<ng-container>
+  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+          9 (A). Details of Trainings Imparted as a Faculty <span class="text-error-500">*</span>
+        </h3>
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-2 lg:mt-0 lg:justify-end">
+        <app-button size="sm" (btnClick)="openTrainingModal()">Add Training Experience</app-button>
+      </div>
+    </div>
+    <div class="max-w-full overflow-x-auto">
+      <table class="min-w-full">
+        <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+          <tr>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">S.No</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Training Name</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Duration</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Organization</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">ZED Disciplines</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">ZED Sector</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of trainingRows; track $index) {
+            <tr class="border-t border-gray-100 dark:border-white/[0.05]">
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.trainingname }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400 whitespace-nowrap">{{ row.durationyear }}Y {{ row.durationmonth }}M {{ row.durationday }}D</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.organization }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.zeddisciplines || '—' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.sector || '—' }}</td>
+              <td class="px-4 py-3">
+                <a (click)="removeTrainingRow($index)" class="cursor-pointer text-sm text-error-500 hover:text-error-700">Remove</a>
+              </td>
+            </tr>
+          }
+          @if (trainingRows.length === 0) {
+            <tr><td colspan="7" class="px-4 py-8 text-center text-sm text-gray-400">No entries added yet.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<!-- ── §9B Assessment Experience ──────────────────────────────────────────────── -->
+<ng-container>
+  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+          9 (B). Details of Assessment Experience as an Assessor <span class="text-error-500">*</span>
+        </h3>
+        <div class="mt-2 flex items-center gap-3">
+          <label class="text-sm text-gray-600 dark:text-gray-400">No. of Assessments Done <span class="text-error-500">*</span></label>
+          <input [(ngModel)]="noOfAssessmentsDone" (ngModelChange)="emitData()" type="text" maxlength="4"
+            class="h-9 w-24 rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+        </div>
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-2 lg:mt-0 lg:justify-end">
+        <app-button size="sm" (btnClick)="openAssessmentModal()">Add Assessment Experience</app-button>
+      </div>
+    </div>
+    <div class="max-w-full overflow-x-auto">
+      <table class="min-w-full">
+        <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+          <tr>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">S.No</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Project Name</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Duration</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Organization</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Area</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">ZED Sector</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Roles</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of assessmentRows; track $index) {
+            <tr class="border-t border-gray-100 dark:border-white/[0.05]">
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.projectname }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400 whitespace-nowrap">{{ row.durationyear }}Y {{ row.durationmonth }}M {{ row.durationday }}D</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.organization }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.area || '—' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.sector || '—' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400 max-w-[140px]">{{ row.responsibilities || '—' }}</td>
+              <td class="px-4 py-3">
+                <a (click)="removeAssessmentRow($index)" class="cursor-pointer text-sm text-error-500 hover:text-error-700">Remove</a>
+              </td>
+            </tr>
+          }
+          @if (assessmentRows.length === 0) {
+            <tr><td colspan="8" class="px-4 py-8 text-center text-sm text-gray-400">No entries added yet.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<!-- ── §9C Consultancy Experience ───────────────────────────────────────────── -->
+<ng-container>
+  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+          9 (C). Details of Consultancy Experience as a Consultant <span class="text-error-500">*</span>
+        </h3>
+        <div class="mt-2 flex items-center gap-3">
+          <label class="text-sm text-gray-600 dark:text-gray-400">No. of Consultancies Given</label>
+          <input [(ngModel)]="noOfConsultanciesGiven" (ngModelChange)="emitData()" type="text" maxlength="4"
+            class="h-9 w-24 rounded-lg border border-gray-300 px-3 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+        </div>
+      </div>
+      <div class="flex items-center gap-3 px-2 mt-2 lg:mt-0 lg:justify-end">
+        <app-button size="sm" (btnClick)="openConsultancyModal()">Add Consultancy Experience</app-button>
+      </div>
+    </div>
+    <div class="max-w-full overflow-x-auto">
+      <table class="min-w-full">
+        <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+          <tr>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">S.No</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Project Name</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Duration</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Organization</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Area</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">ZED Sector</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Roles</th>
+            <th class="px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 text-start">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of consultancyRows; track $index) {
+            <tr class="border-t border-gray-100 dark:border-white/[0.05]">
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.projectname }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400 whitespace-nowrap">{{ row.durationyear }}Y {{ row.durationmonth }}M {{ row.durationday }}D</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.organization }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.area || '—' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.sector || '—' }}</td>
+              <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400 max-w-[140px]">{{ row.responsibilities || '—' }}</td>
+              <td class="px-4 py-3">
+                <a (click)="removeConsultancyRow($index)" class="cursor-pointer text-sm text-error-500 hover:text-error-700">Remove</a>
+              </td>
+            </tr>
+          }
+          @if (consultancyRows.length === 0) {
+            <tr><td colspan="8" class="px-4 py-8 text-center text-sm text-gray-400">No entries added yet.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- ── Modal: §9A Training as Faculty ────────────────────────────────────────── -->
+<app-modal [isOpen]="isTrainingOpen" (close)="closeTrainingModal()" className="max-w-[660px] m-4">
+  <div *ngIf="isTrainingOpen" class="no-scrollbar relative flex flex-col w-full max-h-[90vh] rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-8">
+    <h4 class="mb-5 flex-shrink-0 text-xl font-semibold text-gray-800 dark:text-white/90">Add Training Experience (as Faculty)</h4>
+    <form class="flex flex-col flex-1 min-h-0" [formGroup]="trainingForm" (ngSubmit)="saveTraining()">
+      <div class="custom-scrollbar flex-1 overflow-y-auto px-1 pb-3 min-h-0">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
+
+          <div class="lg:col-span-2">
+            <app-label>Training Name <span class="text-error-500">*</span></app-label>
+            <input formControlName="trainingname" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="trainingForm.get('trainingname')?.invalid && trainingForm.get('trainingname')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Organization / Employer <span class="text-error-500">*</span></app-label>
+            <input formControlName="organization" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="trainingForm.get('organization')?.invalid && trainingForm.get('organization')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Roles &amp; Responsibilities <span class="text-error-500">*</span></app-label>
+            <textarea formControlName="responsibilities" rows="2"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 focus:outline-hidden focus:ring-3"></textarea>
+            <p *ngIf="trainingForm.get('responsibilities')?.invalid && trainingForm.get('responsibilities')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div>
+            <app-label>ZED Disciplines</app-label>
+            <input formControlName="zeddisciplines" type="text" placeholder="e.g. QMS, HRM"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div>
+            <app-label>ZED Sector</app-label>
+            <input formControlName="sector" type="text" placeholder="e.g. Automotive"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div>
+            <app-label>Duration Years <span class="text-error-500">*</span></app-label>
+            <app-select [options]="yearOptions" placeholder="Year" [value]="trainingYearSelect"
+              (valueChange)="setTrainingYear($event)"></app-select>
+            <p *ngIf="trainingForm.get('durationyear')?.invalid && trainingForm.get('durationyear')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+          <div>
+            <app-label>Duration Months</app-label>
+            <app-select [options]="monthOptions" placeholder="Month" [value]="trainingMonthSelect"
+              (valueChange)="setTrainingMonth($event)"></app-select>
+          </div>
+          <div>
+            <app-label>Duration Days</app-label>
+            <app-select [options]="dayOptions" placeholder="Day" [value]="trainingDaySelect"
+              (valueChange)="setTrainingDay($event)"></app-select>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <button type="button" (click)="closeTrainingModal()"
+          class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300">Cancel</button>
+        <app-button size="sm" (btnClick)="saveTraining()">Add</app-button>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+
+<!-- ── Modal: §9B Assessment Experience ──────────────────────────────────────── -->
+<app-modal [isOpen]="isAssessmentOpen" (close)="closeAssessmentModal()" className="max-w-[660px] m-4">
+  <div *ngIf="isAssessmentOpen" class="no-scrollbar relative flex flex-col w-full max-h-[90vh] rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-8">
+    <h4 class="mb-5 flex-shrink-0 text-xl font-semibold text-gray-800 dark:text-white/90">Add Assessment Experience</h4>
+    <form class="flex flex-col flex-1 min-h-0" [formGroup]="assessmentForm" (ngSubmit)="saveAssessment()">
+      <div class="custom-scrollbar flex-1 overflow-y-auto px-1 pb-3 min-h-0">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
+
+          <div class="lg:col-span-2">
+            <app-label>Project Name <span class="text-error-500">*</span></app-label>
+            <input formControlName="projectname" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="assessmentForm.get('projectname')?.invalid && assessmentForm.get('projectname')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Organization / Employer <span class="text-error-500">*</span></app-label>
+            <input formControlName="organization" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="assessmentForm.get('organization')?.invalid && assessmentForm.get('organization')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div>
+            <app-label>Area</app-label>
+            <input formControlName="area" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div>
+            <app-label>ZED Sector</app-label>
+            <input formControlName="sector" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Roles &amp; Responsibilities</app-label>
+            <textarea formControlName="responsibilities" rows="2"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 focus:outline-hidden focus:ring-3"></textarea>
+          </div>
+
+          <div>
+            <app-label>Duration Years <span class="text-error-500">*</span></app-label>
+            <app-select [options]="yearOptions" placeholder="Year" [value]="assessmentYearSelect"
+              (valueChange)="setAssessmentYear($event)"></app-select>
+            <p *ngIf="assessmentForm.get('durationyear')?.invalid && assessmentForm.get('durationyear')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+          <div>
+            <app-label>Duration Months</app-label>
+            <app-select [options]="monthOptions" placeholder="Month" [value]="assessmentMonthSelect"
+              (valueChange)="setAssessmentMonth($event)"></app-select>
+          </div>
+          <div>
+            <app-label>Duration Days</app-label>
+            <app-select [options]="dayOptions" placeholder="Day" [value]="assessmentDaySelect"
+              (valueChange)="setAssessmentDay($event)"></app-select>
+          </div>
+
+          <div>
+            <app-label>Proof <span class="text-gray-400 font-normal">(max 2000 KB)</span></app-label>
+            <app-file-input (fileChange)="handleAssessmentProof($event)" accept=".pdf,.jpg,.jpeg,.png" className="custom-class"></app-file-input>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <button type="button" (click)="closeAssessmentModal()"
+          class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300">Cancel</button>
+        <app-button size="sm" (btnClick)="saveAssessment()">Add</app-button>
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+
+<!-- ── Modal: §9C Consultancy Experience ─────────────────────────────────────── -->
+<app-modal [isOpen]="isConsultancyOpen" (close)="closeConsultancyModal()" className="max-w-[660px] m-4">
+  <div *ngIf="isConsultancyOpen" class="no-scrollbar relative flex flex-col w-full max-h-[90vh] rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-8">
+    <h4 class="mb-5 flex-shrink-0 text-xl font-semibold text-gray-800 dark:text-white/90">Add Consultancy Experience</h4>
+    <form class="flex flex-col flex-1 min-h-0" [formGroup]="consultancyForm" (ngSubmit)="saveConsultancy()">
+      <div class="custom-scrollbar flex-1 overflow-y-auto px-1 pb-3 min-h-0">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
+
+          <div class="lg:col-span-2">
+            <app-label>Project Name <span class="text-error-500">*</span></app-label>
+            <input formControlName="projectname" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="consultancyForm.get('projectname')?.invalid && consultancyForm.get('projectname')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Organization / Employer <span class="text-error-500">*</span></app-label>
+            <input formControlName="organization" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+            <p *ngIf="consultancyForm.get('organization')?.invalid && consultancyForm.get('organization')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+
+          <div>
+            <app-label>Area</app-label>
+            <input formControlName="area" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div>
+            <app-label>ZED Sector</app-label>
+            <input formControlName="sector" type="text"
+              class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+          </div>
+
+          <div class="lg:col-span-2">
+            <app-label>Roles &amp; Responsibilities</app-label>
+            <textarea formControlName="responsibilities" rows="2"
+              class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 focus:outline-hidden focus:ring-3"></textarea>
+          </div>
+
+          <div>
+            <app-label>Duration Years <span class="text-error-500">*</span></app-label>
+            <app-select [options]="yearOptions" placeholder="Year" [value]="consultancyYearSelect"
+              (valueChange)="setConsultancyYear($event)"></app-select>
+            <p *ngIf="consultancyForm.get('durationyear')?.invalid && consultancyForm.get('durationyear')?.touched"
+               class="mt-1 text-xs text-error-500">Required.</p>
+          </div>
+          <div>
+            <app-label>Duration Months</app-label>
+            <app-select [options]="monthOptions" placeholder="Month" [value]="consultancyMonthSelect"
+              (valueChange)="setConsultancyMonth($event)"></app-select>
+          </div>
+          <div>
+            <app-label>Duration Days</app-label>
+            <app-select [options]="dayOptions" placeholder="Day" [value]="consultancyDaySelect"
+              (valueChange)="setConsultancyDay($event)"></app-select>
+          </div>
+
+          <div>
+            <app-label>Proof <span class="text-gray-400 font-normal">(max 2000 KB)</span></app-label>
+            <app-file-input (fileChange)="handleConsultancyProof($event)" accept=".pdf,.jpg,.jpeg,.png" className="custom-class"></app-file-input>
+          </div>
+
+        </div>
+      </div>
+      <div class="flex justify-end gap-3 mt-4">
+        <button type="button" (click)="closeConsultancyModal()"
+          class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300">Cancel</button>
+        <app-button size="sm" (btnClick)="saveConsultancy()">Add</app-button>
+      </div>
+    </form>
+  </div>
+</app-modal>

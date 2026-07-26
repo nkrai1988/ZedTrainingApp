@@ -58,15 +58,8 @@ export class ViewreportComponent {
 
   dataLoadProgress=false;
   agenciesOptions:any=[];
-  programmetypeOptions:any=[];
   selectedOptionagency = 'All';
-  selectedOptionforprogrammetype = '';
-
-handleProgrammetypeChange(value: string) {
-    this.selectedOptionforprogrammetype = value;
-    console.log('Selected value:', value);
-    this.getProgrammes();
-}
+  selectedOptionforprogrammetype = 'ZEDTP';
 
 handleAgencyChange(value: string) {
     this.selectedOptionagency = value;
@@ -90,12 +83,9 @@ handleAgencyChange(value: string) {
     rejectcommentbtnclick=false;
     userRole=0;
     ngOnInit(){
-      this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
-      this.loadProgrammeType();
       this.getProgrammes();
       this.loadAgencies();
       this.userRole = this.helperService.getUserRole();
-      
     }
 
     rejectProgramme(row:any,status:any){
@@ -201,14 +191,6 @@ handleAgencyChange(value: string) {
         error: (error:any) => {console.error('Error:', error)
       }
     });
-  }
-
-  loadProgrammeType(){
-    var pt =this.helperService.getUserTraingProgrammeswithValue();    
-    pt.forEach((element:any) => {
-            this.programmetypeOptions.push({value:element.qpCode,label: element.qpName});
-          });
-
   }
 
   selectedRows: string[] = [];

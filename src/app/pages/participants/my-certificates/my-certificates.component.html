@@ -1,0 +1,148 @@
+<div class="p-6 md:p-8 space-y-6 min-h-screen flex flex-col">
+
+  <!-- Page Title -->
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Certificates</h1>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">View and download your earned certificates.</p>
+  </div>
+
+  <!-- Search + Filter -->
+  <div class="flex items-center gap-3">
+    <!-- Search -->
+    <div class="relative flex-1">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M11 4.75C7.54822 4.75 4.75 7.54822 4.75 11C4.75 14.4518 7.54822 17.25 11 17.25C14.4518 17.25 17.25 14.4518 17.25 11C17.25 7.54822 14.4518 4.75 11 4.75ZM3.25 11C3.25 6.71979 6.71979 3.25 11 3.25C15.2802 3.25 18.75 6.71979 18.75 11C18.75 12.8722 18.1051 14.5955 17.0302 15.9693L20.5303 19.4697C20.8232 19.7626 20.8232 20.2374 20.5303 20.5303C20.2374 20.8232 19.7626 20.8232 19.4697 20.5303L15.9693 17.0302C14.5955 18.1051 12.8722 18.75 11 18.75C6.71979 18.75 3.25 15.2802 3.25 11Z" fill="currentColor"/>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search"
+        class="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 transition-colors"
+      />
+    </div>
+
+    <!-- Status dropdown -->
+    <div class="relative">
+      <select
+        [(ngModel)]="statusFilter"
+        class="appearance-none pl-3 pr-8 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/30 cursor-pointer transition-colors"
+      >
+        <option value="all">All</option>
+        <option value="valid">Valid</option>
+        <option value="expired">Expired</option>
+      </select>
+      <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" viewBox="0 0 20 20" fill="none">
+        <path d="M4.79 7.396L10 12.604L15.208 7.396" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
+      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Total Certificates</p>
+      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ totalCount }}</p>
+    </div>
+
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
+      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Valid</p>
+      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ validCount }}</p>
+    </div>
+
+    <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
+      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Expired</p>
+      <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ expiredCount }}</p>
+    </div>
+
+  </div>
+
+  <!-- Certificate Cards -->
+  <section class="flex-1 space-y-4">
+
+    <div *ngIf="filteredCertificates.length === 0" class="text-center py-16 text-gray-400 dark:text-gray-500 text-sm">
+      No certificates found.
+    </div>
+
+    <div
+      *ngFor="let c of filteredCertificates"
+      class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5"
+    >
+      <div class="flex items-center justify-between gap-4">
+
+        <!-- Icon + Info -->
+        <div class="flex items-center gap-4">
+          <!-- Certificate icon -->
+          <div class="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center shrink-0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M4.25 5.5C4.25 4.25736 5.25736 3.25 6.5 3.25H17.5C18.7426 3.25 19.75 4.25736 19.75 5.5V13.5C19.75 14.7426 18.7426 15.75 17.5 15.75H14.3107L14.9053 18.3295C15.0343 18.8793 14.8099 19.4512 14.3388 19.7634L12.5528 20.9106C12.2177 21.1298 11.7823 21.1298 11.4472 20.9106L9.66116 19.7634C9.19007 19.4512 8.96573 18.8793 9.09473 18.3295L9.68927 15.75H6.5C5.25736 15.75 4.25 14.7426 4.25 13.5V5.5ZM6.5 4.75C6.08579 4.75 5.75 5.08579 5.75 5.5V13.5C5.75 13.9142 6.08579 14.25 6.5 14.25H17.5C17.9142 14.25 18.25 13.9142 18.25 13.5V5.5C18.25 5.08579 17.9142 4.75 17.5 4.75H6.5ZM11.1907 15.75L10.5561 18.5138L12 19.3863L13.4439 18.5138L12.8093 15.75H11.1907Z" fill="#6366f1"/>
+            </svg>
+          </div>
+
+          <!-- Details -->
+          <div class="space-y-1">
+            <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ c.programmeName }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Certificate No. : {{ c.certificateNo }}</p>
+            <div class="flex items-center gap-4 flex-wrap">
+              <span class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                <!-- Calendar icon -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M3 9H21" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M8 2V6M16 2V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                Issued on : {{ c.issuedOn }}
+              </span>
+              <span class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M3 9H21" stroke="currentColor" stroke-width="1.6"/>
+                  <path d="M8 2V6M16 2V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                Expires on : {{ c.expiresOn }}
+              </span>
+              <span
+                *ngIf="!c.isValid"
+                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-500 border border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20"
+              >
+                Expired
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="flex items-center gap-2 shrink-0">
+          <button class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
+            <!-- Eye icon -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 4.25C7.44365 4.25 3.75 8.04365 3.75 12C3.75 15.9564 7.44365 19.75 12 19.75C16.5564 19.75 20.25 15.9564 20.25 12C20.25 8.04365 16.5564 4.25 12 4.25ZM2.25 12C2.25 7.16637 6.41637 2.75 12 2.75C17.5836 2.75 21.75 7.16637 21.75 12C21.75 16.8336 17.5836 21.25 12 21.25C6.41637 21.25 2.25 16.8336 2.25 12Z" fill="currentColor"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 9.25C10.4812 9.25 9.25 10.4812 9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25ZM7.75 12C7.75 9.65279 9.65279 7.75 12 7.75C14.3472 7.75 16.25 9.65279 16.25 12C16.25 14.3472 14.3472 16.25 12 16.25C9.65279 16.25 7.75 14.3472 7.75 12Z" fill="currentColor"/>
+            </svg>
+            View Certificate
+          </button>
+          <button class="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 transition-colors">
+            <!-- Download icon -->
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25C12.4142 2.25 12.75 2.58579 12.75 3V14.1893L15.4697 11.4697C15.7626 11.1768 16.2374 11.1768 16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L12.5303 16.5303C12.2374 16.8232 11.7626 16.8232 11.4697 16.5303L7.46967 12.5303C7.17678 12.2374 7.17678 11.7626 7.46967 11.4697C7.76256 11.1768 8.23744 11.1768 8.53033 11.4697L11.25 14.1893V3C11.25 2.58579 11.5858 2.25 12 2.25ZM3.25 15C3.66421 15 4 15.3358 4 15.75V19.5C4 19.9142 4.33579 20.25 4.75 20.25H19.25C19.6642 20.25 20 19.9142 20 19.5V15.75C20 15.3358 20.3358 15 20.75 15C21.1642 15 21.5 15.3358 21.5 15.75V19.5C21.5 20.7426 20.4926 21.75 19.25 21.75H4.75C3.50736 21.75 2.5 20.7426 2.5 19.5V15.75C2.5 15.3358 2.83579 15 3.25 15Z" fill="currentColor"/>
+            </svg>
+            Download Certificate
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="pt-4 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-400 dark:text-gray-500">
+    <span>© 2026 Participant Module <span class="font-mono font-semibold">v2.1.0-STABLE</span></span>
+    <div class="flex items-center gap-4">
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Privacy Policy</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Terms of Service</a>
+      <a href="#" class="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Compliance Standards</a>
+    </div>
+  </footer>
+
+</div>

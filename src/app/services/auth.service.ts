@@ -31,12 +31,15 @@ postChangePassword(data:any){
 }
 
 postRegisterData(body:any) {
-   // return this.http.post(APPURLs.base+APPURLs.login, body);
-   return this.api.postSimple(APPURLs.register,body)
+   return this.api.postSimpleWithHeader(APPURLs.register, body);
 }
 
 postParticipantRegister(body:any) {
    return this.api.postSimple(APPURLs.participantRegister, body);
+}
+
+postParticipantVerifyOtp(body:any) {
+   return this.api.postSimple(APPURLs.participantVerifyOtp, body);
 }
 
 postParticipantSignIn(body:any) {
