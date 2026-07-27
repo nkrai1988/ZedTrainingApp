@@ -12,9 +12,10 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getCurriculumList(status: string, orgCategory: number | null = null) {
+getCurriculumList(status: string, orgCategory: number | null = null, subCategoryId: number | null = null) {
   let query = "?status=" + status;
   if (orgCategory != null) query += "&orgCategory=" + orgCategory;
+  if (subCategoryId != null) query += "&subCategoryId=" + subCategoryId;
   return this.api.getSimple(APPURLs.curriculumlist + query);
 }
 

@@ -12,7 +12,8 @@
 
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -44,9 +45,13 @@ import { FacultyService } from '../../../services/faculty.service';
   templateUrl: './facultyallotment.component.html',
   styleUrl: './facultyallotment.component.css',
 })
-export class FacultyallotmentComponent {
+export class FacultyallotmentComponent implements OnDestroy {
+  private categorySub: Subscription = new Subscription();
+  private orgCategoryId: number | null = null;
+  private orgSubCategoryId: number | null = null;
+
   constructor(private fb: FormBuilder,private facultyservice:FacultyService,public modal: ModalService,private helperService:HelperService,private router: Router,private route:ActivatedRoute){
-      
+
     }
 
     filterForm!: FormGroup;
@@ -87,11 +92,24 @@ export class FacultyallotmentComponent {
     rejectcommentbtnclick=false;
     trainerid='';
     ngOnInit(){
-      this.route.params.subscribe(params => {      
-      if(params['id']){
-         this.trainerid = params['id'];
-        this.loadAgencies();
-      }});
+      if (this.helperService.IsCategoryAdmin()) {
+        this.orgCategoryId = this.helperService.getOrgCategoryId();
+        this.categorySub = this.helperService.subCategory$.subscribe(val => {
+          this.orgSubCategoryId = val;
+          if (this.trainerid) this.loadAgencies();
+        });
+      }
+
+      this.route.params.subscribe(params => {
+        if (params['id']) {
+          this.trainerid = params['id'];
+          this.loadAgencies();
+        }
+      });
+    }
+
+    ngOnDestroy() {
+      this.categorySub.unsubscribe();
     }
 
     handlecheckboxclick(row:any,value:any){
@@ -171,7 +189,7 @@ export class FacultyallotmentComponent {
   loadAgencies(){
     this.agenciesOptions=[];
     this.dataRow=[];
-    this.facultyservice.getAgencyAllotmentList(this.trainerid).subscribe({
+    this.facultyservice.getAgencyAllotmentList(this.trainerid, this.orgCategoryId, this.orgSubCategoryId).subscribe({
         next:(response:any)=>{          
           response.forEach((element:any) => {
             element.isChecked=(element.agency ? true:false);

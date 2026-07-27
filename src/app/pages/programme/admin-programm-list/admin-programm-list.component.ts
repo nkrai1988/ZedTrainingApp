@@ -82,8 +82,11 @@ export class AdminProgrammListComponent implements OnInit, OnDestroy {
 
 handleStateSelectChange(value: string) {
     this.selectedOptionforState = value;
-    console.log('Selected value:', value);
     this.filterForm.controls['StateName'].setValue(value)
+}
+
+handleAgencySelectChange(value: string) {
+    this.selectedOptionagency = value;
 }
 
   loadProgrammeType(){
@@ -158,7 +161,7 @@ handleStatusSelectChange(value: string) {
 
     loadAgencies(){
     this.agenciesOptions=[];
-    this.programmeservice.getActiveAgencyList(this.currentCategoryId).subscribe({
+    this.programmeservice.getActiveAgencyList(this.currentCategoryId, this.currentSubCategoryId).subscribe({
         next:(response:any)=>{
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});
@@ -175,7 +178,7 @@ handleStatusSelectChange(value: string) {
         this.getAdminProgrammes();
       }
       else{
-         this.getProgrammes();
+        this.getProgrammes();
       }
     }
 
@@ -194,6 +197,7 @@ handleStatusSelectChange(value: string) {
     this.dataRow = this.programmeList;
     this.selectedOptionforState='';
     this.selectedOptionforStatus='';
+    this.selectedOptionagency='All';
     this.datePickerdefaultDate = false;
     setTimeout(() => {
       this.datePickerdefaultDate=true;
@@ -201,38 +205,15 @@ handleStatusSelectChange(value: string) {
   }
 
   onFilterSubmit(){
-    console.log(this.filterForm.value)
-    if(this.helperService.IsSuperAdmin()){
-      this.dataLoadProgress=true;
-      this.programmeservice.getAdminProgrammeList(this.currentCategoryId, this.currentSubCategoryId).subscribe({
-        next:(response:any[])=>{
-          this.programmeList=response;
-          let tempListData= response;
-          if(this.filterForm.value.StateName){
-           tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);
-          }
-          if(this.filterForm.value.Status){
-           tempListData = tempListData.filter((p:any)=> p.status == this.filterForm.value.Status);
-          }
-          if(this.filterForm.value.StartDate &&  this.filterForm.value.EndDate){
-            tempListData = tempListData.filter((p:any)=> (p.strStartDateFilter == this.filterForm.value.StartDate && p.strEndDateFilter == this.filterForm.value.EndDate));
-          }
-          this.dataRow = tempListData;
-          this.dataLoadProgress=false;
-        },
-        error:(err:any)=>{ this.dataLoadProgress=false; }
-      });
-      return;
-    }
     let tempListData= this.programmeList;
+    if(this.selectedOptionagency && this.selectedOptionagency !== 'All'){
+      tempListData = tempListData.filter((p:any)=> String(p.centerId) == String(this.selectedOptionagency));
+    }
     if(this.filterForm.value.StateName){
      tempListData = tempListData.filter((p:any)=> p.state == this.filterForm.value.StateName);
     }
     if(this.filterForm.value.Status){
      tempListData = tempListData.filter((p:any)=> p.status == this.filterForm.value.Status);
-    }
-    if(this.filterForm.value.OrgCategory){
-     tempListData = tempListData.filter((p:any)=> p.orgCategory == this.filterForm.value.OrgCategory);
     }
     if(this.filterForm.value.StartDate &&  this.filterForm.value.EndDate){
       tempListData = tempListData.filter((p:any)=> (p.strStartDateFilter == this.filterForm.value.StartDate && p.strEndDateFilter == this.filterForm.value.EndDate));
@@ -275,7 +256,6 @@ handleStatusSelectChange(value: string) {
       Status:this.filterForm.value.Status,
       StartDate:this.filterForm.value.StartDate,
       EndDate:this.filterForm.value.EndDate,
-      Type:'Training',//this.programmetype,
       reportType:'New'
     }
 

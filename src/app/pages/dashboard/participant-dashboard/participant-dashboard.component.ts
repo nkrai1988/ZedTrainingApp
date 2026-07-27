@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ParticipantService, ApplicationStatus } from '../../../services/participant.service';
+import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 interface OngoingProgramme {
   programmeId: string;
@@ -20,7 +21,7 @@ interface OngoingProgramme {
 
 @Component({
   selector: 'app-participant-dashboard',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AppFooterComponent],
   templateUrl: './participant-dashboard.component.html',
 })
 export class ParticipantDashboardComponent implements OnInit {

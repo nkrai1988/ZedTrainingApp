@@ -1,48 +1,40 @@
 <div *ngIf="successmessage">
   <app-component-card>
-    <div>
-      <app-alert
-        variant="success"
-        title="Success"
-        [message]="successmessage"
-        [showLink]="false"
-      />
-    </div>
+    <app-alert variant="success" title="Success" [message]="successmessage" [showLink]="false" />
   </app-component-card>
 </div>
 
 <div *ngIf="errormessage">
   <app-component-card>
-    <div>
-      <app-alert
-        variant="error"
-        title="Error"
-        [message]="errormessage"
-        [showLink]="false"
-      />
-    </div>
+    <app-alert variant="error" title="Error" [message]="errormessage" [showLink]="false" />
   </app-component-card>
 </div>
 
-<app-component-card *ngIf="helperService.IsSuperAdmin()">
-  <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-    <div class="space-y-5">
-      <div>
-        <app-label>Programme Name:</app-label>
-        <div class="relative">
-          <input [(ngModel)]="programmename" type="text" class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
-          <p *ngIf="newProgrammeclicked && (programmename == '')" class="mt-1.5 text-xs text-error-500">Programme Name is required.</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3 lg:justify-end">
-        <app-button size="sm" (btnClick)="clearForm()" variant="outline">Clear</app-button>
-        <app-button size="sm" (btnClick)="onDataSubmit()">Add New</app-button>
-      </div>
+<!-- Create Form — SuperAdmin & CategoryAdmin -->
+<app-component-card *ngIf="helperService.IsCategoryAdmin()">
+  <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90 mb-6">Curriculum</h3>
+
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div>
+      <app-label>Programme Name: <span class="text-error-500">*</span></app-label>
+      <input
+        [(ngModel)]="programmename"
+        type="text"
+        placeholder="Enter programme name"
+        class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+      />
+      <p *ngIf="newProgrammeclicked && !programmename" class="mt-1.5 text-xs text-error-500">Programme Name is required.</p>
     </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-3 mt-6">
+    <app-button size="sm" variant="outline" (btnClick)="clearForm()">Clear</app-button>
+    <app-button size="sm" (btnClick)="onDataSubmit()">Create</app-button>
   </div>
 </app-component-card>
 
-<div class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+<!-- Curriculum List -->
+<div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
   <div class="flex flex-col items-start gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
     <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Curriculum</h3>
     <div class="flex flex-wrap items-center gap-4">
@@ -53,92 +45,113 @@
     </div>
   </div>
 
-  <div class="max-w-full overflow-auto flex-1 min-h-0 max-h-[600px]">
-    <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+  <div class="max-w-full overflow-x-auto">
+    <table class="min-w-full" *ngIf="!dataLoadProgress && dataRow.length">
+      <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S. NO.</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PROGRAMME TYPE</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PROGRAMME CODE</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PROGRAMME NAME</th>
-          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">SUB CATEGORY</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PRICE</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">STATUS</th>
+          <th *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()"
+              class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
         </tr>
       </thead>
       <tbody>
         @for (row of dataRow; track $index) {
         <tr class="border-t border-gray-100 dark:border-white/[0.05]">
           <td class="px-6 py-3.5">
-            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index + 1 }}</span>
+            <span class="text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</span>
           </td>
           <td class="px-6 py-3.5">
-            <a (click)="gotosession(row)" class="click-link text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 cursor-pointer">
+            <span class="text-sm text-gray-700 dark:text-gray-400">{{ getProgrammeTypeName(row.programCode) }}</span>
+          </td>
+          <td class="px-6 py-3.5">
+            <a (click)="gotosession(row)" class="text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 cursor-pointer">
               {{ row.qpCode }}
             </a>
           </td>
           <td class="px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.qpName }}</p>
+            <span class="text-sm text-gray-700 dark:text-gray-400">{{ row.qpName }}</span>
           </td>
-          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
-            @if (row.id) {
-            <button
-              (click)="changeUserStatus(row)"
-              [title]="row.isActive ? 'Block Curriculum' : 'Unblock Curriculum'"
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors"
+          <td class="px-6 py-3.5">
+            <span class="text-sm text-gray-700 dark:text-gray-400">{{ row.subCategoryName || '—' }}</span>
+          </td>
+          <td class="px-6 py-3.5">
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+              {{ row.price ? '₹' + row.price : 'Free' }}
+            </span>
+          </td>
+          <td class="px-6 py-3.5">
+            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
               [ngClass]="row.isActive
-                ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
-                : 'border-green-200 bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'">
-              <svg *ngIf="row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-              </svg>
-              <svg *ngIf="!row.isActive" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5"/>
-              </svg>
-              {{ row.isActive ? 'Block' : 'Unblock' }}
-            </button>
-            }
+                ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+                : 'bg-red-100 text-red-600 dark:bg-red-500/15 dark:text-red-400'">
+              {{ row.isActive ? 'Active' : 'Blocked' }}
+            </span>
+          </td>
+          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()">
+            <div class="flex items-center gap-2">
+              @if (row.id) {
+              <button
+                (click)="changeUserStatus(row)"
+                class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors"
+                [ngClass]="row.isActive
+                  ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
+                  : 'border-green-200 bg-green-50 text-green-600 hover:bg-green-100 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                </svg>
+                {{ row.isActive ? 'Block' : 'Unblock' }}
+              </button>
+              <button
+                (click)="openModal(row)"
+                class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors dark:border-gray-700 dark:bg-transparent dark:text-gray-400 dark:hover:bg-white/[0.05]">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+                Edit
+              </button>
+              }
+            </div>
           </td>
         </tr>
         }
       </tbody>
     </table>
-    <app-datanotfound *ngIf="(dataRow.length == 0 && dataLoadProgress == false)"></app-datanotfound>
+    <app-datanotfound *ngIf="dataRow.length === 0 && !dataLoadProgress"></app-datanotfound>
     <app-dataloadinprogress *ngIf="dataLoadProgress"></app-dataloadinprogress>
   </div>
 </div>
 
-<!-- Modal -->
-<app-modal
-  [isOpen]="isOpen"
-  (close)="closeModal()"
-  className="max-w-[500px] m-4"
->
-  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[500px] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900">
+<app-footer />
 
-    <!-- Header -->
+<!-- Edit Modal -->
+<app-modal [isOpen]="isOpen" (close)="closeModal()" className="max-w-[500px] m-4">
+  <div *ngIf="modelItem" class="no-scrollbar relative w-full max-w-[500px] overflow-y-auto rounded-2xl bg-white dark:bg-gray-900">
     <div class="px-6 pt-6 pb-5 border-b border-gray-100 dark:border-white/[0.06]">
       <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90">Edit Curriculum</h4>
       <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ modelItem.qpCode }}</p>
     </div>
-
-    <!-- Body -->
-    <div class="px-6 py-5">
-      <app-label>Programme Name:</app-label>
-      <div class="relative">
+    <div class="px-6 py-5 space-y-4">
+      <div>
+        <app-label>Programme Name: <span class="text-error-500">*</span></app-label>
         <input
           [(ngModel)]="modelItem.qpName"
           name="modelpt"
           maxlength="60"
           type="text"
-          class="form-control h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-        >
+          class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+        />
         <p *ngIf="!modelItem.qpName" class="mt-1.5 text-xs text-error-500">Programme Name is required.</p>
       </div>
     </div>
-
-    <!-- Footer -->
     <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/[0.06]">
       <app-button size="sm" variant="outline" (btnClick)="closeModal()">Cancel</app-button>
       <app-button size="sm" (btnClick)="handleSave()">Save</app-button>
     </div>
-
   </div>
 </app-modal>

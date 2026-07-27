@@ -76,6 +76,8 @@ export class ZedfacultyComponent implements OnDestroy {
   programmetypeOptions:any=[];
   selectedOptionagency = '';
   selectedOptionforprogrammetype = '';
+  private orgCategoryId: number | null = null;
+  private orgSubCategoryId: number | null = null;
     blockUser(row:any){
 
     }
@@ -119,23 +121,19 @@ handleAgencyChange(value: string) {
     programmeList:any=[];
     successmessage='';
     rejectcommentbtnclick=false;
-    orgCategory: number | null = null;
     ngOnInit(){
       this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
       this.loadProgrammeType();
-      this.loadAgencies();
-      if (this.helperService.IsSuperAdmin()) {
-        this.categorySub = this.helperService.category$.subscribe(cat => {
-          this.orgCategory = cat;
-          this.dataRow = [];
-          this.getProgrammes();
+      this.getProgrammes();
+
+      if (this.helperService.IsCategoryAdmin()) {
+        this.orgCategoryId = this.helperService.getOrgCategoryId();
+        this.categorySub = this.helperService.subCategory$.subscribe(val => {
+          this.orgSubCategoryId = val;
+          this.loadAgencies();
         });
-      } else if (this.helperService.IsCategoryAdmin()) {
-        this.orgCategory = this.helperService.getOrgCategoryId();
-        this.getProgrammes();
       } else {
-        this.orgCategory = this.helperService.getOrgCategoryId();
-        this.getProgrammes();
+        this.loadAgencies();
       }
     }
 
@@ -172,7 +170,7 @@ handleAgencyChange(value: string) {
   getProgrammes(){
     this.dataLoadProgress=true;
     this.dataRow=[];
-    this.facultyservice.getFacultyList('', this.orgCategory).subscribe({
+    this.facultyservice.getFacultyList('').subscribe({
       next:(response:any[])=>{        
         this.dataRow = response;
         this.dataLoadProgress=false;
@@ -185,9 +183,8 @@ handleAgencyChange(value: string) {
 
   loadAgencies(){
     this.agenciesOptions=[];
-    this.facultyservice.getActiveAgencyList().subscribe({
+    this.facultyservice.getActiveAgencyList(this.orgCategoryId, this.orgSubCategoryId).subscribe({
         next:(response:any)=>{
-          console.log({'response state':response});          
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});
           });

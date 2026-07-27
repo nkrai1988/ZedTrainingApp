@@ -22,6 +22,7 @@ import { SelectComponent } from '../../../shared/components/form/select/select.c
 import { HelperService } from '../../../services/helper.service';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
+import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 
 @Component({
@@ -42,8 +43,8 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
     LabelComponent,
     SelectComponent,
     DataloadinprogressComponent,
-    DatanotfoundComponent
-    
+    DatanotfoundComponent,
+    AppFooterComponent
   ],
   templateUrl: './curriculumlist.component.html',
   styleUrl: './curriculumlist.component.css',
@@ -63,6 +64,7 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
     modelItem:any;
     programmetype='ZEDTP';
     programmename='';
+    price='';
     newProgrammeclicked=false;
     orgCategoryId: number | null = null;
     orgCategoryName: string | null = null;
@@ -99,6 +101,7 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
       this.subscription.add(
         this.helperService.subCategory$.subscribe(val => {
           this.orgSubCategoryId = val;
+          this.getCurriculum();
         })
       );
     }
@@ -109,8 +112,23 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
 
     clearForm(){
       this.programmename='';
+      this.price='';
       this.programmetype='ZEDTP';
       this.newProgrammeclicked=false;
+    }
+
+    getProgrammeTypeName(code: string): string {
+      const map: Record<string, string> = {
+        'ZEDTP': 'Training Programme',
+        'ZEDAP': 'Awareness Programme',
+        'ZAP':   'Awareness Programme',
+        'ZTP':   'Training Programme',
+      };
+      if (!code) return '';
+      for (const key of Object.keys(map)) {
+        if (code.startsWith(key)) return map[key];
+      }
+      return code;
     }
 
     onDataSubmit(){
@@ -130,6 +148,7 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
           this.service.postCurriculum({
             ProgrammeType: this.programmetype,
             ProgrammeName: this.programmename,
+            Price: this.price,
             OrgCategory: this.orgCategoryName,
             OrgCategoryId: this.orgCategoryId,
             OrgSubCategoryId: this.orgSubCategoryId
@@ -195,7 +214,7 @@ export class CurriculumlistComponent implements OnInit, OnDestroy {
 
     getCurriculum(){
     this.dataLoadProgress=true;
-    this.service.getCurriculumList(this.checkedValue, this.orgCategoryId).subscribe({
+    this.service.getCurriculumList(this.checkedValue, this.orgCategoryId, this.orgSubCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.dataLoadProgress=false;

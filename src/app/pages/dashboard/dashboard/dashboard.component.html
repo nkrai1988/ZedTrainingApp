@@ -17,10 +17,22 @@
           ></app-select>
         </div>
 
-<!-- Apply Filters -->
+        <!-- Programme Type -->
+        <div class="flex-1">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Programme Type</p>
+          <app-select
+            [options]="programmeTypeOptions"
+            placeholder="All Available Programmes"
+            [value]="programmeTypeSelectedValue"
+            (valueChange)="handleProgrammeTypeChange($event)"
+            className="dark:bg-dark-900"
+          ></app-select>
+        </div>
+
+        <!-- Apply Filters -->
         <button
           (click)="applyFilters()"
-          class="flex items-center gap-2 px-5 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0">
+          class="flex items-center gap-2 px-6 h-11 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -37,12 +49,18 @@
       [dataLoadProgress]="dataLoadProgress"
       [programmeCount]="ProgrammeNumber"
       [participantCount]="ParticipantNumber"
+      [agencyCount]="AgencyNumber"
+      [certifiedExpertsCount]="CertifiedExpertsNumber"
     />
   </div>
 
   <!-- Map -->
   <div class="col-span-12" *ngIf="loadMap">
     <app-demographic-card [allLocation]="locationData"/>
+  </div>
+
+  <div class="col-span-12">
+    <app-footer />
   </div>
 
 </div>

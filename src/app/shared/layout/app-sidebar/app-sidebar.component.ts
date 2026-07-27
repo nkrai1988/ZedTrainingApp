@@ -404,7 +404,6 @@ export class AppSidebarComponent {
       sectionLabel: 'MANAGEMENT',
       subItems: [
         { name: "View Implementing Agency", path: "/agencies", roleaccess: [AppRoles.SuperAdmin] },
-        { name: "Create Implementing Agency", path: "/agenciesdetail", roleaccess: [AppRoles.SuperAdmin] },
       ],
       roleaccess: [AppRoles.SuperAdmin]
     },
@@ -438,7 +437,16 @@ export class AppSidebarComponent {
       path: "/adminprogramme",
       roleaccess: [AppRoles.CategoryAdmin]
     },
-    { icon: ICON_PERSON, name: "Trainer Management", path: "/zedfaculty", roleaccess: [AppRoles.CategoryAdmin] },
+    {
+      icon: ICON_PERSON,
+      name: "Trainers",
+      path: "/zedfaculty",
+      subItems: [
+        { name: "Trainers", path: "/zedfaculty", roleaccess: [AppRoles.CategoryAdmin] },
+        { name: "New Trainer", path: "/addfaculty", roleaccess: [AppRoles.CategoryAdmin] },
+      ],
+      roleaccess: [AppRoles.CategoryAdmin]
+    },
     { icon: ICON_CLIPBOARD, name: "Questionnaire", path: "/masterquestionnaire", roleaccess: [AppRoles.SuperAdmin] },
     { icon: ICON_DOC, name: "QC Approval", path: "/qcapproval", roleaccess: [AppRoles.SuperAdmin] },
     {
@@ -489,7 +497,6 @@ export class AppSidebarComponent {
       path: "/zedfaculty",
       subItems: [
         { name: "Trainers", path: "/zedfaculty", roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency] },
-        { name: "New Trainer", path: "/addfaculty", roleaccess: [AppRoles.SuperAdmin] },
       ],
       roleaccess: [AppRoles.SuperAdmin, AppRoles.Agency]
     },

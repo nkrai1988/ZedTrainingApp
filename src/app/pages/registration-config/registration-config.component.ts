@@ -5,6 +5,7 @@ import { AlertComponent } from '../../shared/components/ui/alert/alert.component
 import { SelectComponent } from '../../shared/components/form/select/select.component';
 import { LabelComponent } from '../../shared/components/form/label/label.component';
 import { DataloadinprogressComponent } from '../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
+import { ModalComponent } from '../../shared/components/ui/modal/modal.component';
 import { OrgCategoryService } from '../../services/org-category.service';
 import { RegistrationStepConfigService } from '../../services/registration-step-config.service';
 
@@ -16,7 +17,8 @@ import { RegistrationStepConfigService } from '../../services/registration-step-
     AlertComponent,
     SelectComponent,
     LabelComponent,
-    DataloadinprogressComponent
+    DataloadinprogressComponent,
+    ModalComponent
   ],
   templateUrl: './registration-config.component.html',
   styleUrl: './registration-config.component.css'
@@ -34,6 +36,19 @@ export class RegistrationConfigComponent implements OnInit {
   stepsLoading = false;
   successmessage = '';
   errormessage = '';
+
+  previewStep: any = null;
+  previewOpen = false;
+
+  openPreview(step: any) {
+    this.previewStep = step;
+    this.previewOpen = true;
+  }
+
+  closePreview() {
+    this.previewOpen = false;
+    this.previewStep = null;
+  }
 
   constructor(
     private orgCategoryService: OrgCategoryService,

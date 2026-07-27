@@ -16,13 +16,12 @@
   <app-component-card >
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 overflow-x-hidden">
       <!-- Row 1 -->
-      <div>
+      <div *ngIf="!helperService.IsCategoryAdmin() && !helperService.IsSuperAdmin()">
         <app-label>Type:</app-label>
         <app-select
         [options]="programmetypeOptions"
         placeholder="Select an option"
         [value]="programmetype"
-        
       ></app-select>
       </div>
       <div>
@@ -31,7 +30,7 @@
         [options]="agenciesOptions"
         placeholder="Select an option"
         [value]="selectedOptionagency"
-        
+        (valueChange)="handleAgencySelectChange($event)"
         className="dark:bg-dark-900"
       ></app-select>
       </div>

@@ -172,11 +172,12 @@ selectedOption = '';
   }
 
   loadProgrammeType(){
-       this.programmeService.getProgrammeOption().subscribe({
-        next:(response:any[])=>{  
-          this.programmetypeOptions=[];  
+    const orgCategory = this.helperService.getOrgCategoryId();
+    const subCategoryId = this.helperService.getOrgSubCategoryId();
+    this.programmeService.getProgrammeOption(orgCategory, subCategoryId).subscribe({
+        next:(response:any[])=>{
+          this.programmetypeOptions=[];
           this.programmetypeOptions=response.map(x=> ({value:x.qpCode,label:x.qpName}));
-          //this.programmetypeOptions.unshift({value:'All',label:'All'});
         }
     });
 

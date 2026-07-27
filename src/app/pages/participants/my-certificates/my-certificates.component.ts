@@ -11,9 +11,11 @@ interface Certificate {
   isValid: boolean;
 }
 
+import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
+
 @Component({
   selector: 'app-my-certificates',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppFooterComponent],
   templateUrl: './my-certificates.component.html',
 })
 export class MyCertificatesComponent {

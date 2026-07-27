@@ -9,6 +9,7 @@ import { LabelComponent } from '../../../shared/components/form/label/label.comp
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../../services/dashboard.service';
 import { HelperService } from '../../../services/helper.service';
+import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { HelperService } from '../../../services/helper.service';
     DemographicCardComponent,
     SelectComponent,
     LabelComponent,
-    CommonModule
+    CommonModule,
+    AppFooterComponent
   ],
   templateUrl: './dashboard.component.html',
 })
@@ -27,31 +29,45 @@ export class DashboardComponent {
     
   }
 
-allstates:any=[];
-locationData:any[]=[];
+allstates: any[] = [];
+locationData: any[] = [];
 
-tempuser={userId:3};
+programmeTypeOptions = [
+  { value: 'All',   label: 'All Available Programmes' },
+  { value: 'ZEDTP', label: 'ZED Training Programme' },
+  { value: 'ZEDAP', label: 'ZED Awareness Programme' },
+];
 
+ngOnInit() {
+  this.getStates();
+  this.getProgrammeCount();
+}
 
-  ngOnInit(){
-      this.getStates();
-      this.getProgrammeCount();
-  }
-  
-  stateSelectedValue = 'All';
-  selectedValue = 'ZEDTP';
-  selectedQPValue = 'All';
-  ProgrammeNumber=0;
-  ParticipantNumber=0;
-  loadMap=false;
-  dataLoadProgress=false;
-  applyFilters() {
-    this.getProgrammeCount();
-  }
+stateSelectedValue = 'All';
+programmeTypeSelectedValue = 'All';
+selectedQPValue = 'All';
+ProgrammeNumber = 0;
+ParticipantNumber = 0;
+AgencyNumber = 0;
+CertifiedExpertsNumber = 0;
+loadMap = false;
+dataLoadProgress = false;
 
-  handleStateSelectChange(value: string) {
-    this.stateSelectedValue = value;
-  }
+applyFilters() {
+  this.getProgrammeCount();
+}
+
+handleStateSelectChange(value: string) {
+  this.stateSelectedValue = value;
+}
+
+handleProgrammeTypeChange(value: string) {
+  this.programmeTypeSelectedValue = value;
+}
+
+get selectedValue(): string {
+  return this.programmeTypeSelectedValue === 'All' ? 'ZEDTP' : this.programmeTypeSelectedValue;
+}
 
   getStates(){
     this.dashboardservice.getStateData().subscribe({

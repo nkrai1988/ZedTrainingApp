@@ -87,8 +87,11 @@ getQCApprovalList(ptype:string,status:string,agency:string){
   getCoordinatorsList(){  
    return this.api.getSimple(APPURLs.programmecoordinators);  
   }
-  getActiveAgencyList(){  
-   return this.api.getSimple(APPURLs.activeagencylist);  
+  getActiveAgencyList(orgCategory: number | null = null, subCategoryId: number | null = null){
+    let query = '';
+    if (orgCategory != null) query += '?orgCategory=' + orgCategory;
+    if (subCategoryId != null) query += (query ? '&' : '?') + 'subCategoryId=' + subCategoryId;
+    return this.api.getSimple(APPURLs.activeagencylist + query);
   }
 
   getTrainerDetail(id:string){  
@@ -96,9 +99,11 @@ getQCApprovalList(ptype:string,status:string,agency:string){
    return this.api.getSimple(APPURLs.trainerdetail+query);  
   }
 
-  getAgencyAllotmentList(id:string){  
-    let query ='?id='+id;
-   return this.api.getSimple(APPURLs.trainerallotment+query);  
+  getAgencyAllotmentList(id: string, orgCategory: number | null = null, subCategoryId: number | null = null){
+    let query = '?id=' + id;
+    if (orgCategory != null) query += '&orgCategory=' + orgCategory;
+    if (subCategoryId != null) query += '&subCategoryId=' + subCategoryId;
+    return this.api.getSimple(APPURLs.trainerallotment + query);
   }
 
   getLeadTrainersList(){  

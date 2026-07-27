@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ParticipantProfile, ParticipantService } from '../../../services/participant.service';
+import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-my-profile',
-  imports: [CommonModule],
+  imports: [CommonModule, AppFooterComponent],
   templateUrl: './my-profile.component.html',
 })
 export class MyProfileComponent implements OnInit {

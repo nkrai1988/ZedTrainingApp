@@ -18,7 +18,7 @@ import { RouterModule } from '@angular/router';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
 import { HelperService } from '../../../services/helper.service';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 
 
 @Component({
@@ -68,8 +68,12 @@ export class AgencylistComponent implements OnDestroy {
 
     ngOnInit(){
       if (this.helperService.IsSuperAdmin()) {
-        this.categorySub = this.helperService.category$.subscribe(cat => {
+        this.categorySub = combineLatest([
+          this.helperService.category$,
+          this.helperService.subCategory$
+        ]).subscribe(([cat, subCat]) => {
           this.orgCategory = cat;
+          this.selectedSubCategoryId = subCat;
           this.dataRow = [];
           this.getAgencies();
         });
