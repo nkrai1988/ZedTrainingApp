@@ -57,6 +57,7 @@ import { UploadParticipantsComponent } from './pages/participants/upload-partici
 import { ParticipantSignInComponent } from './pages/auth-pages/participant-sign-in/participant-sign-in.component';
 import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-up/participant-sign-up.component';
 import { ParticipantVerifyEmailComponent } from './pages/auth-pages/participant-verify-email/participant-verify-email.component';
+import { ParticipantForgotPasswordComponent } from './pages/auth-pages/participant-forgot-password/participant-forgot-password.component';
 import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
 import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
 import { MyProgrammesComponent } from './pages/participants/my-programmes/my-programmes.component';
@@ -486,7 +487,7 @@ export const routes: Routes = [
         path: 'participantdashboard',
         component: ParticipantDashboardComponent,
         pathMatch: 'full',
-        title: 'My Training',
+        title: 'Participant Dashboard',
         canActivate: [AuthGuard]
       },
       {
@@ -560,6 +561,11 @@ export const routes: Routes = [
     path:'participant/verifyemail',
     component:ParticipantVerifyEmailComponent,
     title:'Verify Email'
+  },
+  {
+    path:'participant/forgotpassword',
+    component:ParticipantForgotPasswordComponent,
+    title:'Forgot Password'
   },
   {
     path:'registerdetail/:id',

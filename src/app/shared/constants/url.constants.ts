@@ -91,6 +91,8 @@
   participantMyProgrammes:'participant/myprogrammes',
   participantCategories:'participant/categories',
   participantGetCandidates:'participant/candidates',
+  participantForgotPassword:'participant/forgotpassword',
+  participantVerifyResetOtp:'participant/verifyresetotp',
   participantChangePassword:'participant/changepassword',
   participantProfile:'participant/profile',
   participantApplicationStatus:'participant/applicationstatus',

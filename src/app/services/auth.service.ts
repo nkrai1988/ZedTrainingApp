@@ -46,6 +46,14 @@ postParticipantSignIn(body:any) {
    return this.api.postSimple(APPURLs.participantSignin, body);
 }
 
+postParticipantForgotPassword(body:any) {
+   return this.api.postSimple(APPURLs.participantForgotPassword, body);
+}
+
+postParticipantVerifyResetOtp(body:any) {
+   return this.api.postSimple(APPURLs.participantVerifyResetOtp, body);
+}
+
 verifyParticipantEmail(token: string) {
    return this.api.getSimple(APPURLs.participantVerifyEmail + '?token=' + token);
 }

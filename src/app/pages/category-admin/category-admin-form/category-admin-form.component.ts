@@ -60,7 +60,7 @@ export class CategoryAdminFormComponent implements OnInit {
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       mobile: ['', [Validators.required, Validators.maxLength(20)]],
-      aadharNo: ['', [Validators.required, Validators.maxLength(20)]],
+      aadharNo: ['', [Validators.required, Validators.pattern('^[0-9]{12}$')]],
       orgCategoryId: [null, Validators.required],
       password: [{ value: this.generatePassword(), disabled: true }]
     });

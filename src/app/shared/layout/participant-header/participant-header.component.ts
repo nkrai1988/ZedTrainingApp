@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { SidebarService } from '../../services/sidebar.service';
 import { HelperService } from '../../../services/helper.service';
 import { OrgCategoryService } from '../../../services/org-category.service';
@@ -19,13 +20,15 @@ export class ParticipantHeaderComponent implements OnInit {
   userEmail = '';
   userInitial = '';
   categoryLogoUrl: string | null = null;
+  pageTitle = 'Participant Dashboard';
 
   private readonly apiBase = environment.apiurl.replace(/\/api$/, '');
 
   constructor(
     public sidebarService: SidebarService,
     private helper: HelperService,
-    private orgCategoryService: OrgCategoryService
+    private orgCategoryService: OrgCategoryService,
+    private router: Router
   ) {
     this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
   }
@@ -40,6 +43,21 @@ export class ParticipantHeaderComponent implements OnInit {
       this.userInitial = this.userName.charAt(0).toUpperCase() || 'P';
       this.loadCategoryLogo(user.orgCategory);
     }
+
+    this.pageTitle = this.resolveRouteTitle();
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
+      this.pageTitle = this.resolveRouteTitle();
+    });
+  }
+
+  private resolveRouteTitle(): string {
+    let state = this.router.routerState.snapshot.root;
+    let title = '';
+    while (state.firstChild) {
+      state = state.firstChild;
+      if (state.title) title = state.title;
+    }
+    return title || 'Participant Portal';
   }
 
   private loadCategoryLogo(orgCategory: string) {

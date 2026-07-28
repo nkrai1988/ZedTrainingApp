@@ -116,7 +116,7 @@
                     class="w-full h-11 px-4 py-2.5 pr-10 text-sm rounded-lg border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-white appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-400/30 focus:border-indigo-400 transition-colors"
                   >
                     <option value="" disabled selected>Select category</option>
-                    <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+                    <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.label }}</option>
                   </select>
                   <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

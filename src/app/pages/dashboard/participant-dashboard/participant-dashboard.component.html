@@ -1,9 +1,7 @@
 <div class="p-6 md:p-8 space-y-6 min-h-screen flex flex-col">
 
-  <!-- Page Title -->
-  <div class="flex items-start justify-between flex-wrap gap-3">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Participant Dashboard</h1>
-
+  <!-- Application status banner -->
+  <div class="flex items-start justify-end flex-wrap gap-3">
     <!-- Application status banner -->
     <ng-container *ngIf="!applicationStatusLoading">
       <span *ngIf="participantStatus === 'Registered' || !participantStatus"

@@ -1,7 +1,7 @@
-<header class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 xl:border-b">
+<header class="sticky top-0 flex w-full bg-white border-b border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900">
   <div class="flex items-center justify-between w-full px-4 py-3 xl:px-6 lg:py-4">
 
-    <!-- Left: hamburger + portal label -->
+    <!-- Left: hamburger + title -->
     <div class="flex items-center gap-3">
       <!-- Hamburger -->
       <button
@@ -24,12 +24,8 @@
         }
       </button>
 
-      <!-- Category logo — hidden on mobile -->
-      <div class="hidden sm:flex items-center">
-        @if (categoryLogoUrl) {
-          <img [src]="categoryLogoUrl" alt="Category Logo" class="h-8 w-auto object-contain" />
-        }
-      </div>
+      <!-- Page title -->
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ pageTitle }}</h1>
     </div>
 
     <!-- Right: user info + dropdown -->

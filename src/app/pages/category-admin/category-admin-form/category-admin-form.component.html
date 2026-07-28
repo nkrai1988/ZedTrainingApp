@@ -90,11 +90,13 @@
         <input
           formControlName="aadharNo"
           type="text"
-          placeholder="e.g. 1234-1234-XXXX"
+          placeholder="e.g. 123456789012"
           class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
-        <p *ngIf="adminForm.get('aadharNo')?.invalid && adminForm.get('aadharNo')?.touched"
+        <p *ngIf="adminForm.get('aadharNo')?.errors?.['required'] && adminForm.get('aadharNo')?.touched"
            class="mt-1.5 text-xs text-error-500">Aadhar number is required.</p>
+        <p *ngIf="adminForm.get('aadharNo')?.errors?.['pattern'] && adminForm.get('aadharNo')?.touched"
+           class="mt-1.5 text-xs text-error-500">Enter a valid 12-digit Aadhar number.</p>
       </div>
 
       <!-- Sub-Categories (multi-select dropdown) -->

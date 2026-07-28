@@ -48,7 +48,7 @@ export class ParticipantSignupFormComponent {
 
   get filteredSubCategories(): any[] {
     const selected = this.f['orgCategory'].value;
-    return this.categories.find(c => c.value === selected)?.subCategories ?? [];
+    return this.categories.find(c => c.id == selected)?.subCategories ?? [];
   }
 
   onCategoryChange() {
@@ -88,8 +88,9 @@ export class ParticipantSignupFormComponent {
     if (step2Invalid) return;
 
     this.btntext = 'Processing...';
+    const selectedCat = this.categories.find(c => c.id == this.f['orgCategory'].value);
     const payload = {
-      orgCategory:    this.f['orgCategory'].value,
+      orgCategory:    selectedCat?.value ?? this.f['orgCategory'].value,
       orgSubCategory: this.f['orgSubCategory'].value,
       firstName:      this.f['firstName'].value,
       lastName:       this.f['lastName'].value,
