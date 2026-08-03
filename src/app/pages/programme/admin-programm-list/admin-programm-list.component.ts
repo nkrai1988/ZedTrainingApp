@@ -32,6 +32,7 @@ import { HelperService } from '../../../services/helper.service';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
 import { TextAreaComponent } from '../../../shared/components/form/input/text-area.component';
+import { TimePickerComponent } from '../../../shared/components/form/time-picker/time-picker.component';
 
 @Component({
  selector: 'app-admin-programm-list',
@@ -49,7 +50,8 @@ import { TextAreaComponent } from '../../../shared/components/form/input/text-ar
     DatePickerComponent,
     DataloadinprogressComponent,
     DatanotfoundComponent,
-    TextAreaComponent
+    TextAreaComponent,
+    TimePickerComponent
   ],
    templateUrl: './admin-programm-list.component.html',
    styleUrl: './admin-programm-list.component.css',
@@ -256,7 +258,9 @@ handleStatusSelectChange(value: string) {
       Status:this.filterForm.value.Status,
       StartDate:this.filterForm.value.StartDate,
       EndDate:this.filterForm.value.EndDate,
-      reportType:'New'
+      reportType:'New',
+      OrgCategoryId:this.currentCategoryId,
+      OrgSubCategoryId:this.currentSubCategoryId,
     }
 
     console.log({'filters':filters});
@@ -536,6 +540,33 @@ return statusString;
     });
   }
 
+  // ── Create Calendar ────────────────────────────────────────────────────────
+  isCreateCalendarOpen = false;
+  createCalendarItem: any = null;
+
+  openCreateCalendarModal(row: any) {
+    this.createCalendarItem = row;
+    this.isCreateCalendarOpen = true;
+  }
+
+  closeCreateCalendarModal() {
+    this.createCalendarItem = null;
+    this.isCreateCalendarOpen = false;
+  }
+
+  confirmCreateCalendar() {
+    this.programmeservice.createCalendar(this.createCalendarItem.batchNo).subscribe({
+      next: () => {
+        const batchNo = this.createCalendarItem.batchNo;
+        this.closeCreateCalendarModal();
+        this.getProgrammesFromServer();
+        this.successmessage = 'Calendar created for programme ' + batchNo + ' successfully.';
+        setTimeout(() => { this.successmessage = ''; }, 5000);
+      },
+      error: () => { this.closeCreateCalendarModal(); }
+    });
+  }
+
   // ── Set Exam Time ──────────────────────────────────────────────────────────
   isExamTimeOpen = false;
   examTimeItem: any = null;
@@ -581,6 +612,9 @@ return statusString;
       error: () => { this.examTimeError = 'Failed to update exam time.'; }
     });
   }
+
+  onExamStartTimeChange(val: string) { this.examStartTime = val; }
+  onExamEndTimeChange(val: string) { this.examEndTime = val; }
 
   changeUserStatus(user:any){
     // let confirmText = user.isActive ? 'Block this user and prevent future access?': 'Un Block this user?'

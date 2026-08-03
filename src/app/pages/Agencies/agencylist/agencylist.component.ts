@@ -84,6 +84,10 @@ export class AgencylistComponent implements OnDestroy {
           this.dataRow = [];
           this.getAgencies();
         });
+      } else if (this.helperService.IsAgency()) {
+        this.orgCategory = this.helperService.getOrgCategoryId();
+        this.selectedSubCategoryId = this.helperService.getOrgSubCategoryId();
+        this.getAgencies();
       } else {
         this.getAgencies();
       }
@@ -113,8 +117,8 @@ export class AgencylistComponent implements OnDestroy {
   }
 
   exportExcel(){
-    
-    this.agencyservice.exportToExcel(this.checkedValue).subscribe({
+
+    this.agencyservice.exportToExcel(this.checkedValue, this.orgCategory, this.selectedSubCategoryId).subscribe({
       next:(response : any)=>{
         console.log({'response':response});
         const blob = new Blob([response.body as Blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

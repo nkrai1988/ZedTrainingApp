@@ -1,7 +1,7 @@
 
 
 import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -66,22 +66,32 @@ export class CoordinatorlistComponent implements OnDestroy {
     dataRow:any=[];
     successmessage='';
     orgCategory: number | null = null;
+    selectedSubCategoryId: number | null = null;
     ngOnInit(){
       if (this.helperService.IsSuperAdmin()) {
-        this.categorySub = this.helperService.category$.subscribe(cat => {
+        this.categorySub = combineLatest([
+          this.helperService.category$,
+          this.helperService.subCategory$
+        ]).subscribe(([cat, subCat]) => {
           this.orgCategory = cat;
+          this.selectedSubCategoryId = subCat;
           this.dataRow = [];
           this.getAgencies();
         });
-      } else {
+      } else if (this.helperService.IsCategoryAdmin()) {
         this.orgCategory = this.helperService.getOrgCategoryId();
-        console.log({'this.helperService.masterOrgCategoryId':this.helperService.masterOrgCategoryId});
-        console.log({'this.orgCategory':this.orgCategory});
+        this.categorySub = this.helperService.subCategory$.subscribe(subCat => {
+          this.selectedSubCategoryId = subCat;
+          this.dataRow = [];
+          this.getAgencies();
+        });
+      } else if (this.helperService.IsAgency()) {
+        this.orgCategory = this.helperService.getOrgCategoryId();
+        this.selectedSubCategoryId = this.helperService.getOrgSubCategoryId();
         this.getAgencies();
-      } 
-      // else {
-      //   this.getAgencies();
-      // }
+      } else {
+        this.getAgencies();
+      }
     }
 
     ngOnDestroy(){
@@ -96,7 +106,7 @@ export class CoordinatorlistComponent implements OnDestroy {
 
     getAgencies(){
       this.dataLoadProgress=true;
-    this.coordinatorservice.getAgencyList(this.checkedValue, this.orgCategory).subscribe({
+    this.coordinatorservice.getAgencyList(this.checkedValue, this.orgCategory, this.selectedSubCategoryId).subscribe({
       next:(response:any[])=>{
         this.dataRow = response;
         this.dataLoadProgress=false;
@@ -110,7 +120,7 @@ export class CoordinatorlistComponent implements OnDestroy {
 
   exportExcel(){
     
-    this.coordinatorservice.exportToExcel(this.checkedValue).subscribe({
+    this.coordinatorservice.exportToExcel(this.checkedValue, this.orgCategory, this.selectedSubCategoryId).subscribe({
       next:(response : any)=>{     
         console.log({'response':response});
         const blob = response.body as Blob;

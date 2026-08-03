@@ -9,7 +9,8 @@
 // export class CertificateslistComponent {
 
 // }
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription, combineLatest } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { BasicTableTwoComponent } from '../../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { AgencyService } from '../../../services/agencies.service';
@@ -59,10 +60,14 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './certificateslist.component.html',
   styleUrl: './certificateslist.component.css',
 })
-export class CertificateslistComponent {
+export class CertificateslistComponent implements OnInit, OnDestroy {
   constructor(private service:CertificateService,public modal: ModalService,private helperService:HelperService,private router:Router){
-      
+
     }
+
+  private currentCategoryId: number | null = null;
+  private currentSubCategoryId: number | null = null;
+  private subscription: Subscription = new Subscription();
 
     dataLoadProgress=false;
       options = [
@@ -92,10 +97,40 @@ export class CertificateslistComponent {
     selectedBatch:any;
     successmessage='';
     errormessage='';
+    generatingId: any = null;
     programmetypeOptions:any=[];
     ngOnInit(){
-     
-      this.getCertificate();
+      if (this.helperService.IsSuperAdmin()) {
+        this.subscription.add(
+          combineLatest([this.helperService.category$, this.helperService.subCategory$])
+            .subscribe(([category, subCategory]) => {
+              this.currentCategoryId = category;
+              this.currentSubCategoryId = subCategory;
+              this.getCertificate();
+            })
+        );
+      } else if (this.helperService.IsCategoryAdmin()) {
+        const stored = localStorage.getItem('user');
+        if (stored) this.currentCategoryId = JSON.parse(stored)?.orgCategoryId ?? null;
+        this.subscription.add(
+          this.helperService.subCategory$.subscribe(subCategory => {
+            this.currentSubCategoryId = subCategory;
+            this.getCertificate();
+          })
+        );
+      } else {
+        const stored = localStorage.getItem('user');
+        if (stored) {
+          const u = JSON.parse(stored);
+          this.currentCategoryId = u?.orgCategoryId ?? null;
+          this.currentSubCategoryId = u?.selectedSubCategoryId ?? null;
+        }
+        this.getCertificate();
+      }
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();
     }
 
     clearForm(){
@@ -112,7 +147,7 @@ export class CertificateslistComponent {
 
     getCertificate(){
       this.loadParticipants=true;
-    this.service.getCertificateList().subscribe({
+    this.service.getCertificateList(this.currentCategoryId, this.currentSubCategoryId).subscribe({
       next:(response:any[])=>{        
         this.dataRow = response;
         this.loadParticipants=false;
@@ -135,14 +170,34 @@ export class CertificateslistComponent {
   }
 
     getCertificateDetail(row:any){
-    this.service.getCertificateDetail(this.selectedBatch.programmeID,row.id).subscribe({
-      next:(response:any[])=>{
-        console.log({'certificatesdetail':response});
-        //let all=response.map(x=> ({value:x,label:x}));
-       // this.dataRow = response;
-       // console.log({'this.dataRow':this.dataRow});
+    this.errormessage='';
+    this.generatingId = row.id;
+    this.service.generateCertificate(this.selectedBatch.programmeID, row.id).subscribe({
+      next:(_res:any)=>{
+        this.service.downloadCertificate(this.selectedBatch.programmeID, row.id).subscribe({
+          next:(response:any)=>{
+            this.generatingId = null;
+            const blob = response.body as Blob;
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${this.selectedBatch.programmeID}_${row.id}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+          },
+          error:(_err:any)=>{
+            this.generatingId = null;
+            this.errormessage='Failed to download certificate.';
+          }
+        });
+      },
+      error:(err:any)=>{
+        this.generatingId = null;
+        this.errormessage = err?.error?.message || 'Failed to generate certificate.';
       }
-    });    
+    });
   }
 
   backToProgramme(){

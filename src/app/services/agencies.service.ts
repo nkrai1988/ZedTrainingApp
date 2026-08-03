@@ -19,10 +19,11 @@ getAgencyList(status:string, orgCategory: number | null = null, subCategoryId: n
    return this.api.getSimple(APPURLs.agencylist+query);
   }
 
-exportToExcel(activeorblocked:string){
-    let query='?isactive='+(activeorblocked =='Active' ? true:false);
-    //return this.api.getSimpleFile(APPURLs.agencyexport+query);
-    return this.api.getTestFile(APPURLs.agencynewexport+query);
+exportToExcel(activeorblocked: string, orgCategory: number | null = null, subCategoryId: number | null = null) {
+    let query = '?isactive=' + (activeorblocked == 'Active' ? true : false);
+    if (orgCategory != null) query += '&orgCategory=' + orgCategory;
+    if (subCategoryId != null) query += '&subCategoryId=' + subCategoryId;
+    return this.api.getTestFile(APPURLs.agencynewexport + query);
 }
 
   getAgencyDetail(userid:string){

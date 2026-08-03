@@ -1,0 +1,87 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center">
+    <div class="inline-block w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-3 text-gray-500 text-sm">Verifying certificate...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && error" class="bg-white rounded-2xl shadow-md max-w-sm w-full p-8 text-center">
+    <div class="text-red-500 mb-3">
+      <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      </svg>
+    </div>
+    <h2 class="text-lg font-semibold text-gray-800">Verification Failed</h2>
+    <p class="text-gray-500 text-sm mt-2">{{ error }}</p>
+  </div>
+
+  <!-- Certificate Card -->
+  <div *ngIf="!loading && cert" class="bg-white rounded-2xl shadow-md max-w-md w-full overflow-hidden">
+
+    <!-- Header banner -->
+    <div class="bg-green-700 px-6 py-4 text-white text-center">
+      <div class="flex items-center justify-center gap-2 mb-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span class="font-semibold tracking-wide text-sm uppercase">Certificate Verified</span>
+      </div>
+      <p class="text-green-100 text-xs">Training &amp; Capacity Building System – Official Verification</p>
+    </div>
+
+    <div class="p-6">
+
+      <!-- Photo + Name -->
+      <div class="text-center mb-5">
+        <img
+          *ngIf="cert.photoPath"
+          [src]="cert.photoPath"
+          class="w-24 h-24 rounded-full mx-auto object-cover border-4 border-gray-200"
+          alt="Participant Photo"
+          (error)="cert.photoPath = null"
+        />
+        <h2 class="text-xl font-bold text-gray-800 mt-3">{{ cert.participantName }}</h2>
+        <p *ngIf="cert.designation" class="text-gray-500 text-sm mt-0.5">{{ cert.designation }}</p>
+
+        <span
+          class="inline-block mt-2 px-3 py-0.5 rounded-full text-xs font-semibold"
+          [ngClass]="cert.certificateStatus === 'Active' ? 'bg-green-100 text-green-700' : (cert.certificateStatus === 'Expired' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700')"
+        >
+          {{ cert.certificateStatus || 'Valid' }}
+        </span>
+      </div>
+
+      <!-- Details -->
+      <div class="divide-y divide-gray-100 border border-gray-100 rounded-xl overflow-hidden text-sm">
+        <div class="flex justify-between px-4 py-3 bg-gray-50">
+          <span class="text-gray-500 font-medium">Certificate No</span>
+          <span class="text-gray-800 font-semibold">{{ cert.certificateNo }}</span>
+        </div>
+        <div class="flex justify-between px-4 py-3">
+          <span class="text-gray-500 font-medium">Programme</span>
+          <span class="text-gray-800 text-right max-w-[55%]">{{ cert.qpName }}</span>
+        </div>
+        <div class="flex justify-between px-4 py-3 bg-gray-50">
+          <span class="text-gray-500 font-medium">Conducted</span>
+          <span class="text-gray-800">{{ cert.startDate }} – {{ cert.endDate }}</span>
+        </div>
+        <div class="flex justify-between px-4 py-3">
+          <span class="text-gray-500 font-medium">Venue</span>
+          <span class="text-gray-800 text-right max-w-[55%]">{{ cert.venueName }}</span>
+        </div>
+        <div class="flex justify-between px-4 py-3 bg-gray-50">
+          <span class="text-gray-500 font-medium">Issued On</span>
+          <span class="text-gray-800">{{ cert.certificateIssuedOn }}</span>
+        </div>
+      </div>
+
+      <p class="text-center text-xs text-gray-400 mt-5">
+        This certificate was verified using the Training &amp; Capacity Building QR verification system.
+      </p>
+    </div>
+  </div>
+
+</div>

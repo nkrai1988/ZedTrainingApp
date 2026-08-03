@@ -108,6 +108,7 @@ export class MasterRegisterComponent implements OnInit {
 
   editMode = false;
   editingRegistrationId: number | null = null;
+  isSaving = false;
   submitting = false;
 
   applicationStatusLoading = true;
@@ -143,7 +144,6 @@ export class MasterRegisterComponent implements OnInit {
     this.selectedRole = subCategoryValue ? String(subCategoryValue) : '';
     this.registerForm.controls['role'].setValue(subCategoryValue ? String(subCategoryValue) : '');
 
-    // Pre-fill email from logged-in participant account
     const userEmail = this.helper.getUserEmail();
     if (userEmail) {
       this.registerForm.controls['Email'].setValue(userEmail);
@@ -154,21 +154,19 @@ export class MasterRegisterComponent implements OnInit {
     if (this.editMode) {
       this.loadExistingApplication();
     } else {
-      // Check if participant has already submitted an application
       this.participantService.getApplicationStatus().subscribe({
         next: (status) => {
           this.applicationStatus = status;
-          // Rejected participants can reapply — only block if Applied/Active
           const blockedStatuses = ['Applied', 'Active'];
           this.alreadyApplied = status.hasApplied && blockedStatuses.includes(status.participantStatus ?? '');
           this.applicationStatusLoading = false;
           if (!this.alreadyApplied) {
-            this.restoreDraft();
+            this.initDraft();
           }
         },
         error: () => {
           this.applicationStatusLoading = false;
-          this.restoreDraft();
+          this.initDraft();
         }
       });
     }
@@ -179,20 +177,19 @@ export class MasterRegisterComponent implements OnInit {
         this.stepsLoading = false;
       },
       error: () => {
-        // fallback: show all steps
         this.enabledSteps = [
-          { key: 'role_photo',       name: 'Role & Profile Photo',       order: 1 },
-          { key: 'id_proof',         name: 'ID Proof',                   order: 2 },
-          { key: 'nomination',       name: 'Nominated Through',          order: 3 },
-          { key: 'personal_details', name: 'Personal Details',           order: 4 },
-          { key: 'mailing_address',  name: 'Mailing Address',            order: 5 },
-          { key: 'languages',        name: 'Languages',                  order: 6 },
-          { key: 'qualifications',   name: 'Educational Qualifications', order: 7 },
-          { key: 'experience',          name: 'Work Experience',        order: 8 },
-          { key: 'industry_experience', name: 'Industry Experience',    order: 9 },
-          { key: 'technical_skills',    name: 'Technical Skills',       order: 10 },
-          { key: 'role_experience',     name: 'Role Experience',        order: 11 },
-          { key: 'declaration',         name: 'Declaration & Submit',   order: 12 },
+          { key: 'role_photo',          name: 'Role & Profile Photo',       order: 1 },
+          { key: 'id_proof',            name: 'ID Proof',                   order: 2 },
+          { key: 'nomination',          name: 'Nominated Through',          order: 3 },
+          { key: 'personal_details',    name: 'Personal Details',           order: 4 },
+          { key: 'mailing_address',     name: 'Mailing Address',            order: 5 },
+          { key: 'languages',           name: 'Languages',                  order: 6 },
+          { key: 'qualifications',      name: 'Educational Qualifications', order: 7 },
+          { key: 'experience',          name: 'Work Experience',            order: 8 },
+          { key: 'industry_experience', name: 'Industry Experience',        order: 9 },
+          { key: 'technical_skills',    name: 'Technical Skills',           order: 10 },
+          { key: 'role_experience',     name: 'Role Experience',            order: 11 },
+          { key: 'declaration',         name: 'Declaration & Submit',       order: 12 },
         ];
         this.stepsLoading = false;
       }
@@ -218,12 +215,13 @@ export class MasterRegisterComponent implements OnInit {
 
   next() {
     if (!this.validateCurrentStep()) return;
-    this.saveDraft();
-    if (!this.isLastStep) {
-      this.currentStepIndex++;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (this.isLastStep) {
+      this.finalSubmit();
     } else {
-      this.onRegisterPost();
+      this.saveCurrentStep(() => {
+        this.currentStepIndex++;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
   }
 
@@ -234,45 +232,148 @@ export class MasterRegisterComponent implements OnInit {
     }
   }
 
-  // ── Edit mode: load existing application ──────────────────────────────────
+  // ── Draft initialisation (new application flow) ────────────────────────────
 
-  private loadExistingApplication() {
-    this.participantService.getMyApplication().subscribe({
-      next: (data: any) => {
-        this.editingRegistrationId = data.id ?? null;
-        this.prefillFromApiData(data);
-        this.applicationStatusLoading = false;
+  private initDraft() {
+    this.participantService.startApplication().subscribe({
+      next: (res) => {
+        this.editingRegistrationId = res.registrationId;
+        this.loadProgressFromServer(res.lastSavedStep);
       },
       error: () => {
-        this.applicationStatusLoading = false;
-        this.restoreDraft();
+        // Fall back to localStorage draft if API unreachable
+        this.restoreDraftFromLocalStorage();
       }
     });
   }
 
-  private prefillFromApiData(data: any) {
+  private loadProgressFromServer(lastSavedStep: string | null) {
+    this.participantService.getApplicationProgress().subscribe({
+      next: (progress: any) => {
+        if (progress) {
+          this.prefillFromProgressData(progress);
+          // Resume at the step after the last saved one
+          if (lastSavedStep && this.enabledSteps.length > 0) {
+            const savedIdx = this.enabledSteps.findIndex(s => s.key === lastSavedStep);
+            if (savedIdx >= 0 && savedIdx < this.enabledSteps.length - 1) {
+              this.currentStepIndex = savedIdx + 1;
+            }
+          }
+          this.draftRestored = !!lastSavedStep;
+        }
+      },
+      error: () => {
+        this.restoreDraftFromLocalStorage();
+      }
+    });
+  }
+
+  private prefillFromProgressData(p: any) {
+    this.registerForm.patchValue({
+      profileimage:      p.profileImagePath     ?? '',
+      idproofdoctype:    p.idProofDocType        ?? '',
+      docnumber:         p.idProofDocNumber      ?? '',
+      nameondocument:    p.nameOnDocument        ?? '',
+      idproofphoto:      p.idProofImagePath      ?? '',
+      nominatedthrough:  p.nominatedThrough      ?? '',
+      accessorcbidcra:   p.accessorCbidCra       ?? '',
+      consultantorg:     p.consultantOrg         ?? '',
+      coordinatorname:   p.coordinatorName       ?? '',
+      coordinatoremail:  p.coordinatorEmail      ?? '',
+      coordinatorphone:  p.coordinatorPhone      ?? '',
+      FirstName:         p.firstName             ?? '',
+      MiddleName:        p.middleName            ?? '',
+      LastName:          p.lastName              ?? '',
+      MobileNo:          p.mobileNo              ?? '',
+      DOB:               p.dOB                   ?? '',
+      ParentName:        p.parentName            ?? '',
+      AadhaarNo:         p.aadhaarNo             ?? '',
+      Mailingaddress:    p.mailingAddress        ?? '',
+      State:             p.state                 ?? '',
+      District:          p.district              ?? '',
+      City:              p.city                  ?? '',
+      Pincode:           p.pincode               ?? '',
+      MDMobile:          p.mDMobile              ?? '',
+      Email:             p.email                 ?? this.helper.getUserEmail() ?? '',
+      PrimaryLanguage:   p.primaryLanguage       ?? '',
+      PrimaryLangOthers: p.primaryLangOthers     ?? '',
+      WritingLanguage:   p.writingLanguage        ?? '',
+      WritingLangOthers: p.writingLangOthers      ?? '',
+      summaryofskillsets: p.summaryOfSkillSets   ?? '',
+      otherinformation:   p.otherInformation     ?? '',
+    });
+
+    this.selectedNomination = p.nominatedThrough ?? '';
+    this.IdProofSeelcted    = p.idProofDocType   ?? '';
+    this.speakinglangSelect = p.primaryLanguage  ?? '';
+    this.writinglangSelect  = p.writingLanguage  ?? '';
+
+    if (p.profileImagePath) {
+      this.imagePreview = this.fileServerBase + p.profileImagePath;
+    }
+
+    if (p.state) {
+      const st = this.StateOptions.find((s: any) => s.label === p.state);
+      if (st) {
+        this.SelectedState = st.value;
+        this.helper.getDistrictByStates(this.SelectedState).subscribe({
+          next: (res: any[]) => {
+            this.districtOptions = res.map(d => ({ value: d.districtname, label: d.districtname }));
+            this.districtSelect = p.district ?? '';
+          }
+        });
+      }
+    }
+
+    this.qualificationCollection      = p.qualifications        ?? [];
+    this.experienceCollection         = p.experiences           ?? [];
+    this.industryExperienceCollection = p.industryExperiences   ?? [];
+    this.skillsCollection             = p.skills                ?? [];
+    this.roleExperienceCollection     = p.roleExperience        ?? {};
+  }
+
+  // ── Edit mode: load existing application ──────────────────────────────────
+
+  private loadExistingApplication() {
+    this.participantService.getApplicationProgress().subscribe({
+      next: (progress: any) => {
+        if (progress) {
+          this.editingRegistrationId = progress.registrationId;
+          this.prefillFromProgressData(progress);
+        }
+        this.applicationStatusLoading = false;
+      },
+      error: () => {
+        // Legacy fallback: load from old blob endpoint
+        this.participantService.getMyApplication().subscribe({
+          next: (data: any) => {
+            this.editingRegistrationId = data.id ?? null;
+            this.prefillFromLegacyBlobData(data);
+            this.applicationStatusLoading = false;
+          },
+          error: () => { this.applicationStatusLoading = false; }
+        });
+      }
+    });
+  }
+
+  private prefillFromLegacyBlobData(data: any) {
     let parsed: any = {};
     try { parsed = data.data ? JSON.parse(data.data) : {}; } catch {}
-
     const f = parsed.formData ?? {};
-
     this.registerForm.patchValue(f);
-
     this.qualificationCollection      = parsed.qualification      ?? [];
     this.experienceCollection         = parsed.experience         ?? [];
     this.industryExperienceCollection = parsed.industryExperience ?? [];
     this.skillsCollection             = parsed.skills             ?? [];
     this.roleExperienceCollection     = parsed.roleExperience     ?? {};
-
     this.selectedNomination = f.nominatedthrough ?? '';
     this.IdProofSeelcted    = f.idproofdoctype   ?? '';
     this.speakinglangSelect = f.PrimaryLanguage  ?? '';
     this.writinglangSelect  = f.WritingLanguage  ?? '';
-
     if (f.profileimage) {
       this.imagePreview = this.fileServerBase + f.profileimage;
     }
-
     if (f.State) {
       const st = this.StateOptions.find((s: any) => s.label === f.State);
       if (st) {
@@ -287,49 +388,157 @@ export class MasterRegisterComponent implements OnInit {
     }
   }
 
-  // ── Draft persistence ──────────────────────────────────────────────────────
+  // ── Per-step save ──────────────────────────────────────────────────────────
+
+  private saveCurrentStep(onSuccess: () => void) {
+    const key = this.currentStep?.key ?? '';
+    const saveCall = this.buildStepSaveCall(key);
+    if (!saveCall) {
+      onSuccess();
+      return;
+    }
+    this.isSaving = true;
+    saveCall.subscribe({
+      next: () => {
+        this.isSaving = false;
+        onSuccess();
+      },
+      error: (err: any) => {
+        this.isSaving = false;
+        this.setErrorMessage(err.error?.message ?? 'Failed to save step. Please try again.');
+      }
+    });
+  }
+
+  private buildStepSaveCall(key: string): any {
+    const f = this.registerForm.value;
+    switch (key) {
+      case 'role_photo':
+        return this.participantService.saveStepPhoto({ profileImagePath: f.profileimage });
+
+      case 'id_proof':
+        return this.participantService.saveStepIdProof({
+          idProofDocType: f.idproofdoctype,
+          idProofDocNumber: f.docnumber,
+          nameOnDocument: f.nameondocument,
+          idProofImagePath: f.idproofphoto,
+        });
+
+      case 'nomination':
+        return this.participantService.saveStepNomination({
+          nominatedThrough: f.nominatedthrough,
+          accessorCbidCra:  f.accessorcbidcra,
+          consultantOrg:    f.consultantorg,
+          coordinatorName:  f.coordinatorname,
+          coordinatorEmail: f.coordinatoremail,
+          coordinatorPhone: f.coordinatorphone,
+        });
+
+      case 'personal_details':
+        return this.participantService.saveStepPersonal({
+          firstName:  f.FirstName,
+          middleName: f.MiddleName,
+          lastName:   f.LastName,
+          mobileNo:   f.MobileNo,
+          dOB:        f.DOB,
+          parentName: f.ParentName,
+          aadhaarNo:  f.AadhaarNo,
+        });
+
+      case 'mailing_address':
+        return this.participantService.saveStepAddress({
+          mailingAddress: f.Mailingaddress,
+          state:          f.State,
+          district:       f.District,
+          city:           f.City,
+          pincode:        f.Pincode,
+          mDMobile:       f.MDMobile,
+          email:          f.Email,
+        });
+
+      case 'languages':
+        return this.participantService.saveStepLanguages({
+          primaryLanguage:   f.PrimaryLanguage,
+          primaryLangOthers: f.PrimaryLangOthers,
+          writingLanguage:   f.WritingLanguage,
+          writingLangOthers: f.WritingLangOthers,
+        });
+
+      case 'qualifications':
+        return this.participantService.saveStepQualifications({ qualifications: this.qualificationCollection });
+
+      case 'experience':
+        return this.participantService.saveStepExperience({ experiences: this.experienceCollection });
+
+      case 'industry_experience':
+        return this.participantService.saveStepIndustryExperience({ industryExperiences: this.industryExperienceCollection });
+
+      case 'technical_skills':
+        return this.participantService.saveStepSkills({ skills: this.skillsCollection });
+
+      case 'role_experience':
+        return this.participantService.saveStepRoleExperience(this.roleExperienceCollection);
+
+      case 'declaration':
+        return this.participantService.saveStepDeclaration({
+          summaryOfSkillSets: f.summaryofskillsets,
+          otherInformation:   f.otherinformation,
+        });
+
+      default:
+        return null;
+    }
+  }
+
+  // ── Final submit ───────────────────────────────────────────────────────────
+
+  private finalSubmit() {
+    // Save the last step first, then submit
+    this.saveCurrentStep(() => {
+      this.submitting = true;
+      this.participantService.submitApplication().subscribe({
+        next: () => {
+          this.submitting = false;
+          if (this.editMode) {
+            this.router.navigate(['/participant/myapplication']);
+          } else {
+            this.successmessage =
+              'We appreciate your time in filling up the application. Your application will be shortly processed. ' +
+              'Participation is based on fulfilling the Eligibility Criteria and seat availability. ' +
+              'Your registered email is ' + this.registerForm.value.Email + '.';
+          }
+        },
+        error: (err: any) => {
+          this.submitting = false;
+          this.setErrorMessage(err.error?.message ?? 'Failed to submit application. Please try again.');
+        }
+      });
+    });
+  }
+
+  cancelEdit() {
+    this.router.navigate(['/participant/myapplication']);
+  }
+
+  // ── localStorage fallback (secondary, for offline resilience) ──────────────
 
   private get draftKey(): string {
     return `master_register_draft_${this.helper.getUserEmail()}`;
   }
 
-  private saveDraft() {
-    try {
-      const draft = {
-        stepIndex: this.currentStepIndex,
-        formValues: this.registerForm.value,
-        selectedNomination: this.selectedNomination,
-        IdProofSeelcted: this.IdProofSeelcted,
-        SelectedState: this.SelectedState,
-        districtSelect: this.districtSelect,
-        speakinglangSelect: this.speakinglangSelect,
-        writinglangSelect: this.writinglangSelect,
-        qualificationCollection: this.qualificationCollection,
-        experienceCollection: this.experienceCollection,
-        industryExperienceCollection: this.industryExperienceCollection,
-        skillsCollection: this.skillsCollection,
-        roleExperienceCollection: this.roleExperienceCollection,
-        isaccepted: this.isaccepted
-      };
-      localStorage.setItem(this.draftKey, JSON.stringify(draft));
-    } catch {
-      // silently skip if localStorage quota is exceeded
-    }
-  }
-
-  private restoreDraft() {
+  private restoreDraftFromLocalStorage() {
     const raw = localStorage.getItem(this.draftKey);
-    if (!raw) return;
+    if (!raw) { this.applicationStatusLoading = false; return; }
     try {
       const d = JSON.parse(raw);
       this.registerForm.patchValue(d.formValues ?? {});
-      this.currentStepIndex     = d.stepIndex ?? 0;
-      this.selectedNomination   = d.selectedNomination ?? '';
-      this.IdProofSeelcted      = d.IdProofSeelcted ?? '';
-      this.SelectedState        = d.SelectedState ?? '';
-      this.districtSelect       = d.districtSelect ?? '';
-      this.speakinglangSelect   = d.speakinglangSelect ?? '';
-      this.writinglangSelect    = d.writinglangSelect ?? '';
+      this.currentStepIndex             = d.stepIndex ?? 0;
+      this.selectedNomination           = d.selectedNomination ?? '';
+      this.IdProofSeelcted              = d.IdProofSeelcted ?? '';
+      this.SelectedState                = d.SelectedState ?? '';
+      this.districtSelect               = d.districtSelect ?? '';
+      this.speakinglangSelect           = d.speakinglangSelect ?? '';
+      this.writinglangSelect            = d.writinglangSelect ?? '';
       this.qualificationCollection      = d.qualificationCollection      ?? [];
       this.experienceCollection         = d.experienceCollection         ?? [];
       this.industryExperienceCollection = d.industryExperienceCollection ?? [];
@@ -349,6 +558,7 @@ export class MasterRegisterComponent implements OnInit {
     } catch {
       localStorage.removeItem(this.draftKey);
     }
+    this.applicationStatusLoading = false;
   }
 
   clearDraft() {
@@ -356,13 +566,13 @@ export class MasterRegisterComponent implements OnInit {
     this.draftRestored = false;
   }
 
+  // ── Validation ─────────────────────────────────────────────────────────────
+
   validateCurrentStep(): boolean {
     const key = this.currentStep?.key ?? '';
     const controls = STEP_CONTROLS[key] ?? [];
 
-    controls.forEach(name => {
-      this.registerForm.get(name)?.markAsTouched();
-    });
+    controls.forEach(name => this.registerForm.get(name)?.markAsTouched());
 
     const invalid = controls.some(name => this.registerForm.get(name)?.invalid);
     if (invalid) {
@@ -555,78 +765,15 @@ export class MasterRegisterComponent implements OnInit {
   }
 
   validateDisciplines(): boolean {
-    if (this.skillsCollection.length < 3) {
-      this.setErrorMessage('Please select at least 3 disciplines.');
+    const hasA = this.skillsCollection.some((s: any) => s.disciplinegroup === 'A');
+    const hasB = this.skillsCollection.some((s: any) => s.disciplinegroup === 'B');
+    const hasC = this.skillsCollection.some((s: any) => s.disciplinegroup === 'C');
+    const missing = [!hasA && 'A', !hasB && 'B', !hasC && 'C'].filter(Boolean).join(', ');
+    if (missing) {
+      this.setErrorMessage(`Please add at least one discipline from each category. Missing: Category ${missing}.`);
       return false;
     }
     return true;
-  }
-
-  // ── Submit ─────────────────────────────────────────────────────────────────
-
-  onRegisterPost() {
-    this.submitting = true;
-    const allData = this.buildPayload();
-    this.authservice.postRegisterData(allData).subscribe({
-      next: () => {
-        this.submitting = false;
-        this.clearDraft();
-        if (this.editMode) {
-          this.router.navigate(['/participant/myapplication']);
-        } else {
-          this.successmessage =
-            'We appreciate your time in filling up the application. Your application will be shortly processed. ' +
-            'Participation is based on fulfilling the Eligibility Criteria and seat availability. ' +
-            'Your registered email is ' + this.registerForm.value.Email + '.';
-        }
-      },
-      error: (err: any) => {
-        this.submitting = false;
-        this.setErrorMessage(err.error?.message ?? err.error ?? 'Failed to save registration data.');
-      }
-    });
-  }
-
-  cancelEdit() {
-    this.router.navigate(['/participant/myapplication']);
-  }
-
-  buildPayload(): any {
-    const f = this.registerForm.value;
-    return {
-      OldId:                  this.editingRegistrationId,
-      AadhaarNo:              f.AadhaarNo,
-      IdProofDocType:         f.idproofdoctype,
-      IdProofDocNumber:       f.docnumber,
-      Agency:                 '64',
-      ApplyingFor:            f.role != null ? String(f.role) : '',
-      AreaOfKnowledgeOrExpertise: this.experienceCollection.map((d: any) => d.knowledge).join(', '),
-      CBIBCRAName:            f.accessorcbidcra,
-      City:                   f.City,
-      ContactNumber:          f.MDMobile,
-      CoordinatorEmail:       f.coordinatoremail,
-      CoordinatorName:        f.coordinatorname,
-      CoordinatorPhone:       f.coordinatorphone,
-      DOB:                    f.DOB,
-      District:               f.District,
-      Email:                  f.Email,
-      Name:                   [f.FirstName, f.LastName].filter(Boolean).join(' '),
-      NominatedThrough:       f.nominatedthrough,
-      SpokenLanguagePrimary:  f.PrimaryLanguage,
-      State:                  f.State,
-      SummaryOfSkillSets:     f.summaryofskillsets,
-      OtherInformation:       f.otherinformation,
-      WrittenLanguagePrimary: f.WritingLanguage,
-      ZedDisciplines:         this.skillsCollection.map((d: any) => d.discipline).join(', '),
-      data: JSON.stringify({
-        formData:                 f,
-        skills:                   this.skillsCollection,
-        experience:               this.experienceCollection,
-        industryExperience:       this.industryExperienceCollection,
-        roleExperience:           this.roleExperienceCollection,
-        qualification:            this.qualificationCollection,
-      }),
-    };
   }
 
   setErrorMessage(message: string) {

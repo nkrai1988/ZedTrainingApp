@@ -24,7 +24,7 @@
       Back to curriculum
     </a>
   </div>
-  <div *ngIf="helperService.IsSuperAdmin()">
+  <div *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()">
     <app-label>Session Name:</app-label>
     <div class="flex items-center gap-3 mt-1.5">
       <input
@@ -55,7 +55,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">SESSION NAME</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">TOPIC CODE</th>
           <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">TOPIC NAME</th>
-          <th *ngIf="helperService.IsSuperAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
+          <th *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()" class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">ACTION</th>
         </tr>
       </thead>
       <tbody>
@@ -78,7 +78,7 @@
           <td class="px-6 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.pcName }}</p>
           </td>
-          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin()">
+          <td class="px-6 py-3.5" *ngIf="helperService.IsSuperAdmin() || helperService.IsCategoryAdmin()">
             @if (row.nosId) {
             <a
               (click)="openModal(row)"

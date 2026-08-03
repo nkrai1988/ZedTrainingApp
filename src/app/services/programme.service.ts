@@ -46,17 +46,21 @@ registerAssessorsToBatch(data:any){
 
 
   
-getQCApprovalList(ptype:string,status:string,agency:string){
+getQCApprovalList(ptype:string,status:string,agency:string,orgCategoryId?:number|null,orgSubCategoryId?:number|null){
   let query ='?status='+status;
   if(ptype){
       query = query+'&ptype='+ptype;
   }
-
   if(agency){
       query = query+'&agency='+agency;
   }
-
-   return this.api.getSimple(APPURLs.qcapprovallist+query);  
+  if(orgCategoryId != null){
+      query = query+'&orgCategoryId='+orgCategoryId;
+  }
+  if(orgSubCategoryId != null){
+      query = query+'&orgSubCategoryId='+orgSubCategoryId;
+  }
+   return this.api.getSimple(APPURLs.qcapprovallist+query);
   }
 
   updateProgrammeStatus(id:any,status:any){
@@ -78,12 +82,12 @@ getQCApprovalList(ptype:string,status:string,agency:string){
     return this.api.getExceltFileWithFilterPost(APPURLs.programmeexport,filters);
 }
 
-  exportToExcelViewReport(ptype:string,agency:string){  
-      let query ='?ptype='+ptype;
-      if(agency){
-        query  =query+"&agency="+agency;
-      }
-    return this.api.getTestFile(APPURLs.vewreportexport+query);
+  exportToExcelViewReport(ptype: string, agency: string, orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+    let query = '?ptype=' + ptype;
+    if (agency) query += '&agency=' + agency;
+    if (orgCategoryId != null) query += '&orgCategoryId=' + orgCategoryId;
+    if (orgSubCategoryId != null) query += '&orgSubCategoryId=' + orgSubCategoryId;
+    return this.api.getTestFile(APPURLs.vewreportexport + query);
 }
 
   approveProgramme(id:string){
@@ -103,6 +107,10 @@ getQCApprovalList(ptype:string,status:string,agency:string){
 
   postponeProgramme(batchNo: string, comments: string) {
     return this.api.putSimple(APPURLs.programmePostpone + '?batchNo=' + encodeURIComponent(batchNo) + '&comments=' + encodeURIComponent(comments), {});
+  }
+
+  createCalendar(batchNo: string) {
+    return this.api.putSimple(APPURLs.programmeCreateCalendar + '?batchNo=' + encodeURIComponent(batchNo), {});
   }
 
   qcRejectProgramme(batchId:any, comment:any){
@@ -138,18 +146,14 @@ getProgrammeOption(orgCategory: number | null = null, subCategoryId: number | nu
     return this.api.getSimple(APPURLs.programmeprogrammes + query);
   }
 
-getViewReportList(ptype:string,agency:string){
-  let query ='';//'?status='+status;
-  if(ptype){
-      query = query+'?ptype='+ptype;
-  }
-
-  if(agency){
-      query =(query) ? query+'&agency='+agency : query+'?agency='+agency;
-  }
-
-   return this.api.getSimple(APPURLs.viewReportlist+query);
-  }
+getViewReportList(ptype: string, agency: string, orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+  let query = '';
+  if (ptype) query = '?ptype=' + ptype;
+  if (agency) query = (query) ? query + '&agency=' + agency : '?agency=' + agency;
+  if (orgCategoryId != null) query += (query ? '&' : '?') + 'orgCategoryId=' + orgCategoryId;
+  if (orgSubCategoryId != null) query += (query ? '&' : '?') + 'orgSubCategoryId=' + orgSubCategoryId;
+  return this.api.getSimple(APPURLs.viewReportlist + query);
+}
 
   downloadBatchPdf(batchNo: string) {
     return this.api.getTestFile(`BatchDetail/pdftest?id=${batchNo}`);

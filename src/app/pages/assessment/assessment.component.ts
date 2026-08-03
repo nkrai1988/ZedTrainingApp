@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {
   AssessmentService,
   AssessmentQuestion,
   AssessmentResponse
 } from '../../services/assessment.service';
+import { HelperService } from '../../services/helper.service';
 
 interface QuestionItem {
   sectionCode: string;
@@ -83,15 +85,28 @@ export class AssessmentComponent implements OnInit, OnDestroy {
     return this.pagedQuestions.every(q => q.answerCode || q.answerText);
   }
 
-  constructor(private fb: FormBuilder, private assessmentService: AssessmentService) {
+  constructor(
+    private fb: FormBuilder,
+    private assessmentService: AssessmentService,
+    private route: ActivatedRoute,
+    private helperService: HelperService
+  ) {
     this.verifyForm = this.fb.group({
       emailId: ['', [Validators.required, Validators.email]],
-      aadhaarNo: ['', Validators.required],
+      aadhaarNo: [''],
       batchNo: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const user    = this.helperService.getUser();
+    const batchNo = this.route.snapshot.queryParamMap.get('batchNo') ?? '';
+
+    if (user?.email && batchNo) {
+      this.verifyForm.patchValue({ emailId: user.email, batchNo });
+      this.checkStatus();
+    }
+  }
 
   ngOnDestroy(): void {
     this.stopCamera();
@@ -107,42 +122,42 @@ export class AssessmentComponent implements OnInit, OnDestroy {
     this.assessmentService.checkExamStatus(this.verifyForm.value).subscribe({
       next: (res: any) => {
         this.loading = false;
-        const statusRow = res?.Table?.[0];
-        if (!statusRow || statusRow.ErrorStatus === 0) {
-          this.errorMessage = statusRow?.ErrorMessage || 'Verification failed.';
+        const statusRow = res?.table?.[0];
+        if (!statusRow || statusRow.errorStatus === 0) {
+          this.errorMessage = statusRow?.errorMessage || 'Verification failed.';
           return;
         }
 
-        const candidate = res?.Table5?.[0];
-        const programme = res?.Table4?.[0];
+        const candidate = res?.table5?.[0];
+        const programme = res?.table4?.[0];
 
         if (candidate) {
-          this.candidateId = Number(candidate.CandidateId ?? candidate.Id ?? 0);
-          this.candidateName = [candidate.FirstName, candidate.LastName].filter(Boolean).join(' ');
-          this.candidateEmail = candidate.EmailId ?? candidate.Email ?? '';
-          this.candidateMobile = candidate.MobileNo ?? candidate.Mobile ?? candidate.PhoneNo ?? '';
+          this.candidateId = Number(candidate.candidateId ?? candidate.id ?? 0);
+          this.candidateName = [candidate.firstName, candidate.lastName].filter(Boolean).join(' ');
+          this.candidateEmail = candidate.emailId ?? candidate.email ?? '';
+          this.candidateMobile = candidate.mobileNo ?? candidate.mobile ?? candidate.phoneNo ?? '';
           this.batchNo = this.verifyForm.value.batchNo;
         }
 
         if (programme) {
-          this.programmeId = programme.BatchNo ?? '';
-          this.programmeName = programme.QpName ?? '';
-          this.venue = programme.VenueName ?? '';
-          this.programLink = programme.WebLink ?? '';
+          this.programmeId = programme.batchNo ?? '';
+          this.programmeName = programme.qpName ?? '';
+          this.venue = programme.venueName ?? '';
+          this.programLink = programme.webLink ?? '';
         }
 
-        const rawQuestions: any[] = res?.Table2 ?? [];
-        const rawOptions: any[] = res?.Table3 ?? [];
+        const rawQuestions: any[] = res?.table2 ?? [];
+        const rawOptions: any[] = res?.table3 ?? [];
 
         this.questions = rawQuestions.map((q: any) => ({
-          sectionCode: q.SectionCode,
-          sectionName: q.SectionName,
-          questionCode: q.QuestionCode,
-          questionName: q.QuestionText,
+          sectionCode: q.sectionCode,
+          sectionName: q.sectionName,
+          questionCode: q.questionCode,
+          questionName: q.questionText,
           answerType: 'radio',
           options: rawOptions
-            .filter((o: any) => o.SectionCode === q.SectionCode && o.QuestionCode === q.QuestionCode)
-            .map((o: any) => ({ optionCode: o.OptionCode, optionName: o.OptionName }))
+            .filter((o: any) => o.sectionCode === q.sectionCode && o.questionCode === q.questionCode)
+            .map((o: any) => ({ optionCode: o.optionCode, optionName: o.optionName }))
         }));
 
         this.step = 2;

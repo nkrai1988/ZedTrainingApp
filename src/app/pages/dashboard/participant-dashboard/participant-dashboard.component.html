@@ -98,20 +98,46 @@
   <!-- Ongoing Training Programs -->
   <section class="flex-1">
     <h2 class="text-base font-semibold text-gray-800 dark:text-white mb-1">Ongoing Training Programs</h2>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Browse and apply for available training programmes</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Browse and enroll in available training programmes matching your category</p>
+
+    <!-- Enrollment blocked: application pending approval -->
+    <div *ngIf="!applicationStatusLoading && participantStatus !== 'Active'"
+      class="flex items-start gap-3 px-4 py-4 rounded-xl border border-blue-200 bg-blue-50 dark:border-blue-500/20 dark:bg-blue-500/10 mb-4">
+      <svg class="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/>
+      </svg>
+      <div>
+        <p class="text-sm font-semibold text-blue-800 dark:text-blue-300">Enrollment Not Available</p>
+        <p class="text-sm text-blue-700 dark:text-blue-400 mt-0.5">Your application is under review. Enrollment will be available once your application is approved by the administrator.</p>
+      </div>
+    </div>
+
+    <!-- Enroll feedback toast -->
+    <div *ngIf="enrollFeedback"
+      [class]="enrollFeedback.success
+        ? 'mb-4 flex items-center gap-2 px-4 py-3 rounded-lg border border-green-300 bg-green-50 text-green-700 text-sm dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-400'
+        : 'mb-4 flex items-center gap-2 px-4 py-3 rounded-lg border border-red-300 bg-red-50 text-red-600 text-sm dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400'">
+      <svg *ngIf="enrollFeedback.success" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM16.0303 9.46967C16.3232 9.76256 16.3232 10.2374 16.0303 10.5303L11.0303 15.5303C10.7374 15.8232 10.2626 15.8232 9.96967 15.5303L7.96967 13.5303C7.67678 13.2374 7.67678 12.7626 7.96967 12.4697C8.26256 12.1768 8.73744 12.1768 9.03033 12.4697L10.5 13.9393L14.9697 9.46967C15.2626 9.17678 15.7374 9.17678 16.0303 9.46967Z" fill="currentColor"/>
+      </svg>
+      <svg *ngIf="!enrollFeedback.success" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/>
+      </svg>
+      {{ enrollFeedback.message }}
+    </div>
 
     <!-- Loading -->
-    <div *ngIf="programmesLoading" class="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500 text-sm">
+    <div *ngIf="programmesLoading && participantStatus === 'Active'" class="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500 text-sm">
       Loading programmes...
     </div>
 
     <!-- No data -->
-    <div *ngIf="!programmesLoading && programmes.length === 0"
+    <div *ngIf="!programmesLoading && participantStatus === 'Active' && programmes.length === 0"
       class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 flex items-center justify-center py-12 text-gray-400 dark:text-gray-500 text-sm">
       No ongoing training programmes found for your category.
     </div>
 
-    <div *ngIf="!programmesLoading && programmes.length > 0" class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
+    <div *ngIf="!programmesLoading && participantStatus === 'Active' && programmes.length > 0" class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
@@ -162,19 +188,34 @@
 
               <!-- Action -->
               <td class="px-4 py-3.5">
+                <!-- Registration closed -->
                 <span *ngIf="p.actionType === 'closed'"
                   class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-500 border border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 whitespace-nowrap">
                   Registration Closed
                 </span>
-                <button *ngIf="p.actionType === 'register' && !hasApplied"
-                  (click)="goToRegister()"
-                  class="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors whitespace-nowrap">
-                  Register Now
-                </button>
-                <span *ngIf="p.actionType === 'register' && hasApplied"
-                  class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap">
-                  Applied
+
+                <!-- Already enrolled -->
+                <span *ngIf="p.actionType === 'register' && isEnrolled(p.programmeId)"
+                  class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-600 border border-green-200 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20 whitespace-nowrap">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.0303 9.46967C16.3232 9.76256 16.3232 10.2374 16.0303 10.5303L11.0303 15.5303C10.7374 15.8232 10.2626 15.8232 9.96967 15.5303L7.96967 13.5303C7.67678 13.2374 7.67678 12.7626 7.96967 12.4697C8.26256 12.1768 8.73744 12.1768 9.03033 12.4697L10.5 13.9393L14.9697 9.46967C15.2626 9.17678 15.7374 9.17678 16.0303 9.46967Z" fill="currentColor"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12Z" fill="currentColor"/>
+                  </svg>
+                  Enrolled
                 </span>
+
+                <!-- Enroll button -->
+                <button *ngIf="p.actionType === 'register' && !isEnrolled(p.programmeId)"
+                  (click)="enroll(p)"
+                  [disabled]="enrollingBatchNo !== null"
+                  class="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed">
+                  <!-- Spinner for this row -->
+                  <svg *ngIf="enrollingBatchNo === p.programmeId" class="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                  {{ enrollingBatchNo === p.programmeId ? 'Enrolling...' : 'Enroll Now' }}
+                </button>
               </td>
 
             </tr>
@@ -184,6 +225,5 @@
     </div>
   </section>
 
-  <app-footer moduleLabel="Participant Module" />
 
 </div>

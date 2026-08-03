@@ -185,7 +185,7 @@
                 class="click-link inline-flex items-center gap-1 rounded-full bg-warning-50 px-2.5 py-1 text-xs font-medium text-warning-700 hover:bg-warning-100 cursor-pointer whitespace-nowrap">
                 Close Registrations
               </a>
-              <a *ngIf="row.showExamTime == 1 && helperService.IsSuperAdmin()"
+              <a *ngIf="row.status === '1' && row.isRegistrationsClosed && row.showExamTime == 1 && helperService.IsCategoryAdmin()"
                 (click)="openExamTimeModal(row)"
                 class="click-link inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 cursor-pointer whitespace-nowrap">
                 Set Exam Time
@@ -219,16 +219,23 @@
                 Reject
               </a>
             </div>
+            <!-- <div *ngIf="row.status == '1'">
+              <a (click)="openCreateCalendarModal(row)" title="Create Calendar"
+                class="click-link inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 cursor-pointer whitespace-nowrap">
+                Create Calendar
+              </a>
+            </div> -->
           </td>
 
           <!-- col 13 -->
           <td class="px-3 py-2.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              <ng-container *ngIf="row.status == '1' || row.status == '6'">Permission Accepted</ng-container>
-              <ng-container *ngIf="row.status == '2' || row.status == '3'">Conducted</ng-container>
+              <ng-container *ngIf="row.status == '1'">Permission Accepted</ng-container>
+              <ng-container *ngIf="row.status == '6'">Submitted for QC</ng-container>
+              <ng-container *ngIf="row.status == '3'">QC Approved</ng-container>
               <ng-container *ngIf="row.status == '11' || row.status == '12'">Calendar Created</ng-container>
             </p>
-            <a *ngIf="row.status == '1' || row.status == '6' || row.status == '11' || row.status == '12'"
+            <a *ngIf="row.status == '1' || row.status == '3' || row.status == '11' || row.status == '12'"
               (click)="openPostponeModal(row)"
               class="click-link mt-1 inline-flex items-center gap-1 rounded-full bg-warning-50 px-2.5 py-1 text-xs font-medium text-warning-700 hover:bg-warning-100 cursor-pointer whitespace-nowrap">
               Postpone
@@ -350,6 +357,31 @@
   </div>
 </app-modal>
 
+<!-- Create Calendar Modal -->
+<app-modal
+  [isOpen]="isCreateCalendarOpen"
+  (close)="closeCreateCalendarModal()"
+  className="max-w-[480px] m-4"
+>
+  <div *ngIf="createCalendarItem" class="p-6 sm:p-8">
+    <h4 class="mb-1 text-xl font-semibold text-gray-800 dark:text-white/90">
+      Create Calendar
+    </h4>
+    <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      Are you sure you want to create a calendar for batch <strong>{{ createCalendarItem.batchNo }}</strong>?
+      This will move the programme to <strong>Calendar Created</strong> status.
+    </p>
+    <div class="flex items-center justify-end gap-3">
+      <app-button size="sm" variant="outline" (btnClick)="closeCreateCalendarModal()">
+        Cancel
+      </app-button>
+      <app-button size="sm" (btnClick)="confirmCreateCalendar()">
+        Create Calendar
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+
 <!-- Set Exam Time Modal -->
 <app-modal
   [isOpen]="isExamTimeOpen"
@@ -365,22 +397,16 @@
     </p>
     <div class="grid grid-cols-2 gap-4 mb-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Exam Start Time</label>
-        <input
-          type="text"
-          [(ngModel)]="examStartTime"
-          placeholder="e.g. 09:00 AM"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300"
-        />
+        <app-label>Exam Start Time<span class="text-error-500">*</span></app-label>
+        <app-time-picker id="exam-start-time-picker" placeholder="Select start time"
+          [defaultTime]="examStartTime"
+          (timeChange)="onExamStartTimeChange($event)" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Exam End Time</label>
-        <input
-          type="text"
-          [(ngModel)]="examEndTime"
-          placeholder="e.g. 11:00 AM"
-          class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300"
-        />
+        <app-label>Exam End Time</app-label>
+        <app-time-picker id="exam-end-time-picker" placeholder="Select end time"
+          [defaultTime]="examEndTime"
+          (timeChange)="onExamEndTimeChange($event)" />
       </div>
     </div>
     <p *ngIf="examTimeError" class="mb-3 text-sm text-red-500">{{ examTimeError }}</p>

@@ -288,7 +288,11 @@ if (this.qualificationForm.invalid) return;
       this.closeModal();
   }
 
-  getProgrammes(){    
+  get countA(): number { return this.dataRow.filter((s: any) => s.disciplinegroup === 'A').length; }
+  get countB(): number { return this.dataRow.filter((s: any) => s.disciplinegroup === 'B').length; }
+  get countC(): number { return this.dataRow.filter((s: any) => s.disciplinegroup === 'C').length; }
+
+  getProgrammes(){
     this.dataRow=[];
   }
 

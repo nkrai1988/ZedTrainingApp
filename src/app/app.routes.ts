@@ -20,6 +20,7 @@ import { SignUpComponent } from './pages/auth-pages/sign-up/sign-up.component';
 import { CalenderComponent } from './pages/calender/calender.component';
 import { DashboardComponent } from './pages/dashboard/dashboard/dashboard.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ParticipantApplicationGuard } from './guards/participant-application.guard';
 import { AgencylistComponent } from './pages/Agencies/agencylist/agencylist.component';
 import { AgencydetailComponent } from './pages/Agencies/agencydetail/agencydetail.component';
 import { FullScreenModalComponent } from './shared/components/ui-example/modal-example/full-screen-modal/full-screen-modal.component';
@@ -58,6 +59,7 @@ import { ParticipantSignInComponent } from './pages/auth-pages/participant-sign-
 import { ParticipantSignUpComponent } from './pages/auth-pages/participant-sign-up/participant-sign-up.component';
 import { ParticipantVerifyEmailComponent } from './pages/auth-pages/participant-verify-email/participant-verify-email.component';
 import { ParticipantForgotPasswordComponent } from './pages/auth-pages/participant-forgot-password/participant-forgot-password.component';
+import { ForgotPasswordComponent } from './pages/auth-pages/forgot-password/forgot-password.component';
 import { ParticipantDashboardComponent } from './pages/dashboard/participant-dashboard/participant-dashboard.component';
 import { ParticipantLayoutComponent } from './shared/layout/participant-layout/participant-layout.component';
 import { MyProgrammesComponent } from './pages/participants/my-programmes/my-programmes.component';
@@ -78,6 +80,7 @@ import { PracticalScoresComponent } from './pages/participants/practical-scores/
 import { UploadDocumentsComponent } from './pages/upload-documents/upload-documents.component';
 import { MasterQuestionnaireComponent } from './pages/master-questionnaire/master-questionnaire.component';
 import { CategoryAdminDashboardComponent } from './pages/dashboard/category-admin-dashboard/category-admin-dashboard.component';
+import { CertificateVerifyComponent } from './pages/public/certificate-verify/certificate-verify.component';
 
 export const routes: Routes = [
   {
@@ -89,28 +92,28 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent,
         pathMatch: 'full',
-        title:'Training Solution',
+        title:'Training & Capacity Building',
         canActivate:[AuthGuard]
       },
       {
         path: 'prodashboard',
         component: EcommerceComponent,
         pathMatch: 'full',
-        title:'Training Solution',
+        title:'Training & Capacity Building',
         canActivate:[AuthGuard]
       },
       {
         path: 'qmpdashboard',
         component: QmpdashboardComponent,
         pathMatch: 'full',
-        title:'Training Solution',
+        title:'Training & Capacity Building',
         canActivate:[AuthGuard]
       },
       {
         path: 'assessordashboard',
         component: AssessordashboardComponent,
         pathMatch: 'full',
-        title:'Training Solution',
+        title:'Training & Capacity Building',
         canActivate:[AuthGuard]
       },
       {
@@ -488,7 +491,7 @@ export const routes: Routes = [
         component: ParticipantDashboardComponent,
         pathMatch: 'full',
         title: 'Participant Dashboard',
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, ParticipantApplicationGuard]
       },
       {
         path: 'register',
@@ -509,14 +512,14 @@ export const routes: Routes = [
         component: MyProgrammesComponent,
         pathMatch: 'full',
         title: 'My Programmes',
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, ParticipantApplicationGuard]
       },
       {
         path: 'participant/certificates',
         component: MyCertificatesComponent,
         pathMatch: 'full',
         title: 'My Certificates',
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, ParticipantApplicationGuard]
       },
       {
         path: 'participant/profile',
@@ -541,6 +544,11 @@ export const routes: Routes = [
     path:'signin',
     component:SignInComponent,
     title:'Sign In'
+  },
+  {
+    path:'forgot-password',
+    component:ForgotPasswordComponent,
+    title:'Forgot Password'
   },
   {
     path:'signup',
@@ -576,6 +584,11 @@ export const routes: Routes = [
     path:'trainingprogramme',
     component:TrainingprogrammesComponent,
     title:'Training'
+  },
+  {
+    path: 'verify/participant/:id',
+    component: CertificateVerifyComponent,
+    title: 'Certificate Verification'
   },
   {
     path: 'assessment',

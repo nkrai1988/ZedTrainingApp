@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { MyProgramme, ParticipantService } from '../../../services/participant.service';
-import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
-
 @Component({
   selector: 'app-my-programmes',
-  imports: [CommonModule, FormsModule, AppFooterComponent],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './my-programmes.component.html',
 })
 export class MyProgrammesComponent implements OnInit {

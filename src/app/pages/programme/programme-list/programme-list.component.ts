@@ -202,6 +202,8 @@ handleStatusSelectChange(value: string) {
       Status:this.filterForm.value.Status,
       StartDate:this.filterForm.value.StartDate,
       EndDate:this.filterForm.value.EndDate,
+      OrgCategoryId:this.currentCategoryId,
+      OrgSubCategoryId:this.currentSubCategoryId,
     }
 
     console.log({'filters':filters});

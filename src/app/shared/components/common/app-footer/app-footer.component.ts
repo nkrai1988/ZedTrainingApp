@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   templateUrl: './app-footer.component.html',
 })
 export class AppFooterComponent {
-  @Input() moduleLabel = 'Training Module';
+  @Input() moduleLabel = 'Training & Capacity Building';
 }

@@ -52,6 +52,54 @@
       {{ formError }}
     </div>
 
+    <!-- Order + Serial + QuestionCode + MaximumMarks -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Order No</label>
+        <input type="number" [(ngModel)]="orderNo" placeholder="e.g. 101"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Serial No</label>
+        <input type="number" [(ngModel)]="serialNumber" placeholder="e.g. 1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question Code</label>
+        <input type="text" [(ngModel)]="questionCode" placeholder="e.g. Q1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Marks</label>
+        <input type="number" [(ngModel)]="maximumMarks" placeholder="e.g. 1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+    </div>
+
+    <!-- Section + AnswerType -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Code</label>
+        <input type="text" [(ngModel)]="sectionCode" placeholder="e.g. SET1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Section Text</label>
+        <input type="text" [(ngModel)]="sectionText" placeholder="e.g. SECTION 1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Answer Type</label>
+        <select [(ngModel)]="answerType"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="">Select Type</option>
+          <option value="SingleOption">Single Option</option>
+          <option value="Multi">Multiple Choice</option>
+          <option value="YesNo">Yes / No</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Question textarea -->
     <div class="mb-5">
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Question</label>
@@ -199,7 +247,14 @@
             <span class="mt-0.5 flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-bold shrink-0">
               {{ i + 1 }}
             </span>
-            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ q.questionText }}</p>
+            <div>
+              <div class="flex flex-wrap gap-1.5 mb-1">
+                <span *ngIf="q.sectionCode" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">{{ q.sectionCode }}</span>
+                <span *ngIf="q.sectionText" class="inline-flex items-center px-2 py-0.5 rounded text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800">{{ q.sectionText }}</span>
+                <span *ngIf="q.answerType" class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">{{ q.answerType }}</span>
+              </div>
+              <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ q.questionText }}</p>
+            </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <button (click)="openEdit(q)" title="Edit" class="text-gray-400 hover:text-indigo-500 transition-colors">
@@ -295,6 +350,55 @@
           <option value="">All Programme Types</option>
           <option *ngFor="let pt of programmeTypes" [value]="pt">{{ pt }}</option>
         </select>
+      </div>
+
+      <!-- Order + Serial + QuestionCode + MaxMarks -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Order No</label>
+          <input type="number" [(ngModel)]="editOrderNo" placeholder="e.g. 101"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Serial No</label>
+          <input type="number" [(ngModel)]="editSerialNumber" placeholder="e.g. 1"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Question Code</label>
+          <input type="text" [(ngModel)]="editQuestionCode" placeholder="e.g. Q1"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Max Marks</label>
+          <input type="number" [(ngModel)]="editMaximumMarks" placeholder="e.g. 1"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+      </div>
+      <!-- Section + AnswerType -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Section Code</label>
+          <input type="text" [(ngModel)]="editSectionCode" placeholder="e.g. SET1"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Answer Type</label>
+          <select [(ngModel)]="editAnswerType"
+            class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="">Select Type</option>
+            <option value="SingleOption">Single Option</option>
+            <option value="Multi">Multiple Choice</option>
+            <option value="YesNo">Yes / No</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1.5">Section Text</label>
+        <input type="text" [(ngModel)]="editSectionText" placeholder="e.g. SECTION 1"
+          class="w-full h-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
       </div>
 
       <!-- Question text -->

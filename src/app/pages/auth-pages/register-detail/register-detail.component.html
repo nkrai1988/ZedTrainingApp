@@ -1,5 +1,45 @@
 <app-dataloadinprogress *ngIf="loading" />
 
+<!-- Redirect banners (shown when guard redirected participant here) -->
+<ng-container *ngIf="!loading && participantMode">
+  <div *ngIf="redirectReason === 'incomplete'"
+    class="mb-5 flex items-start gap-3 px-4 py-4 rounded-xl border border-amber-300 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10">
+    <svg class="w-5 h-5 text-amber-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/>
+    </svg>
+    <div>
+      <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">Application Required</p>
+      <p class="text-sm text-amber-700 dark:text-amber-400 mt-0.5">Please complete and submit your application to access your dashboard, programmes, and certificates.</p>
+    </div>
+  </div>
+  <div *ngIf="redirectReason === 'rejected'"
+    class="mb-5 flex items-start gap-3 px-4 py-4 rounded-xl border border-red-300 bg-red-50 dark:border-red-500/30 dark:bg-red-500/10">
+    <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12 16.75C12.4142 16.75 12.75 16.4142 12.75 16C12.75 15.5858 12.4142 15.25 12 15.25C11.5858 15.25 11.25 15.5858 11.25 16C11.25 16.4142 11.5858 16.75 12 16.75Z" fill="currentColor"/>
+    </svg>
+    <div>
+      <p class="text-sm font-semibold text-red-800 dark:text-red-300">Application Rejected</p>
+      <p class="text-sm text-red-700 dark:text-red-400 mt-0.5">Your previous application was rejected. Please review the comments below and resubmit your application.</p>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Empty state: participant has not submitted application yet -->
+<div *ngIf="!loading && participantMode && !detail"
+  class="flex flex-col items-center justify-center py-20 text-center px-4">
+  <div class="w-16 h-16 rounded-full bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center mb-4">
+    <svg class="w-8 h-8 text-amber-500" fill="none" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 4A2.25 2.25 0 0 0 3 6.25v11.5A2.25 2.25 0 0 0 5.25 20h13.5A2.25 2.25 0 0 0 21 17.75V6.25A2.25 2.25 0 0 0 18.75 4H5.25ZM12 7.25a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0V8a.75.75 0 0 1 .75-.75ZM12 15.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" fill="currentColor"/>
+    </svg>
+  </div>
+  <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">No Application Submitted</h2>
+  <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-sm">You have not submitted your application yet. Complete your application to access your dashboard, programmes, and certificates.</p>
+  <a routerLink="/register"
+    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 transition-colors">
+    Complete Application
+  </a>
+</div>
+
 <ng-container *ngIf="!loading && detail">
 
   <!-- Success message -->

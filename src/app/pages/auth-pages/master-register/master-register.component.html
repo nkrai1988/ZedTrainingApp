@@ -492,16 +492,16 @@
     <button
       type="button"
       (click)="next()"
-      [disabled]="isLastStep && submitting"
+      [disabled]="isSaving || submitting"
       class="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       [ngClass]="isLastStep ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'">
-      <!-- spinner while submitting -->
-      <svg *ngIf="isLastStep && submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+      <!-- spinner while saving step or final submit -->
+      <svg *ngIf="isSaving || submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
       </svg>
-      <span>{{ isLastStep ? (submitting ? 'Processing...' : 'Submit Application') : 'Next' }}</span>
-      <svg *ngIf="!isLastStep" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <span>{{ isLastStep ? (submitting ? 'Processing...' : 'Submit Application') : (isSaving ? 'Saving...' : 'Next') }}</span>
+      <svg *ngIf="!isLastStep && !isSaving" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
       </svg>
       <svg *ngIf="isLastStep && !submitting" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

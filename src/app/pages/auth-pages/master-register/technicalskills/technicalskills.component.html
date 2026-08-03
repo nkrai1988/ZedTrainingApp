@@ -21,7 +21,54 @@
           [message]="'Note: To qualify as a participant for Master Trainer/Assessor/Consultant Training, the Professional shall have the knowledge/expertise in minimum 1 Discipline from each category (A, B and C).'"
           [showLink]="false"
         />
-  
+
+  <!-- Category coverage status -->
+  <div class="mx-6 mb-4 mt-2 flex flex-wrap gap-3">
+    <div class="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm"
+         [ngClass]="countA >= 1 ? 'border-green-200 bg-green-50 dark:border-green-800/40 dark:bg-green-900/10' : 'border-red-200 bg-red-50 dark:border-red-800/40 dark:bg-red-900/10'">
+      <span class="font-semibold"
+            [ngClass]="countA >= 1 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+        Category A
+      </span>
+      <span class="text-gray-500 dark:text-gray-400">{{ countA }} added</span>
+      <svg *ngIf="countA >= 1" class="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+      <svg *ngIf="countA < 1" class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </div>
+
+    <div class="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm"
+         [ngClass]="countB >= 1 ? 'border-green-200 bg-green-50 dark:border-green-800/40 dark:bg-green-900/10' : 'border-red-200 bg-red-50 dark:border-red-800/40 dark:bg-red-900/10'">
+      <span class="font-semibold"
+            [ngClass]="countB >= 1 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+        Category B
+      </span>
+      <span class="text-gray-500 dark:text-gray-400">{{ countB }} added</span>
+      <svg *ngIf="countB >= 1" class="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+      <svg *ngIf="countB < 1" class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </div>
+
+    <div class="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-sm"
+         [ngClass]="countC >= 1 ? 'border-green-200 bg-green-50 dark:border-green-800/40 dark:bg-green-900/10' : 'border-red-200 bg-red-50 dark:border-red-800/40 dark:bg-red-900/10'">
+      <span class="font-semibold"
+            [ngClass]="countC >= 1 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
+        Category C
+      </span>
+      <span class="text-gray-500 dark:text-gray-400">{{ countC }} added</span>
+      <svg *ngIf="countC >= 1" class="h-4 w-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+      </svg>
+      <svg *ngIf="countC < 1" class="h-4 w-4 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </div>
+  </div>
 
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full">

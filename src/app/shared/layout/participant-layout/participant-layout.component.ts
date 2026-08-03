@@ -5,6 +5,7 @@ import { SidebarService } from '../../services/sidebar.service';
 import { ParticipantSidebarComponent } from '../participant-sidebar/participant-sidebar.component';
 import { BackdropComponent } from '../backdrop/backdrop.component';
 import { ParticipantHeaderComponent } from '../participant-header/participant-header.component';
+import { AppFooterComponent } from '../../components/common/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-participant-layout',
@@ -14,6 +15,7 @@ import { ParticipantHeaderComponent } from '../participant-header/participant-he
     ParticipantSidebarComponent,
     BackdropComponent,
     ParticipantHeaderComponent,
+    AppFooterComponent,
   ],
   templateUrl: './participant-layout.component.html',
 })

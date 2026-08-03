@@ -12,13 +12,30 @@ constructor(private http:HttpClient,private api: ApiService){
     
   }
 
-getCertificateList(){
-    return this.api.getSimple(APPURLs.certificateslist);  
+getCertificateList(orgCategoryId: number | null = null, orgSubCategoryId: number | null = null){
+    let query = '';
+    if (orgCategoryId) query += '?orgCategoryId=' + orgCategoryId;
+    if (orgSubCategoryId) query += (query ? '&' : '?') + 'orgSubCategoryId=' + orgSubCategoryId;
+    return this.api.getSimple(APPURLs.certificateslist + query);
 }
 
 getCertificateDetail(batchid:string,participantid:string){
     let query ="?programmeId="+batchid+"&participantId="+participantid;
-    return this.api.getSimple(APPURLs.certificatedetail+query);  
+    return this.api.getSimple(APPURLs.certificatedetail+query);
+}
+
+generateCertificate(programmeId:string, participantId:string){
+    let query = "?programmeId="+programmeId+"&participantId="+participantId;
+    return this.api.postSimpleWithHeader(APPURLs.certificateGenerate+query, {});
+}
+
+downloadCertificate(batchNo:string, participantId:string){
+    let query = "?batchNo="+batchNo+"&participantId="+participantId;
+    return this.api.getTestFile(APPURLs.certificateDownload+query);
+}
+
+verifyCertificate(id: string){
+    return this.api.getPublic(APPURLs.certificateVerify+'/'+id);
 }
 
 getParticipantsList(batchid:string){

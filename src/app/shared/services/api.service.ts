@@ -38,6 +38,10 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}/${url}`, { headers });
   }
 
+  getPublic(url: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${url}`);
+  }
+
   getTestFile(url: string):Observable<HttpResponse<Blob>>{
     let token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + token });
@@ -74,6 +78,11 @@ export class ApiService {
   putSimple(url: string, body: any | {[header: string]: string}): Observable<any> {
     let headers = this.getHeaders();
     return this.http.put<any>(`${this.baseUrl}/${url}`, body, { headers });
+  }
+
+  patchSimple(url: string, body: any): Observable<any> {
+    const headers = this.getHeaders();
+    return this.http.patch<any>(`${this.baseUrl}/${url}`, body, { headers });
   }
 
   get<T>(url: string, params?: HttpParams | {[param: string]: string | number | boolean}): Observable<T> {

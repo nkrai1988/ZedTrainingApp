@@ -1,17 +1,5 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-summaryreport',
-//   imports: [],
-//   templateUrl: './summaryreport.component.html',
-//   styleUrl: './summaryreport.component.css',
-// })
-// export class SummaryreportComponent {
-
-// }
-
-
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -61,12 +49,16 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './summaryreport.component.html',
   styleUrl: './summaryreport.component.css',
 })
-export class SummaryreportComponent {
+export class SummaryreportComponent implements OnDestroy {
   constructor(private fb: FormBuilder,private reportservice:ReportService,public modal: ModalService,private helperService:HelperService){
-      
+
     }
 
-filterForm!: FormGroup;
+  filterForm!: FormGroup;
+  orgCategoryId: number | null = null;
+  orgSubCategoryId: number | null = null;
+  private categorySub!: Subscription;
+
   dataLoadProgress=false;
   agenciesOptions:any=[];
   selectedOptionagency = '';
@@ -78,19 +70,18 @@ filterForm!: FormGroup;
 
 handleCuricullumnChange(value: string) {
     this.curriculumnselect = value;
-    console.log('Selected value:', value);
-   
+    this.filterMainData();
 }
 
 handleAgencyChange(value: string) {
-    this.selectedOptionagency = value;    
-    //this.getProgrammes();
-} 
+    this.selectedOptionagency = value;
+    this.filterMainData();
+}
 handleStateChange(value: string) {
-    this.selectedStated = value;    
-   // this.getProgrammes();
-   this.filterMainData();
-} 
+    this.selectedStated = value;
+    this.filterMainData();
+}
+
     isOpen = false;
     modelItem:any;
   openModal(row:any) {
@@ -108,12 +99,29 @@ handleStateChange(value: string) {
     successmessage='';
     rejectcommentbtnclick=false;
     ngOnInit(){
-      //this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
-      this.loadProgrammeType();
-      //this.getProgrammes();
-      this.loadAgencies();
       this.loadFilterState();
-      
+      this.loadCurriculum();
+
+      if (this.helperService.IsAgency()) {
+        this.orgCategoryId = this.helperService.getOrgCategoryId();
+        this.orgSubCategoryId = this.helperService.getOrgSubCategoryId();
+        this.loadAgencies();
+        this.getProgrammes();
+      } else {
+        this.categorySub = combineLatest([
+          this.helperService.category$,
+          this.helperService.subCategory$
+        ]).subscribe(([catId, subCatId]) => {
+          this.orgCategoryId = catId;
+          this.orgSubCategoryId = subCatId;
+          this.loadAgencies();
+          this.getProgrammes();
+        });
+      }
+    }
+
+    ngOnDestroy() {
+      this.categorySub?.unsubscribe();
     }
 
     rejectProgramme(row:any,status:any){
@@ -142,54 +150,51 @@ handleStateChange(value: string) {
     
   }
 
-  getProgrammes(){    
+  getProgrammes(){
     this.dataLoadProgress=true;
     this.dataRow=[];
     this.programmeList=[];
-    //this.reportservice.getQCApprovalList(this.selectedOptionforprogrammetype,this.statusvalue,this.selectedOptionagency).subscribe({
-    this.reportservice.getSummaryReport().subscribe({
-      next:(response:any[])=>{ 
+    this.reportservice.getSummaryReport(this.orgCategoryId, this.orgSubCategoryId).subscribe({
+      next:(response:any[])=>{
         this.programmeList = response;
         this.filterMainData();
-        
         this.dataLoadProgress=false;
       },
       error:(err:any)=>{
         this.dataLoadProgress=false;
       }
-    });    
+    });
   }
 
   filterMainData(){
     this.dataRow = [];
-    let filteredData=[];
-    console.log({'this.selectedOptionforprogrammetype':this.selectedOptionforprogrammetype});
-    console.log({'this.selectedStated':this.selectedStated});
-    
+    let filteredData = [...this.programmeList];
+
     if(this.selectedOptionforprogrammetype){
-        filteredData = this.programmeList.filter((f:any)=> f.programType == this.selectedOptionforprogrammetype);
-        console.log({'filteredData':filteredData});
+      filteredData = filteredData.filter((f:any)=> f.programType == this.selectedOptionforprogrammetype);
     }
-    if(this.selectedStated){
+    if(this.selectedStated && this.selectedStated !== 'All'){
       filteredData = filteredData.filter((f:any)=> f.stateId == this.selectedStated);
     }
-
-    if(this.selectedOptionagency){
+    if(this.curriculumnselect && this.curriculumnselect !== 'All'){
+      filteredData = filteredData.filter((f:any)=> f.qpCode == this.curriculumnselect);
+    }
+    if(this.selectedOptionagency && this.selectedOptionagency !== 'All'){
       filteredData = filteredData.filter((f:any)=> f.agencyName == this.selectedOptionagency);
     }
-    console.log({'filteredData':filteredData});
     this.dataRow = filteredData;
   }
 
 
 
   exportExcel(){
-    //this.selectedOptionforprogrammetype,this.statusvalue,this.selectedOptionagency
     var filters={
       Type:this.selectedOptionforprogrammetype,
       State:this.selectedStated,
       Agency:this.selectedOptionagency,
-      QpCode:this.selectedOptionagency,
+      QpCode:this.curriculumnselect,
+      OrgCategoryId:this.orgCategoryId,
+      OrgSubCategoryId:this.orgSubCategoryId,
     }
 
     this.reportservice.exportToExcel(filters).subscribe({
@@ -244,12 +249,11 @@ handleStateChange(value: string) {
 
   loadAgencies(){
     this.agenciesOptions=[];
-    this.reportservice.getActiveAgencyList().subscribe({
+    this.reportservice.getActiveAgencyList(this.orgCategoryId, this.orgSubCategoryId).subscribe({
         next:(response:any)=>{
-          console.log({'response state':response});          
           response.forEach((element:any) => {
-            this.agenciesOptions.push({value:element.userId,label: element.firstName});
-          }); 
+            this.agenciesOptions.push({value:element.firstName,label: element.firstName});
+          });
           this.agenciesOptions.unshift({value:'All',label:'All'});
         },
         error: (error:any) => {console.error('Error:', error)
@@ -257,10 +261,6 @@ handleStateChange(value: string) {
     });
   }
 
-  loadProgrammeType(){
-    this.loadCurriculum();
-    this.getProgrammes();
-  }
 
   loadFilterState(){
     this.helperService.getAllStates().subscribe({

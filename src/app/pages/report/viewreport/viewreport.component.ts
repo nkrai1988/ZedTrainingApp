@@ -1,6 +1,7 @@
 
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 
 import { BadgeComponent } from '../../../shared/components/ui/badge/badge.component';
@@ -49,12 +50,15 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './viewreport.component.html',
   styleUrl: './viewreport.component.css',
 })
-export class ViewreportComponent {
+export class ViewreportComponent implements OnDestroy {
   constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,private helperService:HelperService){
-      
+
     }
 
     filterForm!: FormGroup;
+  orgCategoryId: number | null = null;
+  orgSubCategoryId: number | null = null;
+  private categorySub!: Subscription;
 
   dataLoadProgress=false;
   agenciesOptions:any=[];
@@ -63,9 +67,8 @@ export class ViewreportComponent {
 
 handleAgencyChange(value: string) {
     this.selectedOptionagency = value;
-    console.log('Selected value:', value);
     this.getProgrammes();
-} 
+}
     isOpen = false;
     modelItem:any;
   openModal(row:any) {
@@ -83,9 +86,27 @@ handleAgencyChange(value: string) {
     rejectcommentbtnclick=false;
     userRole=0;
     ngOnInit(){
-      this.getProgrammes();
-      this.loadAgencies();
       this.userRole = this.helperService.getUserRole();
+      if (this.helperService.IsAgency()) {
+        this.orgCategoryId = this.helperService.getOrgCategoryId();
+        this.orgSubCategoryId = this.helperService.getOrgSubCategoryId();
+        this.getProgrammes();
+        this.loadAgencies();
+      } else {
+        this.categorySub = combineLatest([
+          this.helperService.category$,
+          this.helperService.subCategory$
+        ]).subscribe(([catId, subCatId]) => {
+          this.orgCategoryId = catId;
+          this.orgSubCategoryId = subCatId;
+          this.getProgrammes();
+          this.loadAgencies();
+        });
+      }
+    }
+
+    ngOnDestroy() {
+      this.categorySub?.unsubscribe();
     }
 
     rejectProgramme(row:any,status:any){
@@ -93,7 +114,7 @@ handleAgencyChange(value: string) {
   }
 
   exportExcel(){
-    this.programmeservice.exportToExcelViewReport(this.selectedOptionforprogrammetype,this.selectedOptionagency).subscribe({
+    this.programmeservice.exportToExcelViewReport(this.selectedOptionforprogrammetype, this.selectedOptionagency, this.orgCategoryId, this.orgSubCategoryId).subscribe({
       next:(response : any)=>{     
         console.log({'response':response});
         const blob = response.body as Blob;
@@ -165,10 +186,10 @@ handleAgencyChange(value: string) {
     
   }
 
-  getProgrammes(){    
+  getProgrammes(){
     this.dataRow=[];
     this.dataLoadProgress=true;
-    this.programmeservice.getViewReportList(this.selectedOptionforprogrammetype,this.selectedOptionagency).subscribe({
+    this.programmeservice.getViewReportList(this.selectedOptionforprogrammetype, this.selectedOptionagency, this.orgCategoryId, this.orgSubCategoryId).subscribe({
       next:(response:any[])=>{               
         this.dataRow = response;
         this.dataLoadProgress=false;
@@ -181,7 +202,7 @@ handleAgencyChange(value: string) {
 
   loadAgencies(){
     this.agenciesOptions=[];
-    this.programmeservice.getActiveAgencyList().subscribe({
+    this.programmeservice.getActiveAgencyList(this.orgCategoryId, this.orgSubCategoryId).subscribe({
         next:(response:any)=>{
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});

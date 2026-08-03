@@ -1,92 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ParticipantService } from '../../../services/participant.service';
+import { APPURLs } from '../../../shared/constants/url.constants';
 
-interface Certificate {
-  id: number;
+interface MyCertificate {
+  batchNo: string;
+  candidateId: string;
   programmeName: string;
-  certificateNo: string;
-  issuedOn: string;
-  expiresOn: string;
-  isValid: boolean;
+  qpCode: string | null;
+  issuedOn: string | null;
 }
-
-import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 @Component({
   selector: 'app-my-certificates',
-  imports: [CommonModule, FormsModule, AppFooterComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './my-certificates.component.html',
 })
-export class MyCertificatesComponent {
+export class MyCertificatesComponent implements OnInit {
 
   searchText = '';
-  statusFilter = 'all';
+  certificates: MyCertificate[] = [];
+  loading = true;
+  errorMessage = '';
 
-  certificates: Certificate[] = [
-    {
-      id: 1,
-      programmeName: '5-Day Assessors Training Program',
-      certificateNo: 'BA20251034204235',
-      issuedOn: '19/12/2025',
-      expiresOn: '19/12/2028',
-      isValid: true,
-    },
-    {
-      id: 2,
-      programmeName: '5-Day Assessors Training Program',
-      certificateNo: 'BA20251034204235',
-      issuedOn: '19/12/2025',
-      expiresOn: '19/12/2028',
-      isValid: true,
-    },
-    {
-      id: 3,
-      programmeName: '5-Day Assessors Training Program',
-      certificateNo: 'BA20251034204236',
-      issuedOn: '10/05/2023',
-      expiresOn: '10/05/2026',
-      isValid: true,
-    },
-    {
-      id: 4,
-      programmeName: '5-Day Assessors Training Program',
-      certificateNo: 'BA20251034204237',
-      issuedOn: '01/03/2021',
-      expiresOn: '01/03/2024',
-      isValid: false,
-    },
-    {
-      id: 5,
-      programmeName: '5-Day Assessors Training Program',
-      certificateNo: 'BA20251034204238',
-      issuedOn: '15/07/2025',
-      expiresOn: '15/07/2028',
-      isValid: true,
-    },
-  ];
+  constructor(private participantService: ParticipantService) {}
+
+  ngOnInit(): void {
+    this.participantService.getMyCertificates().subscribe({
+      next: (data) => {
+        this.certificates = data ?? [];
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load certificates. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
 
   get totalCount(): number { return this.certificates.length; }
-  get validCount(): number  { return this.certificates.filter(c => c.isValid).length; }
-  get expiredCount(): number { return this.certificates.filter(c => !c.isValid).length; }
 
-  get filteredCertificates(): Certificate[] {
-    let result = this.certificates;
-
-    if (this.statusFilter === 'valid') {
-      result = result.filter(c => c.isValid);
-    } else if (this.statusFilter === 'expired') {
-      result = result.filter(c => !c.isValid);
-    }
-
+  get filteredCertificates(): MyCertificate[] {
     const q = this.searchText.trim().toLowerCase();
-    if (q) {
-      result = result.filter(c =>
-        c.programmeName.toLowerCase().includes(q) ||
-        c.certificateNo.toLowerCase().includes(q)
-      );
-    }
+    if (!q) return this.certificates;
+    return this.certificates.filter(c =>
+      (c.programmeName ?? '').toLowerCase().includes(q) ||
+      (c.batchNo ?? '').toLowerCase().includes(q) ||
+      (c.qpCode ?? '').toLowerCase().includes(q)
+    );
+  }
 
-    return result;
+  formatDate(dateStr: string | null): string {
+    if (!dateStr) return '—';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  downloadCertificate(cert: MyCertificate): void {
+    const url = `${APPURLs.base}${APPURLs.certificateDownload}?batchNo=${cert.batchNo}&participantId=${cert.candidateId}`;
+    window.open(url, '_blank');
   }
 }

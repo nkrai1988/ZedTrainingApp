@@ -22,7 +22,6 @@ import { SelectComponent } from '../../../shared/components/form/select/select.c
 import { HelperService } from '../../../services/helper.service';
 import { DataloadinprogressComponent } from '../../../shared/components/common/dataloadinprogress/dataloadinprogress.component';
 import { DatanotfoundComponent } from '../../../shared/components/common/datanotfound/datanotfound.component';
-import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
 
 
 @Component({
@@ -44,7 +43,6 @@ import { AppFooterComponent } from '../../../shared/components/common/app-footer
     SelectComponent,
     DataloadinprogressComponent,
     DatanotfoundComponent,
-    AppFooterComponent
   ],
   templateUrl: './curriculumlist.component.html',
   styleUrl: './curriculumlist.component.css',

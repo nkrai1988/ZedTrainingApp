@@ -9,8 +9,6 @@ import { LabelComponent } from '../../../shared/components/form/label/label.comp
 import { CommonModule } from '@angular/common';
 import { DashboardService } from '../../../services/dashboard.service';
 import { HelperService } from '../../../services/helper.service';
-import { AppFooterComponent } from '../../../shared/components/common/app-footer/app-footer.component';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +18,6 @@ import { AppFooterComponent } from '../../../shared/components/common/app-footer
     SelectComponent,
     LabelComponent,
     CommonModule,
-    AppFooterComponent
   ],
   templateUrl: './dashboard.component.html',
 })

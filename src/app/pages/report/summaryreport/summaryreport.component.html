@@ -14,86 +14,67 @@
   </div>
 
   <app-component-card>
-    <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
-    <div class="space-y-6">
+    <div class="grid grid-cols-2 gap-6">
       <div>
-      <app-label>Curriculum</app-label>
-      <app-select
-        [options]="curriculumnOption"
-        placeholder="Select an option"
-        [value]="curriculumnselect"
-        (valueChange)="handleCuricullumnChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
-    
-    </div>
-    <div class="space-y-6">
+        <app-label>State</app-label>
+        <app-select
+          [options]="selectedStatedOptions"
+          placeholder="Select an option"
+          [value]="selectedStated"
+          (valueChange)="handleStateChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
       <div>
-      <app-label>State</app-label>
-      <app-select
-        [options]="selectedStatedOptions"
-        placeholder="Select an option"
-        [value]="selectedStated"
-        (valueChange)="handleStateChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
-    </div>
+        <app-label>Curriculum</app-label>
+        <app-select
+          [options]="curriculumnOption"
+          placeholder="Select an option"
+          [value]="curriculumnselect"
+          (valueChange)="handleCuricullumnChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
       <div>
-      <app-label>Agency</app-label>
-      <app-select
-        [options]="agenciesOptions"
-        placeholder="Select an option"
-        [value]="selectedOptionagency"
-        (valueChange)="handleAgencyChange($event)"
-        className="dark:bg-dark-900"
-      ></app-select>
+        <app-label>Agency</app-label>
+        <app-select
+          [options]="agenciesOptions"
+          placeholder="Select an option"
+          [value]="selectedOptionagency"
+          (valueChange)="handleAgencyChange($event)"
+          className="dark:bg-dark-900"
+        ></app-select>
+      </div>
     </div>
-    </div>
-    
-    </div>
-    
   </app-component-card>
 
 <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-  
+
   <div class="flex flex-col gap-4 px-6 mb-4 sm:flex-row sm:items-center sm:justify-between">
     <div>
       <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-        Programmes Summmary
+        Programmes Summary
       </h3>
     </div>
-  <div class="flex flex-wrap items-center gap-8">
-    <button (click)="exportExcel()" style="color:green;" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-    Export to Excel
-    </button>
+    <div>
+      <button (click)="exportExcel()" class="inline-flex items-center gap-2 rounded-lg border border-green-600 bg-white px-4 py-2.5 text-theme-sm font-medium text-green-700 shadow-theme-xs hover:bg-green-50 dark:border-green-500 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-white/[0.03]">
+        Export to Excel
+      </button>
     </div>
   </div>
   
 
   <div class="max-w-full overflow-x-auto">
     <table class="min-w-full" *ngIf="(!dataLoadProgress && dataRow.length)">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+      <thead class="border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
-                </span>
-              </div>
-            </div>
-          </th>
-          
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">State</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Agency Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Curriculum</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">No of AWS</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">No of Participant</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Avg
-Participants
-per WS</th>          
-                    
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">S.No</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">State</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">Agency Name</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">Curriculum</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">No of AWS</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">No of Participant</th>
+          <th class="px-6 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start uppercase tracking-wide">Avg Participants per WS</th>
         </tr>
       </thead>
       <tbody>

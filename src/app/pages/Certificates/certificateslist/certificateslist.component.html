@@ -208,8 +208,11 @@ Results for programmes conducted till 31st March 2018
           </td>
           <td class="px-4 sm:px-6 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              <a title="Download" (click)="getCertificateDetail(row)" class="cursor-pointer inline-flex items-center rounded-lg px-4 py-1.5 text-xs font-medium text-white bg-gray-900 hover:bg-gray-700 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200">
-                Download
+              <a title="Download" (click)="generatingId !== row.id && getCertificateDetail(row)"
+                [class.opacity-50]="generatingId === row.id"
+                [class.cursor-not-allowed]="generatingId === row.id"
+                class="cursor-pointer inline-flex items-center rounded-lg px-4 py-1.5 text-xs font-medium text-white bg-gray-900 hover:bg-gray-700 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-200">
+                {{ generatingId === row.id ? 'Generating...' : 'Download' }}
               </a>
             </p>
           </td>

@@ -10,7 +10,8 @@
 
 // }
 
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { BasicTableTwoComponent } from '../../../shared/components/tables/basic-tables/basic-table-two/basic-table-two.component';
 import { AgencyService } from '../../../services/agencies.service';
@@ -60,10 +61,14 @@ import { DatanotfoundComponent } from '../../../shared/components/common/datanot
   templateUrl: './qcapprovallist.component.html',
   styleUrl: './qcapprovallist.component.css',
 })
-export class QcapprovallistComponent {
-  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,private helperService:HelperService){
-      
+export class QcapprovallistComponent implements OnDestroy {
+  constructor(private fb: FormBuilder,private programmeservice:ProgrammeService,public modal: ModalService,public helperService:HelperService){
+
     }
+
+  private categorySub?: Subscription;
+  orgCategoryId: number | null = null;
+  orgSubCategoryId: number | null = null;
 
     filterForm!: FormGroup;
 
@@ -103,9 +108,20 @@ handleAgencyChange(value: string) {
     ngOnInit(){
       this.selectedOptionforprogrammetype = this.helperService.userTrainingProgrammeDefaultValue();
       this.loadProgrammeType();
-      this.getProgrammes();
-      this.loadAgencies();
-      
+
+      this.categorySub = combineLatest([
+        this.helperService.category$,
+        this.helperService.subCategory$
+      ]).subscribe(([catId, subCatId]) => {
+        this.orgCategoryId = catId;
+        this.orgSubCategoryId = subCatId;
+        this.loadAgencies();
+        this.getProgrammes();
+      });
+    }
+
+    ngOnDestroy(){
+      this.categorySub?.unsubscribe();
     }
 
     rejectProgramme(row:any,status:any){
@@ -134,10 +150,12 @@ handleAgencyChange(value: string) {
     
   }
 
-  getProgrammes(){    
+  getProgrammes(){
     this.dataLoadProgress=true;
     this.dataRow=[];
-    this.programmeservice.getQCApprovalList(this.selectedOptionforprogrammetype,this.statusvalue,this.selectedOptionagency).subscribe({
+    const statusQuery = this.statusvalue === '2' ? '2,6' : this.statusvalue;
+    const ptype = this.helperService.IsSuperAdmin() || this.helperService.IsCategoryAdmin() ? '' : this.selectedOptionforprogrammetype;
+    this.programmeservice.getQCApprovalList(ptype,statusQuery,this.selectedOptionagency,this.orgCategoryId,this.orgSubCategoryId).subscribe({
     
       next:(response:any[])=>{            
         this.dataRow = response;
@@ -152,9 +170,8 @@ handleAgencyChange(value: string) {
 
   loadAgencies(){
     this.agenciesOptions=[];
-    this.programmeservice.getActiveAgencyList().subscribe({
+    this.programmeservice.getActiveAgencyList(this.orgCategoryId, this.orgSubCategoryId).subscribe({
         next:(response:any)=>{
-          console.log({'response state':response});          
           response.forEach((element:any) => {
             this.agenciesOptions.push({value:element.userId,label: element.firstName});
           });

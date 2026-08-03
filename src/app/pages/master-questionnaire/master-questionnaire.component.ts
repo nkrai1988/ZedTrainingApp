@@ -23,7 +23,14 @@ export class MasterQuestionnaireComponent implements OnInit {
   selectedSubCategoryId: number | null = null;
   selectedProgrammeType = '';
 
+  orderNo: number | null = null;
+  serialNumber: number | null = null;
+  questionCode = '';
+  maximumMarks: number | null = null;
+  sectionCode = '';
+  sectionText = '';
   questionText = '';
+  answerType = '';
   options: { optionCode: string; optionText: string }[] = [
     { optionCode: 'A', optionText: '' }
   ];
@@ -47,7 +54,14 @@ export class MasterQuestionnaireComponent implements OnInit {
   // ── Edit question modal ────────────────────────────────────────
   showEditModal = false;
   editQuestion: any = null;
+  editOrderNo: number | null = null;
+  editSerialNumber: number | null = null;
+  editQuestionCode = '';
+  editMaximumMarks: number | null = null;
+  editSectionCode = '';
+  editSectionText = '';
   editQuestionText = '';
+  editAnswerType = '';
   editOptions: { optionCode: string; optionText: string }[] = [];
   editCorrectAnswer = '';
   editCategoryId: number | null = null;
@@ -110,7 +124,14 @@ export class MasterQuestionnaireComponent implements OnInit {
 
     this.formSaving = true;
     this.mqService.addQuestion({
+      orderNo:          this.orderNo,
+      serialNumber:     this.serialNumber,
+      questionCode:     this.questionCode.trim(),
+      maximumMarks:     this.maximumMarks,
+      sectionCode:      this.sectionCode.trim(),
+      sectionText:      this.sectionText.trim(),
       questionText:     this.questionText.trim(),
+      answerType:       this.answerType,
       correctAnswer:    this.correctAnswer,
       orgCategoryId:    this.selectedCategoryId,
       orgSubCategoryId: this.selectedSubCategoryId,
@@ -132,7 +153,14 @@ export class MasterQuestionnaireComponent implements OnInit {
   }
 
   resetForm() {
+    this.orderNo = null;
+    this.serialNumber = null;
+    this.questionCode = '';
+    this.maximumMarks = null;
+    this.sectionCode = '';
+    this.sectionText = '';
     this.questionText = '';
+    this.answerType = '';
     this.options = [{ optionCode: 'A', optionText: '' }];
     this.correctAnswer = '';
     this.formError = '';
@@ -179,11 +207,18 @@ export class MasterQuestionnaireComponent implements OnInit {
 
   // ── Edit modal ─────────────────────────────────────────────────
   openEdit(q: any) {
-    this.editQuestion    = q;
-    this.editQuestionText = q.questionText;
-    this.editOptions     = q.options.map((o: any) => ({ optionCode: o.optionCode, optionText: o.optionText }));
+    this.editQuestion      = q;
+    this.editOrderNo       = q.orderNo ?? null;
+    this.editSerialNumber  = q.serialNumber ?? null;
+    this.editQuestionCode  = q.questionCode ?? '';
+    this.editMaximumMarks  = q.maximumMarks ?? null;
+    this.editSectionCode   = q.sectionCode ?? '';
+    this.editSectionText   = q.sectionText ?? '';
+    this.editQuestionText  = q.questionText;
+    this.editAnswerType    = q.answerType ?? '';
+    this.editOptions       = q.options.map((o: any) => ({ optionCode: o.optionCode, optionText: o.optionText }));
     this.editCorrectAnswer = q.correctAnswer;
-    this.editCategoryId  = q.orgCategoryId;
+    this.editCategoryId    = q.orgCategoryId;
     this.editSubCategoryId = q.orgSubCategoryId;
     this.editProgrammeType = q.programmeType ?? '';
     const cat = this.allCategories.find((c: any) => c.id === q.orgCategoryId);
@@ -226,7 +261,14 @@ export class MasterQuestionnaireComponent implements OnInit {
     this.editError = '';
 
     this.mqService.updateQuestion(this.editQuestion.id, {
+      orderNo:          this.editOrderNo,
+      serialNumber:     this.editSerialNumber,
+      questionCode:     this.editQuestionCode.trim(),
+      maximumMarks:     this.editMaximumMarks,
+      sectionCode:      this.editSectionCode.trim(),
+      sectionText:      this.editSectionText.trim(),
       questionText:     this.editQuestionText.trim(),
+      answerType:       this.editAnswerType,
       correctAnswer:    this.editCorrectAnswer,
       orgCategoryId:    this.editCategoryId,
       orgSubCategoryId: this.editSubCategoryId,

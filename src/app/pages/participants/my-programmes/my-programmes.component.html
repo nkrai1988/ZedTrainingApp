@@ -140,12 +140,25 @@
           </div>
         </div>
 
+        <!-- Take Assessment -->
+        <div *ngIf="p.isLastDay" class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <a
+            [routerLink]="['/assessment']"
+            [queryParams]="{ batchNo: p.batchNo }"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Take Assessment
+          </a>
+        </div>
+
       </div>
 
     </section>
 
   </ng-container>
 
-  <app-footer moduleLabel="Participant Module" />
 
 </div>

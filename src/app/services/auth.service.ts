@@ -54,6 +54,14 @@ postParticipantVerifyResetOtp(body:any) {
    return this.api.postSimple(APPURLs.participantVerifyResetOtp, body);
 }
 
+postUserForgotPassword(body: any) {
+  return this.api.postSimple(APPURLs.userForgotPassword, body);
+}
+
+postUserVerifyResetOtp(body: any) {
+  return this.api.postSimple(APPURLs.userVerifyResetOtp, body);
+}
+
 verifyParticipantEmail(token: string) {
    return this.api.getSimple(APPURLs.participantVerifyEmail + '?token=' + token);
 }

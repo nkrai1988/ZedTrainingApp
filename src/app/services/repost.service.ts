@@ -36,18 +36,12 @@ getCurriculumList(ptype:string){
    return this.api.getSimple(APPURLs.qcapprovallist+query);  
   }
   
-getSummaryReport(){//(ptype:string,state:string,agency:string,curriculum:string){
-  // let query ='?status='+status;
-  // if(ptype){
-  //     query = query+'&ptype='+ptype;
-  // }
-
-  // if(agency){
-  //     query = query+'&agency='+agency;
-  // }
-
-   return this.api.getSimple(APPURLs.programmesummarylist);  
-  }
+getSummaryReport(orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+  let query = '';
+  if (orgCategoryId != null) query += '?orgCategoryId=' + orgCategoryId;
+  if (orgSubCategoryId != null) query += (query ? '&' : '?') + 'orgSubCategoryId=' + orgSubCategoryId;
+  return this.api.getSimple(APPURLs.programmesummarylist + query);
+}
 
   updateProgrammeStatus(id:any,status:any){
     if(status == 3){
@@ -73,8 +67,11 @@ getSummaryReport(){//(ptype:string,state:string,agency:string,curriculum:string)
   getCoordinatorsList(){  
    return this.api.getSimple(APPURLs.programmecoordinators);  
   }
-  getActiveAgencyList(){  
-   return this.api.getSimple(APPURLs.activeagencylist);  
+  getActiveAgencyList(orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+    let query = '';
+    if (orgCategoryId != null) query += '?orgCategory=' + orgCategoryId;
+    if (orgSubCategoryId != null) query += (query ? '&' : '?') + 'subCategoryId=' + orgSubCategoryId;
+    return this.api.getSimple(APPURLs.activeagencylist + query);
   }
 
   getLeadTrainersList(){  

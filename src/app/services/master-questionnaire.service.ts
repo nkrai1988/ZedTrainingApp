@@ -9,7 +9,14 @@ export interface QuestionOptionPayload {
 }
 
 export interface QuestionBankPayload {
+  orderNo?: number | null;
+  serialNumber?: number | null;
+  questionCode?: string;
+  maximumMarks?: number | null;
+  sectionCode?: string;
+  sectionText?: string;
   questionText: string;
+  answerType?: string;
   correctAnswer: string;
   orgCategoryId: number;
   orgSubCategoryId: number;
