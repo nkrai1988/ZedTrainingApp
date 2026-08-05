@@ -72,6 +72,7 @@ import { QuestionnaireComponent } from './pages/questionnaire/questionnaire.comp
 import { CategoryListComponent } from './pages/org-categories/category-list/category-list.component';
 import { CategoryFormComponent } from './pages/org-categories/category-form/category-form.component';
 import { AddSubcategoryComponent } from './pages/org-categories/add-subcategory/add-subcategory.component';
+import { EditSubcategoryComponent } from './pages/org-categories/edit-subcategory/edit-subcategory.component';
 import { CategoryAdminListComponent } from './pages/category-admin/category-admin-list/category-admin-list.component';
 import { CategoryAdminFormComponent } from './pages/category-admin/category-admin-form/category-admin-form.component';
 import { RegistrationConfigComponent } from './pages/registration-config/registration-config.component';
@@ -346,6 +347,13 @@ export const routes: Routes = [
         component: AddSubcategoryComponent,
         pathMatch: 'full',
         title: 'Add Sub Category',
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'editsubcategory/:id',
+        component: EditSubcategoryComponent,
+        pathMatch: 'full',
+        title: 'Edit Sub Category',
         canActivate: [AuthGuard]
       },
       {

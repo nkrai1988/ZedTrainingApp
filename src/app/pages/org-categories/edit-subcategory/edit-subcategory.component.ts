@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
 import { SelectComponent } from '../../../shared/components/form/select/select.component';
@@ -10,7 +10,7 @@ import { AlertComponent } from '../../../shared/components/ui/alert/alert.compon
 import { OrgCategoryService } from '../../../services/org-category.service';
 
 @Component({
-  selector: 'app-add-subcategory',
+  selector: 'app-edit-subcategory',
   imports: [
     CommonModule,
     FormsModule,
@@ -21,62 +21,69 @@ import { OrgCategoryService } from '../../../services/org-category.service';
     ButtonComponent,
     AlertComponent
   ],
-  templateUrl: './add-subcategory.component.html',
-  styleUrl: './add-subcategory.component.css'
+  templateUrl: './edit-subcategory.component.html',
+  styleUrl: './edit-subcategory.component.css'
 })
-export class AddSubcategoryComponent implements OnInit {
+export class EditSubcategoryComponent implements OnInit {
 
   subCategoryForm!: FormGroup;
-  categoryOptions: any[] = [];
-  selectedCategoryId = '';
+  subCategoryId!: number;
   errormessage = '';
   successmessage = '';
   isSubmitting = false;
+  isLoading = true;
 
+  currentSequenceName = '';
+  currentPrefix = '';
   selectedTemplateFile: File | null = null;
+  currentTemplatePath = '';
 
   constructor(
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private orgCategoryService: OrgCategoryService,
     private router: Router
   ) {}
 
   ngOnInit() {
+    this.subCategoryId = Number(this.route.snapshot.paramMap.get('id'));
+
     this.subCategoryForm = this.fb.group({
-      categoryId:    ['', Validators.required],
       value:         ['', [Validators.required, Validators.maxLength(100)]],
       label:         ['', [Validators.required, Validators.maxLength(100)]],
       requiresMCQ:   [true],
       mScoreDivisor: [null]
     });
 
-    this.loadCategories();
+    this.loadSubCategory();
   }
 
-  loadCategories() {
-    this.orgCategoryService.getCategories().subscribe({
-      next: (res: any[]) => {
-        this.categoryOptions = res
-          .filter(c => c.isActive)
-          .map(c => ({ value: String(c.id), label: c.label }));
+  loadSubCategory() {
+    this.orgCategoryService.getSubCategory(this.subCategoryId).subscribe({
+      next: (sub: any) => {
+        this.currentSequenceName = sub.certificateSequenceName ?? '';
+        this.currentPrefix       = sub.certificatePrefix ?? '';
+        this.currentTemplatePath = sub.certificateTemplatePath ?? '';
+
+        this.subCategoryForm.patchValue({
+          value:         sub.value,
+          label:         sub.label,
+          requiresMCQ:   sub.requiresMCQ ?? false,
+          mScoreDivisor: sub.mScoreDivisor ?? null
+        });
+
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errormessage = 'Failed to load sub-category.';
+        this.isLoading = false;
       }
     });
-  }
-
-  handleCategoryChange(value: string) {
-    this.selectedCategoryId = value;
-    this.subCategoryForm.controls['categoryId'].setValue(value);
   }
 
   onTemplateFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.selectedTemplateFile = input.files?.[0] ?? null;
-  }
-
-  clearForm() {
-    this.subCategoryForm.reset({ requiresMCQ: true });
-    this.selectedCategoryId = '';
-    this.selectedTemplateFile = null;
   }
 
   onSubmit() {
@@ -92,36 +99,39 @@ export class AddSubcategoryComponent implements OnInit {
     };
 
     this.isSubmitting = true;
-    this.orgCategoryService.addSubCategory(Number(v.categoryId), body).subscribe({
-      next: (res: any) => {
+    this.orgCategoryService.updateSubCategory(this.subCategoryId, body).subscribe({
+      next: () => {
         if (this.selectedTemplateFile) {
-          this.orgCategoryService.uploadSubCategoryTemplate(res.id, this.selectedTemplateFile).subscribe({
-            next: () => this.finishAdd(),
+          this.orgCategoryService.uploadSubCategoryTemplate(this.subCategoryId, this.selectedTemplateFile).subscribe({
+            next: (res: any) => {
+              this.currentTemplatePath = res.certificateTemplatePath ?? '';
+              this.finishUpdate();
+            },
             error: () => {
-              // Sub-category saved; template upload failed
               this.isSubmitting = false;
               window.scrollTo({ top: 0, behavior: 'smooth' });
               this.errormessage = 'Sub-category saved but template upload failed.';
-              setTimeout(() => this.router.navigate(['/orgcategories']), 3000);
+              setTimeout(() => this.errormessage = '', 4000);
             }
           });
         } else {
-          this.finishAdd();
+          this.finishUpdate();
         }
       },
       error: (err: any) => {
         this.isSubmitting = false;
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        this.errormessage = 'Failed to add sub-category. ' + (err?.error || '');
+        this.errormessage = 'Failed to update sub-category. ' + (err?.error || '');
         setTimeout(() => this.errormessage = '', 4000);
       }
     });
   }
 
-  private finishAdd() {
+  private finishUpdate() {
     this.isSubmitting = false;
+    this.selectedTemplateFile = null;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    this.successmessage = 'Sub-category added successfully.';
+    this.successmessage = 'Sub-category updated successfully.';
     setTimeout(() => {
       this.successmessage = '';
       this.router.navigate(['/orgcategories']);

@@ -91,16 +91,8 @@
             </p>
           </div>
 
-          <!-- Remember me + Forget Password -->
-          <div class="flex items-center justify-between">
-            <label class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                formControlName="rememberMe"
-                class="w-4 h-4 rounded border-gray-300 accent-indigo-600 cursor-pointer"
-              />
-              Remember me
-            </label>
+          <!-- Forget Password -->
+          <div class="flex justify-end">
             <a
               routerLink="/participant/forgotpassword"
               class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
@@ -108,6 +100,15 @@
               Forget Password?
             </a>
           </div>
+
+          <!-- reCAPTCHA -->
+          <div class="flex justify-center">
+            <div #recaptchaContainer></div>
+          </div>
+          <p *ngIf="submitted && !recaptchaToken"
+            class="text-xs text-center text-red-500 -mt-1">
+            Please complete the reCAPTCHA verification.
+          </p>
 
           <!-- Sign In button -->
           <button

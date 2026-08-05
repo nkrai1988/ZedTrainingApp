@@ -14,7 +14,7 @@
   </app-component-card>
 </div>
 
-<app-component-card>
+<app-component-card *ngIf="isCategoryAdmin">
   <div class="flex items-center justify-between mb-6">
     <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">New Topic</h3>
     <a (click)="goBack()" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer">
@@ -67,7 +67,7 @@
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.pcName }}</p>
           </td>
           <td class="px-6 py-3.5">
-            @if (row.id) {
+            @if (row.id && isCategoryAdmin) {
             <a
               (click)="openModal(row)"
               title="Edit"

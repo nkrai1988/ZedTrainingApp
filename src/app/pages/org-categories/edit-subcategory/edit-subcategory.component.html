@@ -14,30 +14,24 @@
   </app-component-card>
 </div>
 
-<form (ngSubmit)="onSubmit()" [formGroup]="subCategoryForm" class="space-y-6">
+<div *ngIf="isLoading" class="flex items-center justify-center py-16">
+  <svg class="w-8 h-8 animate-spin text-indigo-600" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+  </svg>
+</div>
+
+<form *ngIf="!isLoading" (ngSubmit)="onSubmit()" [formGroup]="subCategoryForm" class="space-y-6">
 
   <!-- Basic Info -->
-  <app-component-card title="Add Sub Category">
+  <app-component-card title="Edit Sub Category">
     <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-
-      <div class="lg:col-span-2">
-        <app-label>Select Category <span class="text-error-500">*</span></app-label>
-        <app-select
-          [options]="categoryOptions"
-          placeholder="Select a category"
-          [value]="selectedCategoryId"
-          (valueChange)="handleCategoryChange($event)"
-        ></app-select>
-        <p *ngIf="subCategoryForm.get('categoryId')?.invalid && subCategoryForm.get('categoryId')?.touched"
-           class="mt-1.5 text-xs text-error-500">Please select a category.</p>
-      </div>
 
       <div>
         <app-label for="value">Sub Category Value <span class="text-error-500">*</span></app-label>
         <input
           formControlName="value"
           type="text"
-          placeholder="e.g. Assessor"
           class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
         <p *ngIf="subCategoryForm.get('value')?.invalid && subCategoryForm.get('value')?.touched"
@@ -49,7 +43,6 @@
         <input
           formControlName="label"
           type="text"
-          placeholder="e.g. Assessor"
           class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
         <p *ngIf="subCategoryForm.get('label')?.invalid && subCategoryForm.get('label')?.touched"
@@ -62,11 +55,26 @@
   <!-- Certificate Settings -->
   <app-component-card title="Certificate Settings">
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">
-      Leave these blank for subcategories that do not issue certificates (e.g. LEAN, SAMAR).
+      Leave these blank for subcategories that do not issue certificates.
     </p>
 
     <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
 
+      <div>
+        <app-label>Certificate Number Prefix</app-label>
+        <div class="h-11 w-full rounded-lg border bg-gray-50 px-4 py-2.5 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-300 flex items-center">
+          {{ currentPrefix || '— not set —' }}
+        </div>
+        <p class="mt-1 text-xs text-gray-400">Auto-generated when the subcategory was created. Cannot be changed.</p>
+      </div>
+
+      <div>
+        <app-label>Certificate Sequence Name</app-label>
+        <div class="h-11 w-full rounded-lg border bg-gray-50 px-4 py-2.5 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-300 flex items-center">
+          {{ currentSequenceName || '— not set —' }}
+        </div>
+        <p class="mt-1 text-xs text-gray-400">Auto-generated when the subcategory was created. Cannot be changed.</p>
+      </div>
 
       <div>
         <app-label for="mScoreDivisor">Mentor Score Divisor</app-label>
@@ -75,10 +83,10 @@
           type="number"
           min="0"
           step="0.01"
-          placeholder="e.g. 100 for Assessor/Consultant, 170 for MasterTrainer"
+          placeholder="e.g. 100 or 170"
           class="h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
         />
-        <p class="mt-1 text-xs text-gray-400">Leave blank if this programme does not use mentor scores.</p>
+        <p class="mt-1 text-xs text-gray-400">Leave blank if no mentor scores.</p>
       </div>
 
 
@@ -92,32 +100,36 @@
         <app-label for="requiresMCQ" class="mb-0 cursor-pointer">
           Requires MCQ Assessment
         </app-label>
-        <p class="text-xs text-gray-400">(Uncheck for participation-only programmes like TP24)</p>
+        <p class="text-xs text-gray-400">(Uncheck for participation-only programmes)</p>
       </div>
 
       <div class="lg:col-span-2">
         <app-label>Certificate Background Template</app-label>
+        <div *ngIf="currentTemplatePath" class="mb-3">
+          <p class="text-xs text-gray-500 mb-1">Current template:</p>
+          <img [src]="'/api/static/' + currentTemplatePath" alt="Certificate template preview"
+               class="h-24 rounded border border-gray-200 object-cover" />
+        </div>
         <input
           type="file"
           accept=".jpg,.jpeg,.png"
           (change)="onTemplateFileChange($event)"
           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
         />
-        <p class="mt-1 text-xs text-gray-400">Upload the JPG/PNG image used as the certificate background. Stored under CertificateImages/[subCategoryId]/.</p>
+        <p class="mt-1 text-xs text-gray-400">Upload a new JPG/PNG to replace the current template. Stored under CertificateImages/[subCategoryId]/.</p>
         <p *ngIf="selectedTemplateFile" class="mt-1 text-xs text-green-600">Selected: {{ selectedTemplateFile.name }}</p>
       </div>
 
     </div>
 
     <div class="flex items-center gap-3 mt-6 lg:justify-end">
-      <app-button size="md" variant="outline" (btnClick)="clearForm()" [disabled]="isSubmitting">Clear</app-button>
       <app-button size="md" variant="outline" (btnClick)="cancel()" [disabled]="isSubmitting">Cancel</app-button>
       <button
         type="button"
         (click)="onSubmit()"
         [disabled]="isSubmitting"
         class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-3.5 text-sm font-medium text-white shadow-theme-xs hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-        {{ isSubmitting ? 'Processing...' : 'Add Sub Category' }}
+        {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
       </button>
     </div>
 

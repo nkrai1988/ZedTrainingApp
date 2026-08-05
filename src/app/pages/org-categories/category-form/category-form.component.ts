@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComponentCardComponent } from '../../../shared/components/common/component-card/component-card.component';
 import { LabelComponent } from '../../../shared/components/form/label/label.component';
@@ -40,30 +40,8 @@ export class CategoryFormComponent implements OnInit {
   ngOnInit() {
     this.categoryForm = this.fb.group({
       value: ['', [Validators.required, Validators.maxLength(100)]],
-      label: ['', [Validators.required, Validators.maxLength(100)]],
-      subCategories: this.fb.array([this.createSubCategoryGroup()])
-    });
-  }
-
-  get subCategories(): FormArray {
-    return this.categoryForm.get('subCategories') as FormArray;
-  }
-
-  createSubCategoryGroup(): FormGroup {
-    return this.fb.group({
-      value: ['', [Validators.required, Validators.maxLength(100)]],
       label: ['', [Validators.required, Validators.maxLength(100)]]
     });
-  }
-
-  addSubCategory() {
-    this.subCategories.push(this.createSubCategoryGroup());
-  }
-
-  removeSubCategory(index: number) {
-    if (this.subCategories.length > 1) {
-      this.subCategories.removeAt(index);
-    }
   }
 
   onLogoSelected(event: Event) {
@@ -93,10 +71,6 @@ export class CategoryFormComponent implements OnInit {
 
   clearForm() {
     this.categoryForm.reset();
-    while (this.subCategories.length > 1) {
-      this.subCategories.removeAt(1);
-    }
-    this.subCategories.at(0).reset();
     this.selectedLogoFile = null;
     this.logoPreviewUrl = null;
   }

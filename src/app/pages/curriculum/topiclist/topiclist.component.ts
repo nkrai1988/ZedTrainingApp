@@ -64,6 +64,8 @@ export class TopiclistComponent {
 
   goBack() { this.location.back(); }
 
+  get isCategoryAdmin(): boolean { return this.helperService.IsCategoryAdmin(); }
+
     isOpen = false;
     modelItem:any;
     programmetype='';
