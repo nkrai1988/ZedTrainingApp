@@ -1,52 +1,71 @@
 <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
 @for (row of dataRow; track $index) {
 <app-component-card [title]="'Trainer'+($index+1)" [desc]="row.addedOn">
-    
+
   <div class="space-y-6">
     <div>
-      <app-label>Trainer Name</app-label>      
+      <app-label>Trainer Name</app-label>
        <div class="relative">
         {{row.trainerName}}
         </div>
     </div>
     <div>
-      <app-label>Trainer Engagement</app-label>      
+      <app-label>Trainer Engagement</app-label>
        <div class="relative">
         {{row.trainerEngagement}}
         </div>
-    </div> 
+    </div>
     <div>
-      <app-label>No. of years Experience</app-label>      
+      <app-label>No. of years Experience</app-label>
        <div class="relative">
         {{row.experienceInYears}}
         </div>
-    </div>  
+    </div>
     <div>
-      <app-label>Qualification</app-label>      
+      <app-label>Qualification</app-label>
        <div class="relative">
         {{row.qualification}}
         </div>
-    </div>  
+    </div>
     <div>
-      <app-label>Email ID</app-label>      
+      <app-label>Email ID</app-label>
        <div class="relative">
         {{row.eMailId}}
         </div>
-    </div>  
+    </div>
     <div>
-      <app-label>Contact No</app-label>      
+      <app-label>Contact No</app-label>
        <div class="relative">
         {{row.contactNo}}
         </div>
-    </div>  
+    </div>
     <div>
-      <app-label>Aadhaar No</app-label>      
+      <app-label>Aadhaar No</app-label>
        <div class="relative">
         {{row.adhaarNo}}
         </div>
-    </div>  
-  </div>  
+    </div>
+
+    <!-- Trainer Photos -->
+    <div *ngIf="row.photos?.length" class="mt-2">
+      <app-label>Photos</app-label>
+      <div class="flex flex-wrap gap-3 mt-2">
+        <div *ngFor="let p of row.photos" class="flex flex-col items-center gap-1">
+          <img [src]="staticBase + p" alt="Trainer Photo"
+            class="w-24 h-24 object-cover rounded border border-gray-200 cursor-pointer"
+            (click)="selectedPhoto = staticBase + p" />
+        </div>
+      </div>
+    </div>
+
+  </div>
 </app-component-card>
 }
 
+</div>
+
+<!-- Lightbox -->
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+  (click)="selectedPhoto = null">
+  <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
 </div>

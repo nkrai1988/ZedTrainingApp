@@ -1,4 +1,6 @@
- export const APPURLs = {
+ export const API_STATIC_BASE = 'https://localhost:7161';
+
+export const APPURLs = {
   base:'https://localhost:7161/api/',
   login: 'User/signin',
   register: 'User/submmitresume',
@@ -44,8 +46,10 @@
   batchdetailVenue:'batchdetail/venue',
   batchdetailMonitoring:'batchdetail/monitoring',
   batchdetailTrainers:'batchdetail/trainers',
-  batchdetailFeedback:'batchdetail/feedbacks',
+  batchdetailFeedback:'batchdetail/feedback',
   batchdetailAttendance:'batchdetail/attendance',
+  batchdetailAttendancePhotos:'batchdetail/attendancephotos',
+  batchdetailParticipants:'batchdetail/participants',
   organisingpartner:'organisingpartner/list',
   organisingpartnerPOST:'organisingpartner/add',
   curriculumlist:'curriculum/list',

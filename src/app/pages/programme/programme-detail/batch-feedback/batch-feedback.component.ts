@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { BatchDetailService } from '../../../../services/batchdetail.service';
 
 @Component({
   selector: 'app-batch-feedback',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './batch-feedback.component.html',
   styleUrl: './batch-feedback.component.css',
 })

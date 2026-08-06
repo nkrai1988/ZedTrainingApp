@@ -3,7 +3,7 @@
       <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">              
+            <div class="flex items-center gap-3">
               <div>
                 <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                  S.No
@@ -14,8 +14,7 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Photo</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Feedback</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant ID</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant NAME</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Edit</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant Name</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">EXAM</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">W</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">P</th>
@@ -26,95 +25,88 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">No of Attempts</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Start Time</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">End Time</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Duration
-(Minutes)</th>
-<th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Organisation Name</th>
-<th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">UAM/EM-2/SSI No</th>
-<th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Mobile No</th>
-<th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email Id</th>
-
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Organisation Name</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">UAM/EM-2/SSI No</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Mobile No</th>
+          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email Id</th>
         </tr>
       </thead>
-      <!-- <tbody>
+      <tbody>
         @for (row of dataRow; track $index) {
-        <tr>
+        <tr class="border-b border-gray-100 dark:border-white/[0.05]">
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                  {{ $index+1 }}
-                </span>
-              </div>
-            </div>
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index + 1 }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <a  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{ row.batchNo }}
-                    
-                </a>
-                
-              </div>
-            </div>
+            <img *ngIf="row.photoUrl" [src]="staticBase + row.photoUrl" alt="Photo"
+              class="w-10 h-10 rounded-full object-cover border border-gray-200" />
+            <span *ngIf="!row.photoUrl" class="text-red-500 text-theme-xs">No Photo</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.qpName }}
-                
-            </p>
+            <span [class]="row.hasFeedback === 1 ? 'text-green-600 font-semibold' : 'text-red-500'">
+              {{ row.hasFeedback === 1 ? 'Yes' : 'No' }}
+            </span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.venueName }}
-                
-            </p>
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.candidateId }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.stateName }}
-                
-            </p>
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.firstName }} {{ row.lastName }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.strStartDate }}
-                
-            </p>
+            <span [class]="row.tacRefId ? 'text-green-600 font-semibold' : 'text-gray-400'">
+              {{ row.tacRefId ? 'Done' : 'Pending' }}
+            </span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.strEndDate }}
-                
-            </p>
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.w ?? '-' }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.noc }}
-                
-            </p>
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.p ?? '-' }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <app-badge
-              variant="light"
-              [color]="getStatusBadgeColor(row.status)"
-              size="sm"
-            >
-              {{ getStatusString(row.status) }}
-            </app-badge>
-            
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.totalMarks ?? '-' }}</span>
           </td>
-
-          <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
-            <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Accept</a>
-              <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Reject</a>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span [class]="row.resultStatus === 'Pass' ? 'text-green-600 font-semibold' : (row.resultStatus ? 'text-red-500 font-semibold' : 'text-gray-400')">
+              {{ row.resultStatus ?? '-' }}
+            </span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">
+              {{ (row.mRecommendation || row.pRecommendation) ? 'Yes' : '-' }}
+            </span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.preCourseAttemptsCount ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.noOfAttempts ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.tacStartTime ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.tacEndTime ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.organizationName ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.uameem2ssino ?? '-' }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.mobileNo }}</span>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.emailId }}</span>
           </td>
         </tr>
+        } @empty {
+        <tr>
+          <td colspan="19" class="px-6 py-6 text-center text-gray-400 text-theme-sm">No participants found.</td>
+        </tr>
         }
-      </tbody> -->
+      </tbody>
     </table>
-    
   </div>

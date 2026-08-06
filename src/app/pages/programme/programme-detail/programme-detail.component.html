@@ -61,7 +61,7 @@
 <app-batch-venue [batchId]="programmeId" > </app-batch-venue>
 </div>
 <div *ngIf="selected=='Participants'">
-<app-batch-participants > </app-batch-participants>
+<app-batch-participants [batchId]="programmeId"> </app-batch-participants>
 </div>
 
 <app-batch-monitoring [batchId]="programmeId" *ngIf="selected=='Monitoring'"> </app-batch-monitoring>

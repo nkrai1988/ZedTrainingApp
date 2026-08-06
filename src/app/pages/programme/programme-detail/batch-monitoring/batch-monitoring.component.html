@@ -59,10 +59,10 @@
             </p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              -Image Name-
-                
-            </p>
+            <img *ngIf="row.photoPath" [src]="staticBase + row.photoPath" alt="Session Photo"
+              class="w-16 h-16 object-cover rounded border border-gray-200 cursor-pointer"
+              (click)="selectedPhoto = staticBase + row.photoPath" />
+            <span *ngIf="!row.photoPath" class="text-gray-400 text-theme-xs">No Photo</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
@@ -109,5 +109,10 @@
         }
       </tbody>
     </table>
-    
+  </div>
+
+  <!-- Lightbox -->
+  <div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+    (click)="selectedPhoto = null">
+    <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
   </div>

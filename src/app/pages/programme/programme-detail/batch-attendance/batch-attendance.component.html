@@ -694,5 +694,23 @@
         }
       </tbody>
     </table>
-    
+  </div>
+
+  <!-- Attendance Photos -->
+  <div *ngIf="photos.length" class="mt-6 px-2">
+    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Attendance Photos</h3>
+    <div class="flex flex-wrap gap-3">
+      <div *ngFor="let p of photos" class="flex flex-col items-center gap-1">
+        <img [src]="staticBase + p.photoPath" alt="Attendance Photo"
+          class="w-20 h-20 object-cover rounded border border-gray-200 cursor-pointer"
+          (click)="selectedPhoto = staticBase + p.photoPath" />
+        <span class="text-xs text-gray-400">{{ p.capturedTime }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+    (click)="selectedPhoto = null">
+    <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
   </div>

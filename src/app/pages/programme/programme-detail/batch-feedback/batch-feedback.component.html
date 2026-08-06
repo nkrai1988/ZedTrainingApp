@@ -34,86 +34,77 @@
 
         </tr>
       </thead>
-      <!-- <tbody>
+      <tbody *ngIf="dataRow.length">
         @for (row of dataRow; track $index) {
         <tr>
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                  {{ $index+1 }}
-                </span>
-              </div>
-            </div>
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index+1 }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <a  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{ row.batchNo }}
-                    
-                </a>
-                
-              </div>
-            </div>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.candidateId }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.qpName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.firstName }} {{ row.lastName }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.venueName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.overallProgrammeDelivery }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.contentAndInformationProvided }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.exercisedAndCaseStudiesHelp }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.sessionsStructure }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.paceOfTheProgram }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.timelyConductOfTests }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
             <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.stateName }}
-                
+              {{ (row.overallProgrammeDelivery || 0) + (row.contentAndInformationProvided || 0) + (row.exercisedAndCaseStudiesHelp || 0) + (row.sessionsStructure || 0) + (row.paceOfTheProgram || 0) + (row.timelyConductOfTests || 0) }}
             </p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.strStartDate }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.trainingMaterialUsefulness }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.strEndDate }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.likeToTakeThisTrainingAgain }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.noc }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.howConfidentToTakeAssignmentsUnderZed }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <app-badge
-              variant="light"
-              [color]="getStatusBadgeColor(row.status)"
-              size="sm"
-            >
-              {{ getStatusString(row.status) }}
-            </app-badge>
-            
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.ovelallVenueArrangements }}</p>
           </td>
-
-          <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
-            <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Accept</a>
-              <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Reject</a>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.avAndInternetSupport }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.refreshmentsAndFoodQuality }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.powerBackup }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.eventCoordinationAndTimeManagement }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.likeToTakeThisTrainingAgain }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.topThreeImprovementAreas }}</p>
+          </td>
+          <td class="px-4 sm:px-6 py-3.5">
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.otherSuggestionsOnVenue }}</p>
           </td>
         </tr>
         }
-      </tbody> -->
+      </tbody>
     </table>
     
   </div>

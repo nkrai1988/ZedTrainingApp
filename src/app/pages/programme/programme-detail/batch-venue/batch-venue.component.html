@@ -39,7 +39,7 @@
 <app-component-card>
   <div class="space-y-6">
     <div>
-      <app-label for="input">Agency</app-label>      
+      <app-label for="input">Agency</app-label>
        <div class="relative">
         {{batchDetail ? batchDetail.agency :''}}
         </div>
@@ -74,9 +74,27 @@
         {{batchDetail ? batchDetail.endDate :''}}
         </div>
     </div>
-      
+
   </div>
-  
+
 </app-component-card>
 
+</div>
+
+<!-- Venue Photos -->
+<div *ngIf="photos.length" class="mt-6">
+  <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Venue Photos</h3>
+  <div class="flex flex-wrap gap-3">
+    <div *ngFor="let p of photos" class="flex flex-col items-center gap-1">
+      <img [src]="staticBase + p" alt="Venue Photo"
+        class="w-24 h-24 object-cover rounded border border-gray-200 cursor-pointer"
+        (click)="selectedPhoto = staticBase + p" />
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+  (click)="selectedPhoto = null">
+  <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
 </div>

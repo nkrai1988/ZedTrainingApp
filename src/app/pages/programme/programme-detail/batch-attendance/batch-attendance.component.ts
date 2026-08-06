@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { BatchDetailService } from '../../../../services/batchdetail.service';
 import { CommonModule } from '@angular/common';
+import { BatchDetailService } from '../../../../services/batchdetail.service';
+import { API_STATIC_BASE } from '../../../../shared/constants/url.constants';
 
 @Component({
   selector: 'app-batch-attendance',
@@ -9,29 +10,32 @@ import { CommonModule } from '@angular/common';
   styleUrl: './batch-attendance.component.css',
 })
 export class BatchAttendanceComponent {
-constructor(private batchdetail:BatchDetailService){
-    
+  constructor(private batchdetail: BatchDetailService) {}
+
+  @Input() batchId = '';
+  dataRow: any[] = [];
+  photos: any[] = [];
+  staticBase = API_STATIC_BASE;
+  selectedPhoto: string | null = null;
+
+  ngOnInit() {
+    if (this.batchId) {
+      this.getAttendance();
+      this.getAttendancePhotos();
+    }
   }
 
-  @Input() batchId='';
-  dataRow:any=[];
+  getAttendance() {
+    this.batchdetail.getBatchAttendanceList(this.batchId).subscribe({
+      next: (res: any) => { this.dataRow = res; },
+      error: () => {}
+    });
+  }
 
-  ngOnInit(){
-      if(this.batchId){
-        this.getAttendance();
-      }
-    }
-
-
-    getAttendance(){
-        this.batchdetail.getBatchAttendanceList(this.batchId).subscribe({
-          next:(res:any)=>{        
-            console.log({'getBatchFeedbacksList':res});
-            this.dataRow = res;
-          },
-          error:(err:any)=>{
-    
-          }
-        })
-      }
+  getAttendancePhotos() {
+    this.batchdetail.getBatchAttendancePhotoList(this.batchId).subscribe({
+      next: (res: any) => { this.photos = res; },
+      error: () => {}
+    });
+  }
 }

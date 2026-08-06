@@ -39,6 +39,16 @@ getBatchAttendanceList(batchid:string){
     return this.api.getSimple(APPURLs.batchdetailAttendance+query);
 }
 
+getBatchParticipantList(batchid:string){
+    let query="?batchid="+batchid;
+    return this.api.getSimple(APPURLs.batchdetailParticipants+query);
+}
+
+getBatchAttendancePhotoList(batchid:string){
+    let query="?batchid="+batchid;
+    return this.api.getSimple(APPURLs.batchdetailAttendancePhotos+query);
+}
+
 
 
 
