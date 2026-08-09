@@ -1,5 +1,5 @@
 
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import flatpickr from 'flatpickr';
 import { LabelComponent } from '../label/label.component';
 
@@ -9,7 +9,7 @@ import { LabelComponent } from '../label/label.component';
   templateUrl: './date-picker.component.html',
   styles: ``
 })
-export class DatePickerComponent implements AfterViewInit, OnDestroy {
+export class DatePickerComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input() id!: string;
   @Input() mode: 'single' | 'multiple' | 'range' | 'time' = 'single';
@@ -24,6 +24,12 @@ export class DatePickerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('dateInput', { static: false }) dateInput!: ElementRef<HTMLInputElement>;
 
   private flatpickrInstance: flatpickr.Instance | undefined;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['defaultDate'] && this.flatpickrInstance) {
+      this.flatpickrInstance.setDate(this.defaultDate ?? '', false);
+    }
+  }
 
   ngAfterViewInit() {
     this.flatpickrInstance = flatpickr(this.dateInput.nativeElement, {

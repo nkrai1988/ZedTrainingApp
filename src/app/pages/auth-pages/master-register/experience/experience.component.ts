@@ -220,19 +220,13 @@ export class ExperienceComponent {
     });
   }
 
-  handleSave() {  
-    console.log({'form value':this.qualificationForm.value});
-    this.qualificationForm.markAllAsTouched(); 
-if (this.qualificationForm.invalid) return;
-    var formdata = this.qualificationForm.value;  
-    console.log({'formdata':formdata});
-    this.dataRow.push(formdata);  
-    // this.dataRow.push({year:formdata.startdate,
-    //   institue:formdata.institution,
-    //   qualification:formdata.qualification,
-    //   certificate:formdata.document.name});
-      this.onExperienceSubmit.emit(this.dataRow);
-      this.closeModal();
+  handleSave() {
+    this.qualificationForm.markAllAsTouched();
+    if (this.qualificationForm.invalid) return;
+    const formdata = this.qualificationForm.value;
+    this.dataRow = [...this.dataRow, formdata];
+    this.onExperienceSubmit.emit(this.dataRow);
+    this.closeModal();
   }
 
   getProgrammes(){    

@@ -17,10 +17,12 @@ getProgrammeList(centerId:string){
    return this.api.getSimple(APPURLs.programmelist+query);  
   }
 
-getCurriculumList(ptype:string){
-  let query ="?ptype="+ptype;
-   return this.api.getSimple(APPURLs.reportcurriculum+query);  
-  }
+getCurriculumList(ptype: string, orgCategoryId?: number | null, orgSubCategoryId?: number | null) {
+  let query = '?ptype=' + ptype;
+  if (orgCategoryId != null) query += '&orgCategoryId=' + orgCategoryId;
+  if (orgSubCategoryId != null) query += '&orgSubCategoryId=' + orgSubCategoryId;
+  return this.api.getSimple(APPURLs.reportcurriculum + query);
+}
 
 
   getQCApprovalList(ptype:string,status:string,agency:string){

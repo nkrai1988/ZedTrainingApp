@@ -18,12 +18,14 @@ export class BatchVenueComponent {
   @Input() batchId = '';
   batchDetail: any = null;
   photos: string[] = [];
+  attendancePhotos: any[] = [];
   staticBase = API_STATIC_BASE;
   selectedPhoto: string | null = null;
 
   ngOnInit() {
     if (this.batchId) {
       this.getBatchVenue();
+      this.getAttendancePhotos();
     }
   }
 
@@ -35,6 +37,13 @@ export class BatchVenueComponent {
         }
         this.photos = res.photos ?? [];
       },
+      error: () => {}
+    });
+  }
+
+  getAttendancePhotos() {
+    this.batchdetail.getBatchAttendancePhotoList(this.batchId).subscribe({
+      next: (res: any) => { this.attendancePhotos = res ?? []; },
       error: () => {}
     });
   }

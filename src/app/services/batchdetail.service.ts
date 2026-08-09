@@ -49,6 +49,11 @@ getBatchAttendancePhotoList(batchid:string){
     return this.api.getSimple(APPURLs.batchdetailAttendancePhotos+query);
 }
 
+getBatchFeedbackPhotoList(batchid:string){
+    let query="?batchid="+batchid;
+    return this.api.getSimple(APPURLs.batchdetailFeedbackPhotos+query);
+}
+
 
 
 

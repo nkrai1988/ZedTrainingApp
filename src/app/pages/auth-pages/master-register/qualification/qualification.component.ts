@@ -183,14 +183,14 @@ export class QualificationComponent {
     this.qualificationForm.markAllAsTouched();
     if (this.qualificationForm.invalid) return;
     var formdata = this.qualificationForm.value;
-    this.dataRow.push({
+    this.dataRow = [...this.dataRow, {
       year: formdata.startdate + ' – ' + formdata.enddate,
       institue: formdata.institution,
       qualification: formdata.qualification,
       grade: formdata.grade,
       certificate: 'Uploaded',
       document: formdata.document,
-    });
+    }];
       this.onQualificationSubmit.emit(this.dataRow);
       this.resetForm();
       this.closeModal();

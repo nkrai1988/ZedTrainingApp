@@ -132,19 +132,9 @@ Organization Name</th>
           </h5>
           <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2"> 
             <div>
-      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
-      Qualification:<span class="text-error-500">*</span>
-      </h3>
-    </div>
-    <!-- <div class=”flex flex-wrap items-center gap-8”>
-    <app-radio [id]=”'Model 1'” [name]=”'group1'” [value]=”'Active'” [checked]=”checkedValue === 'Model 1'”
-      [label]=”'Qualified Lead Auditor Certification in Quality Management Systems or any other ISO Management Systems, as relevant'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 1')”/>
-    <app-radio [id]=”'Model 2'” [name]=”'group1'” [value]=”'Blocked'” [checked]=”checkedValue === 'Model 2'”
-      [label]=”'A qualified ZED Assessor under the erstwhile Financial Support to MSMEs in ZED Certification Scheme'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 2')”/>
-    <app-radio [id]=”'Model 3'” [name]=”'group1'” [value]=”'Blocked'” [checked]=”checkedValue === 'Model 3'”
-      [label]=”'Any Other'” [disabled]=”false” (valueChange)=”handleKnowledgeRadioChange('Model 3')”/>
-      <div *ngIf=”qualificationForm.get('knowledge')?.invalid && (qualificationForm.get('knowledge')?.touched || qualificationForm.get('knowledge')?.dirty)” class=”mt-1.5 text-xs text-error-500”>Area of knowledge and expertise is required.</div>
-  </div> -->
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Qualification:<span class="text-error-500">*</span></label>
+              <input formControlName="knowledge" type="text" name="knowledge" maxlength="500" class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none dark:bg-gray-900 dark:text-white/90">
+            </div>
 
               <div>
               <app-label>Type of Experience:<span class="text-error-500">*</span></app-label>

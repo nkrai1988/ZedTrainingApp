@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BatchDetailService } from '../../../../services/batchdetail.service';
+import { API_STATIC_BASE } from '../../../../shared/constants/url.constants';
 
 @Component({
   selector: 'app-batch-feedback',
@@ -9,29 +10,32 @@ import { BatchDetailService } from '../../../../services/batchdetail.service';
   styleUrl: './batch-feedback.component.css',
 })
 export class BatchFeedbackComponent {
-constructor(private batchdetail:BatchDetailService){
-    
+  constructor(private batchdetail: BatchDetailService) {}
+
+  @Input() batchId = '';
+  dataRow: any = [];
+  photos: string[] = [];
+  staticBase = API_STATIC_BASE;
+  selectedPhoto: string | null = null;
+
+  ngOnInit() {
+    if (this.batchId) {
+      this.getFeedbacks();
+      this.getFeedbackPhotos();
+    }
   }
 
-  @Input() batchId='';
-  dataRow:any=[];
+  getFeedbacks() {
+    this.batchdetail.getBatchFeedbacksList(this.batchId).subscribe({
+      next: (res: any) => { this.dataRow = res; },
+      error: () => {}
+    });
+  }
 
-  ngOnInit(){
-      if(this.batchId){
-        this.getFeedbacks();
-      }
-    }
-
-
-    getFeedbacks(){
-        this.batchdetail.getBatchFeedbacksList(this.batchId).subscribe({
-          next:(res:any)=>{        
-            console.log({'getBatchFeedbacksList':res});
-            this.dataRow = res;
-          },
-          error:(err:any)=>{
-    
-          }
-        })
-      }
+  getFeedbackPhotos() {
+    this.batchdetail.getBatchFeedbackPhotoList(this.batchId).subscribe({
+      next: (res: any) => { this.photos = res ?? []; },
+      error: () => {}
+    });
+  }
 }

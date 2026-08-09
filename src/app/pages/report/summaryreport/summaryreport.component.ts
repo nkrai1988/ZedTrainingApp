@@ -100,11 +100,11 @@ handleStateChange(value: string) {
     rejectcommentbtnclick=false;
     ngOnInit(){
       this.loadFilterState();
-      this.loadCurriculum();
 
       if (this.helperService.IsAgency()) {
         this.orgCategoryId = this.helperService.getOrgCategoryId();
         this.orgSubCategoryId = this.helperService.getOrgSubCategoryId();
+        this.loadCurriculum();
         this.loadAgencies();
         this.getProgrammes();
       } else {
@@ -114,6 +114,7 @@ handleStateChange(value: string) {
         ]).subscribe(([catId, subCatId]) => {
           this.orgCategoryId = catId;
           this.orgSubCategoryId = subCatId;
+          this.loadCurriculum();
           this.loadAgencies();
           this.getProgrammes();
         });
@@ -275,14 +276,14 @@ handleStateChange(value: string) {
 
   loadCurriculum(){
     this.curriculumnOption=[];
-    this.reportservice.getCurriculumList(this.selectedOptionforprogrammetype).subscribe({
+    this.reportservice.getCurriculumList(this.selectedOptionforprogrammetype, this.orgCategoryId, this.orgSubCategoryId).subscribe({
       next:(response:any)=>{
        response.forEach((element:any) => {
             this.curriculumnOption.push({value:element.qpCode,label: element.qpName});
           });
           this.curriculumnOption.unshift({value:'All',label:'All'});
       }
-    }); 
+    });
   }
 
   selectedRows: string[] = [];

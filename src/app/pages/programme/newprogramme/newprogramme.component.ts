@@ -242,11 +242,29 @@ stuffValue(values:any){
     this.detailForm.controls['FirstName'].setValue(values.firstName);
     this.detailForm.controls['FirstName'].disable();   
    this.detailForm.controls['address'].setValue(values.address);
-    this.detailForm.controls['StateName'].setValue(values.stateName);
-    this.selectedStateOption=values.stateName;
-    this.detailForm.controls['districtname'].setValue(values.districtname);
-    this.selectedDistrictOption=values.districtname;
-    this.loadDistrictByStates(this.selectedStateOption);
+
+    // Resolve numeric stateID from stateOptions (coordinator returns stateName text)
+    const stateMatch = this.stateOptions.find((s: any) =>
+      s.label?.toLowerCase() === values.stateName?.toLowerCase());
+    const stateId = stateMatch ? stateMatch.value : values.stateName;
+    this.detailForm.controls['StateName'].setValue(stateId);
+    this.selectedStateOption = stateId;
+
+    // Load districts for the resolved stateID, then match districtID by name
+    this.helperService.getDistrictByStates(stateId).subscribe({
+      next: (response: any) => {
+        this.districtOptions = response.map((e: any) => ({
+          value: e.districtID,
+          label: e.districtname
+        }));
+        const distMatch = this.districtOptions.find((d: any) =>
+          d.label?.toLowerCase() === values.districtname?.toLowerCase());
+        const distId = distMatch ? distMatch.value : values.districtname;
+        this.detailForm.controls['districtname'].setValue(distId);
+        this.selectedDistrictOption = distId;
+      },
+      error: () => {}
+    });
     this.detailForm.controls['PinCode'].setValue(values.pinCode);
     this.detailForm.controls['ProgrammeType'].setValue(values.programmeType);
     this.detailForm.controls['ProgrammeType'].disable();

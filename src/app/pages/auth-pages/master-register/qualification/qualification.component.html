@@ -163,8 +163,10 @@ Marksheet</th>
                 <p *ngIf="qualificationForm.get('grade')?.invalid && (qualificationForm.get('grade')?.touched || qualificationForm.get('grade')?.dirty)" class="mt-1.5 text-xs text-error-500">Grade or % Marks is required.</p>
               </div>
             </div>
-            <app-label>Proofs (pdf, jpg, jpeg, png)File should not exceed 2000 KB:<span class="text-error-500">*</span></app-label>
-             <app-file-input (fileChange)="handleFileChange($event)" accept=".pdf,.jpg,.jpeg,.png" className="custom-class"></app-file-input>        
+            <div>
+              <app-label>Proofs (pdf, jpg, jpeg, png) File should not exceed 2000 KB:<span class="text-error-500">*</span></app-label>
+              <app-file-input (fileChange)="handleFileChange($event)" accept=".pdf,.jpg,.jpeg,.png" className="custom-class"></app-file-input>
+            </div>
           </div>
         </div>        
       </div>

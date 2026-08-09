@@ -283,7 +283,7 @@
           </div>
           <div>
             <app-label>Date of Birth <span class="text-error-500">*</span></app-label>
-            <app-date-picker id="dob-picker" placeholder="Select a date" [maxDate]="maxDOB" (dateChange)="handleDOBChange($event)" />
+            <app-date-picker id="dob-picker" placeholder="Select a date" [maxDate]="maxDOB" [defaultDate]="registerForm.get('DOB')?.value" (dateChange)="handleDOBChange($event)" />
             <p *ngIf="registerForm.get('DOB')?.invalid && registerForm.get('DOB')?.touched"
                class="mt-1.5 text-xs text-error-500">Required.</p>
           </div>

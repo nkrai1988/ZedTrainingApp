@@ -1,4 +1,5 @@
- export const API_STATIC_BASE = 'https://localhost:7161';
+import { environment } from '../../../environments/environment';
+export const API_STATIC_BASE = environment.staticBase;
 
 export const APPURLs = {
   base:'https://localhost:7161/api/',
@@ -49,6 +50,7 @@ export const APPURLs = {
   batchdetailFeedback:'batchdetail/feedback',
   batchdetailAttendance:'batchdetail/attendance',
   batchdetailAttendancePhotos:'batchdetail/attendancephotos',
+  batchdetailFeedbackPhotos:'batchdetail/feedbackphotos',
   batchdetailParticipants:'batchdetail/participants',
   organisingpartner:'organisingpartner/list',
   organisingpartnerPOST:'organisingpartner/add',

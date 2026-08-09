@@ -238,9 +238,14 @@ handleAgencyChange(value: string) {
     return 'error';
   }
 
+  downloadingPdfBatchNo: string | null = null;
+
   downloadPdf(batchNo: string) {
+    if (this.downloadingPdfBatchNo) return;
+    this.downloadingPdfBatchNo = batchNo;
     this.programmeservice.downloadBatchPdf(batchNo).subscribe({
       next: (response: any) => {
+        this.downloadingPdfBatchNo = null;
         const blob = response.body as Blob;
         let fileName = `${batchNo}.pdf`;
         const contentDisposition = response.headers.get('Content-Disposition');
@@ -258,6 +263,7 @@ handleAgencyChange(value: string) {
         window.URL.revokeObjectURL(url);
       },
       error: (err: any) => {
+        this.downloadingPdfBatchNo = null;
         console.error('PDF download error:', err);
       }
     });
