@@ -54,6 +54,27 @@ getBatchFeedbackPhotoList(batchid:string){
     return this.api.getSimple(APPURLs.batchdetailFeedbackPhotos+query);
 }
 
+updateVenue(batchNo: string, venueName: string, zip: string) {
+    const query = `?batchNo=${encodeURIComponent(batchNo)}&venueName=${encodeURIComponent(venueName)}&zip=${encodeURIComponent(zip)}`;
+    return this.api.patchSimple(APPURLs.batchdetailUpdateVenue + query, {});
+}
+
+updateParticipant(id: number, body: { firstName: string, lastName: string }) {
+    return this.api.patchSimple(`${APPURLs.batchdetailUpdateParticipant}?id=${id}`, body);
+}
+
+getExamAnswers(candidateId: number, batchNo: string) {
+    return this.api.getSimple(`${APPURLs.batchdetailExamAnswers}?candidateId=${candidateId}&batchNo=${encodeURIComponent(batchNo)}`);
+}
+
+getAttendanceByDate(batchNo: string, year: number, month: number, day: number) {
+    return this.api.getSimple(`${APPURLs.batchdetailAttendanceByDate}?batchNo=${encodeURIComponent(batchNo)}&year=${year}&month=${month}&day=${day}`);
+}
+
+exportExcel(batchid: string) {
+    return this.api.getTestFile(`${APPURLs.batchdetailExportExcel}?batchid=${encodeURIComponent(batchid)}`);
+}
+
 
 
 

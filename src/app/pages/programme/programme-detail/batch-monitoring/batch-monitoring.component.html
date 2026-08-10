@@ -3,7 +3,7 @@
       <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
         <tr>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">              
+            <div class="flex items-center gap-3">
               <div>
                 <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
                  S.No
@@ -19,44 +19,28 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">SME</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Observant</th>
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Comments</th>
-
         </tr>
       </thead>
       <tbody>
+        <tr *ngIf="loading">
+          <td colspan="9" class="px-6 py-6 text-center text-gray-400 text-theme-sm">Loading...</td>
+        </tr>
         @for (row of dataRow; track $index) {
         <tr>
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">              
-              <div>
-                <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                  {{ $index+1 }}
-                </span>
-              </div>
-            </div>
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index+1 }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <div class="flex items-center gap-3">
-              
-              <div>
-                <a  class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  {{ row.createdDate }}
-                    
-                </a>
-                
-              </div>
-            </div>
+            <a class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline cursor-pointer"
+              (click)="openDateModal(row.createdDate)">
+              {{ row.createdDate }}
+            </a>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.nosName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.nosName }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.pcName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.pcName }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
             <img *ngIf="row.photoPath" [src]="staticBase + row.photoPath" alt="Session Photo"
@@ -65,54 +49,129 @@
             <span *ngIf="!row.photoPath" class="text-gray-400 text-theme-xs">No Photo</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+            <a *ngIf="row.trainerId" [href]="'/facultydetail/' + row.trainerId" target="_blank"
+              class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline cursor-pointer">
               {{ row.trainerName }}
-                
-            </p>
+            </a>
+            <span *ngIf="!row.trainerId" class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.trainerName }}</span>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.smeName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.smeName }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.observantName }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.observantName }}</p>
           </td>
           <td class="px-4 sm:px-6 py-3.5">
-            <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ row.comments }}
-                
-            </p>
+            <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.comments }}</p>
           </td>
-          <!-- <td class="px-4 sm:px-6 py-3.5">
-            <app-badge
-              variant="light"
-              [color]="getStatusBadgeColor(row.status)"
-              size="sm"
-            >
-              {{ getStatusString(row.status) }}
-            </app-badge>
-            
-          </td> -->
-
-          <!-- <td class="px-4 sm:px-6 py-3.5" *ngIf="row.status == '0'">
-            <a (click)="onAccept(row)" title="Accept" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Accept</a>
-              <a (click)="onReject(row)" title="Reject" class="click-link inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-              Reject</a>
-          </td> -->
+        </tr>
+        } @empty {
+        <tr *ngIf="!loading">
+          <td colspan="9" class="px-6 py-6 text-center text-gray-400 text-theme-sm">No monitoring records found.</td>
         </tr>
         }
       </tbody>
     </table>
-  </div>
+</div>
 
-  <!-- Lightbox -->
-  <div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-    (click)="selectedPhoto = null">
-    <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
+<!-- Lightbox -->
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[999999]"
+  (click)="selectedPhoto = null">
+  <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
+</div>
+
+<!-- Date Detail Modal -->
+<div *ngIf="showDateModal" class="fixed inset-0 bg-black/60 flex items-start justify-center z-[999999] p-4 overflow-y-auto">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-5xl mx-auto my-6 flex flex-col">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 rounded-t-xl flex-shrink-0"
+         style="background-color: #1a6b55;">
+      <span class="text-base font-semibold text-white">Monitoring Details</span>
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-white/80">{{ selectedDate }}</span>
+        <button (click)="closeDateModal()" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+    </div>
+
+    <!-- Sessions Section -->
+    <div class="p-4 overflow-x-auto">
+      <table class="min-w-full border border-gray-200 dark:border-gray-700 rounded">
+        <thead class="bg-gray-50 dark:bg-gray-900">
+          <tr>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">S.NO</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Session</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Topic</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Photo</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Trainer</th>
+            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of dateSessions; track $index) {
+          <tr class="border-t border-gray-100 dark:border-gray-700">
+            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ s.nosName }}</td>
+            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ s.pcName }}</td>
+            <td class="px-4 py-2">
+              <img *ngIf="s.photoPath" [src]="staticBase + s.photoPath" alt="Photo"
+                class="w-14 h-14 object-cover rounded border border-gray-200 cursor-pointer"
+                (click)="selectedPhoto = staticBase + s.photoPath" />
+              <span *ngIf="!s.photoPath" class="text-gray-400 text-xs">—</span>
+            </td>
+            <td class="px-4 py-2">
+              <a *ngIf="s.trainerId" [href]="'/facultydetail/' + s.trainerId" target="_blank"
+                class="text-sm font-medium text-teal-700 hover:underline">{{ s.trainerName }}</a>
+              <span *ngIf="!s.trainerId" class="text-sm text-gray-700 dark:text-gray-400">{{ s.trainerName }}</span>
+            </td>
+            <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ s.comments }}</td>
+          </tr>
+          } @empty {
+          <tr><td colspan="6" class="px-4 py-4 text-center text-gray-400 text-sm">No sessions recorded for this date.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Attendance Section -->
+    <div class="px-4 pb-6">
+      <h3 class="text-sm font-semibold text-teal-700 dark:text-teal-400 mb-3 mt-2">Attendance</h3>
+
+      <div *ngIf="attendanceLoading" class="py-6 text-center text-gray-400 text-sm">Loading attendance...</div>
+
+      <div *ngIf="!attendanceLoading" class="overflow-x-auto">
+        <table class="min-w-full border border-gray-200 dark:border-gray-700 rounded">
+          <thead class="bg-gray-50 dark:bg-gray-900">
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">S.NO</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Candidate ID</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Candidate Name</th>
+              <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">IN</th>
+              <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">OUT</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (a of dateAttendance; track $index) {
+            <tr class="border-t border-gray-100 dark:border-gray-700">
+              <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ a.candidateId }}</td>
+              <td class="px-4 py-2 text-sm text-gray-700 dark:text-gray-400">{{ a.candidateName }}</td>
+              <td class="px-4 py-2 text-center">
+                <span *ngIf="a.isIn" class="text-green-600 font-bold">&#10003;</span>
+                <span *ngIf="!a.isIn" class="text-red-400 font-medium">N</span>
+              </td>
+              <td class="px-4 py-2 text-center">
+                <span *ngIf="a.isOut" class="text-green-600 font-bold">&#10003;</span>
+                <span *ngIf="!a.isOut" class="text-red-400 font-medium">N</span>
+              </td>
+            </tr>
+            } @empty {
+            <tr><td colspan="5" class="px-4 py-4 text-center text-gray-400 text-sm">No attendance records found.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
+</div>

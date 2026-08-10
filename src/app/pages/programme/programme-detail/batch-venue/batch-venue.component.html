@@ -10,9 +10,15 @@
     </div>
     <div>
       <app-label for="input">Venue</app-label>
-      <div class="relative">
+      <div class="relative flex items-center gap-3">
         {{batchDetail ? batchDetail.venueName :''}}
-        </div>
+        <button *ngIf="batchDetail"
+          (click)="openEditModal()"
+          class="px-3 py-1 text-xs font-medium text-white rounded"
+          style="background-color: #1a6b55;">
+          Edit
+        </button>
+      </div>
     </div>
     <div>
       <app-label for="input">State</app-label>
@@ -28,9 +34,18 @@
     </div>
     <div>
       <app-label for="input">Pin Code</app-label>
-      <div class="relative">
+      <div class="relative flex items-center gap-3">
         {{batchDetail ? batchDetail.zip :''}}
-        </div>
+        <a *ngIf="batchDetail?.venueLat && batchDetail?.venueLong"
+          [href]="'https://maps.google.com/?q=' + batchDetail.venueLat + ',' + batchDetail.venueLong"
+          target="_blank"
+          class="inline-flex items-center gap-1 text-blue-600 hover:underline text-sm font-medium">
+          Google Map
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+          </svg>
+        </a>
+      </div>
     </div>
       
   </div>
@@ -84,11 +99,12 @@
 <!-- Venue Photos -->
 <div *ngIf="photos.length" class="mt-6">
   <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Venue Photos</h3>
-  <div class="flex flex-wrap gap-3">
-    <div *ngFor="let p of photos" class="flex flex-col items-center gap-1">
+  <div class="flex flex-wrap gap-4">
+    <div *ngFor="let p of photos; let i = index" class="flex flex-col items-center gap-1">
       <img [src]="staticBase + p" alt="Venue Photo"
-        class="w-24 h-24 object-cover rounded border border-gray-200 cursor-pointer"
+        class="w-36 h-28 object-cover rounded border border-gray-200 cursor-pointer"
         (click)="selectedPhoto = staticBase + p" />
+      <span class="text-xs text-gray-500 dark:text-gray-400">Venue Photo {{i + 1}}</span>
     </div>
   </div>
 </div>
@@ -96,17 +112,49 @@
 <!-- Attendance Photos -->
 <div *ngIf="attendancePhotos.length" class="mt-6">
   <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Attendance Photos</h3>
-  <div class="flex flex-wrap gap-3">
-    <div *ngFor="let p of attendancePhotos" class="flex flex-col items-center gap-1">
+  <div class="flex flex-wrap gap-4">
+    <div *ngFor="let p of attendancePhotos; let i = index" class="flex flex-col items-center gap-1">
       <img [src]="staticBase + p.photoPath" alt="Attendance Photo"
-        class="w-24 h-24 object-cover rounded border border-gray-200 cursor-pointer"
+        class="w-36 h-28 object-cover rounded border border-gray-200 cursor-pointer"
         (click)="selectedPhoto = staticBase + p.photoPath" />
+      <span class="text-xs text-gray-500 dark:text-gray-400">Attendance Photo {{(i + 1).toString().padStart(2, '0')}}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Venue Modal -->
+<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+      <h3 class="text-lg font-semibold text-blue-600 dark:text-blue-400">
+        {{batchDetail?.qpName}}
+      </h3>
+      <button (click)="closeEditModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xl leading-none">&times;</button>
+    </div>
+    <div class="px-6 py-6 space-y-5">
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">Venue:</label>
+        <input [(ngModel)]="editVenueName" type="text"
+          class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-24 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">Pin Code:</label>
+        <input [(ngModel)]="editZip" type="text"
+          class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+      </div>
+    </div>
+    <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+      <button (click)="saveVenue()" [disabled]="saving"
+        class="px-6 py-2 text-sm font-medium text-white rounded-lg disabled:opacity-60"
+        style="background-color: #1a6b55;">
+        {{saving ? 'Saving...' : 'Save'}}
+      </button>
     </div>
   </div>
 </div>
 
 <!-- Lightbox -->
-<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]"
   (click)="selectedPhoto = null">
   <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
 </div>

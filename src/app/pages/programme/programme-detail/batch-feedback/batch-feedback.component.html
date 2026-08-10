@@ -16,7 +16,7 @@
 
 <!-- Lightbox -->
 <div *ngIf="selectedPhoto"
-  class="fixed inset-0 bg-black/75 flex items-center justify-center z-50"
+  class="fixed inset-0 bg-black/75 flex items-center justify-center z-[9999]"
   (click)="selectedPhoto = null">
   <img [src]="selectedPhoto" class="max-h-[85vh] max-w-[92vw] rounded-xl shadow-2xl" />
 </div>

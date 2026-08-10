@@ -46,7 +46,10 @@
           <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">31</th>
         </tr>
       </thead>
-      <tbody *ngIf="dataRow.length">
+      <tbody>
+        <tr *ngIf="loading">
+          <td colspan="34" class="px-6 py-6 text-center text-gray-400 text-theme-sm">Loading...</td>
+        </tr>
         @for (row of dataRow; track $index) {
         <tr>
           <td class="px-4 sm:px-6 py-3.5">
@@ -691,6 +694,10 @@
           </td>
           
         </tr>
+        } @empty {
+        <tr *ngIf="!loading">
+          <td colspan="34" class="px-6 py-6 text-center text-gray-400 text-theme-sm">No attendance records found.</td>
+        </tr>
         }
       </tbody>
     </table>
@@ -710,7 +717,7 @@
   </div>
 
   <!-- Lightbox -->
-  <div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+  <div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]"
     (click)="selectedPhoto = null">
     <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
   </div>

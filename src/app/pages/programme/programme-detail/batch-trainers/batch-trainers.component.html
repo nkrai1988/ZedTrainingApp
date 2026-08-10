@@ -65,7 +65,7 @@
 </div>
 
 <!-- Lightbox -->
-<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]"
   (click)="selectedPhoto = null">
   <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
 </div>

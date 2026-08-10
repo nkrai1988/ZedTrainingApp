@@ -1,112 +1,244 @@
 <div class="max-w-full overflow-x-auto">
-    <table class="min-w-full">
-      <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
-        <tr>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
-            <div class="flex items-center gap-3">
-              <div>
-                <span class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                 S.No
-                </span>
-              </div>
-            </div>
-          </th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Photo</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Feedback</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant ID</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Participant Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">EXAM</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">W</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">P</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">TOTAL</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Result</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Recommended</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Pre Course Attempts</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">No of Attempts</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Start Time</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">End Time</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Organisation Name</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">UAM/EM-2/SSI No</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Mobile No</th>
-          <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email Id</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (row of dataRow; track $index) {
-        <tr class="border-b border-gray-100 dark:border-white/[0.05]">
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ $index + 1 }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <img *ngIf="row.photoUrl" [src]="staticBase + row.photoUrl" alt="Photo"
-              class="w-10 h-10 rounded-full object-cover border border-gray-200" />
-            <span *ngIf="!row.photoUrl" class="text-red-500 text-theme-xs">No Photo</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span [class]="row.hasFeedback === 1 ? 'text-green-600 font-semibold' : 'text-red-500'">
-              {{ row.hasFeedback === 1 ? 'Yes' : 'No' }}
-            </span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.candidateId }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.firstName }} {{ row.lastName }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span [class]="row.tacRefId ? 'text-green-600 font-semibold' : 'text-gray-400'">
-              {{ row.tacRefId ? 'Done' : 'Pending' }}
-            </span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.w ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.p ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.totalMarks ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span [class]="row.resultStatus === 'Pass' ? 'text-green-600 font-semibold' : (row.resultStatus ? 'text-red-500 font-semibold' : 'text-gray-400')">
-              {{ row.resultStatus ?? '-' }}
-            </span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">
-              {{ (row.mRecommendation || row.pRecommendation) ? 'Yes' : '-' }}
-            </span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.preCourseAttemptsCount ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.noOfAttempts ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.tacStartTime ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.tacEndTime ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.organizationName ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.uameem2ssino ?? '-' }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.mobileNo }}</span>
-          </td>
-          <td class="px-4 sm:px-6 py-3.5">
-            <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ row.emailId }}</span>
-          </td>
-        </tr>
-        } @empty {
-        <tr>
-          <td colspan="19" class="px-6 py-6 text-center text-gray-400 text-theme-sm">No participants found.</td>
-        </tr>
-        }
-      </tbody>
-    </table>
+  <table class="min-w-full">
+    <thead class="border-t border-y border-gray-100 bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+      <tr>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">S.NO</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PHOTO</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">FEEDBACK</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PARTICIPANT ID</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">PARTICIPANT NAME</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">EDIT</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">EXAM</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">W</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">P</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">TOTAL</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-center">RESULT</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">MOBILE NO</th>
+        <th class="px-4 py-3 font-medium text-gray-500 text-theme-xs dark:text-gray-400 text-start">EMAIL ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of dataRow; track $index) {
+      <tr class="border-b border-gray-100 dark:border-white/[0.05] hover:bg-gray-50 dark:hover:bg-white/[0.02]">
+
+        <!-- S.NO -->
+        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ $index + 1 }}</td>
+
+        <!-- PHOTO -->
+        <td class="px-4 py-3">
+          <img *ngIf="row.photoUrl" [src]="staticBase + row.photoUrl" alt="Photo"
+            class="w-10 h-10 rounded-full object-cover border border-gray-200 cursor-pointer"
+            (click)="selectedPhoto = staticBase + row.photoUrl" />
+        </td>
+
+        <!-- FEEDBACK -->
+        <td class="px-4 py-3 text-center">
+          <span *ngIf="row.hasFeedback === 1" class="text-green-600 font-semibold text-sm">Yes</span>
+        </td>
+
+        <!-- PARTICIPANT ID -->
+        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.candidateId }}</td>
+
+        <!-- PARTICIPANT NAME -->
+        <td class="px-4 py-3">
+          <a *ngIf="row.registrationId" [href]="'/registerdetail/' + row.registrationId" target="_blank"
+            class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline cursor-pointer">
+            {{ row.firstName }} {{ row.lastName }}
+          </a>
+          <span *ngIf="!row.registrationId" class="text-sm font-medium text-teal-700 dark:text-teal-400">
+            {{ row.firstName }} {{ row.lastName }}
+          </span>
+        </td>
+
+        <!-- EDIT -->
+        <td class="px-4 py-3 text-center">
+          <button (click)="openEditModal(row)"
+            class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">
+            Edit
+          </button>
+        </td>
+
+        <!-- EXAM -->
+        <td class="px-4 py-3 text-center">
+          <button (click)="openExamView(row)"
+            class="text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline">
+            VIEW
+          </button>
+        </td>
+
+        <!-- W -->
+        <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-400">
+          {{ row.w != null ? (row.w | number:'1.2-2') : '' }}
+        </td>
+
+        <!-- P (teal) with breakdown popover -->
+        <td class="px-4 py-3 text-center">
+          <span class="text-sm font-medium cursor-pointer hover:underline" style="color: #1a6b55;"
+            (click)="togglePPopup(row, $event)">
+            {{ row.p != null ? row.p : '0.00' }}
+          </span>
+        </td>
+
+        <!-- TOTAL -->
+        <td class="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-400">
+          {{ (row.w != null || row.p != null) ? (((row.w ?? 0) + (row.p ?? 0)) | number:'1.2-2') : '' }}
+        </td>
+
+        <!-- RESULT -->
+        <td class="px-4 py-3 text-center text-sm font-medium"
+          [class.text-green-600]="row.resultStatus === 'Pass'"
+          [class.text-red-500]="row.resultStatus === 'Fail'">
+          {{ row.resultStatus ?? '' }}
+        </td>
+
+        <!-- MOBILE NO -->
+        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.mobileNo ?? '' }}</td>
+
+        <!-- EMAIL ID -->
+        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-400">{{ row.emailId ?? '' }}</td>
+
+      </tr>
+      } @empty {
+      <tr *ngIf="!loading">
+        <td colspan="13" class="px-6 py-6 text-center text-gray-400 text-theme-sm">No participants found.</td>
+      </tr>
+      }
+      <tr *ngIf="loading">
+        <td colspan="13" class="px-6 py-6 text-center text-gray-400 text-theme-sm">Loading...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- P Score Breakdown Popup (fixed position to escape overflow clipping) -->
+<div *ngIf="activePPopup"
+  class="fixed z-[999999] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-xl p-3 min-w-[220px]"
+  [style.left.px]="pPopupX"
+  [style.top.px]="pPopupY"
+  (click)="$event.stopPropagation()">
+  <div class="flex justify-between gap-6 text-xs py-1.5 border-b border-gray-100">
+    <span class="text-gray-500">AttendanceMarks</span>
+    <span class="font-medium text-gray-700">{{ activePPopup.attendanceMarks != null ? (activePPopup.attendanceMarks | number:'1.2-2') : '—' }}</span>
   </div>
+  <div class="flex justify-between gap-6 text-xs py-1.5 border-b border-gray-100">
+    <span class="text-gray-500">ClassParticipation</span>
+    <span class="font-medium text-gray-700">{{ activePPopup.classParticipation != null ? (activePPopup.classParticipation | number:'1.2-2') : '—' }}</span>
+  </div>
+  <div class="flex justify-between gap-6 text-xs py-1.5 border-b border-gray-100">
+    <span class="text-gray-500">CommunicationSkills</span>
+    <span class="font-medium text-gray-700">{{ activePPopup.communicationSkills != null ? (activePPopup.communicationSkills | number:'1.2-2') : '—' }}</span>
+  </div>
+  <div class="flex justify-between gap-6 text-xs py-1.5">
+    <span class="text-gray-500">AssessmentSkills</span>
+    <span class="font-medium text-gray-700">{{ activePPopup.assessmentSkills != null ? (activePPopup.assessmentSkills | number:'1.2-2') : '—' }}</span>
+  </div>
+</div>
+
+<!-- Photo Lightbox -->
+<div *ngIf="selectedPhoto" class="fixed inset-0 bg-black/70 flex items-center justify-center z-[999999]"
+  (click)="selectedPhoto = null">
+  <img [src]="selectedPhoto" class="max-h-[80vh] max-w-[90vw] rounded shadow-xl" />
+</div>
+
+<!-- Exam View Modal -->
+<div *ngIf="showExamModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[999999] p-4">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl mx-4 flex flex-col max-h-[90vh]">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-4 rounded-t-xl flex-shrink-0"
+         style="background-color: #1a6b55;">
+      <span class="text-base font-semibold text-white">
+        {{selectedParticipant?.firstName}} {{selectedParticipant?.lastName}}
+      </span>
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-white/80">{{batchId}}</span>
+        <button (click)="closeExamModal()" class="text-white/70 hover:text-white text-xl leading-none">&times;</button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="examLoading" class="flex items-center justify-center py-12">
+      <span class="text-gray-400 text-sm">Loading answers...</span>
+    </div>
+
+    <!-- No data -->
+    <div *ngIf="!examLoading && examAnswers.length === 0" class="flex items-center justify-center py-12">
+      <span class="text-gray-400 text-sm">No exam submission found.</span>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!examLoading && examAnswers.length > 0" class="overflow-y-auto flex-1">
+      <table class="min-w-full">
+        <thead class="bg-gray-50 dark:bg-gray-900 sticky top-0">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide w-20">Code</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide">Question</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide w-48">Answer</th>
+            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wide w-28">Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of examAnswers; track $index) {
+          <tr class="border-t border-gray-100 dark:border-white/[0.05]">
+            <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 align-top">{{row.code}}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{{row.questionText}}</td>
+            <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300 align-top">{{row.answer}}</td>
+            <td class="px-4 py-3 text-sm align-top"
+                [class.text-green-600]="row.result === 'Correct'"
+                [class.text-red-500]="row.result === 'Incorrect'">
+              {{row.result}}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- Edit Participant Modal -->
+<div *ngIf="showEditModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[999999]">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md mx-4">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+      <h3 class="text-lg font-semibold text-blue-600 dark:text-blue-400">
+        {{selectedParticipant?.firstName}} {{selectedParticipant?.lastName}}
+      </h3>
+      <button (click)="closeEditModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+    </div>
+    <div class="px-6 py-6 space-y-4">
+      <div class="flex items-center gap-4">
+        <label class="w-36 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">First Name:</label>
+        <input [(ngModel)]="editForm.firstName" type="text"
+          class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-36 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">Last Name:</label>
+        <input [(ngModel)]="editForm.lastName" type="text" placeholder="Last Name"
+          class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-36 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">Mobile No:</label>
+        <input [value]="editForm.mobileNo" type="text" readonly
+          class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400" />
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-36 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">UAM/EM-2/SSI No:</label>
+        <input [value]="editForm.uamNo" type="text" placeholder="Aadhaar No" readonly
+          class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400" />
+      </div>
+      <div class="flex items-center gap-4">
+        <label class="w-36 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right shrink-0">Email Id:</label>
+        <input [value]="editForm.emailId" type="email" readonly
+          class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-400" />
+      </div>
+    </div>
+    <div class="flex justify-end px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+      <button (click)="saveParticipant()" [disabled]="saving"
+        class="px-6 py-2 text-sm font-medium text-white rounded-lg disabled:opacity-60"
+        style="background-color: #1a6b55;">
+        {{saving ? 'Saving...' : 'Save'}}
+      </button>
+    </div>
+  </div>
+</div>

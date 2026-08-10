@@ -17,6 +17,7 @@ export class BatchAttendanceComponent {
   photos: any[] = [];
   staticBase = API_STATIC_BASE;
   selectedPhoto: string | null = null;
+  loading = false;
 
   ngOnInit() {
     if (this.batchId) {
@@ -26,9 +27,10 @@ export class BatchAttendanceComponent {
   }
 
   getAttendance() {
+    this.loading = true;
     this.batchdetail.getBatchAttendanceList(this.batchId).subscribe({
-      next: (res: any) => { this.dataRow = res; },
-      error: () => {}
+      next: (res: any) => { this.dataRow = res; this.loading = false; },
+      error: () => { this.loading = false; }
     });
   }
 

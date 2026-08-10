@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { HelperService } from '../../../services/helper.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BatchDetailService } from '../../../services/batchdetail.service';
 import { BatchVenueComponent } from './batch-venue/batch-venue.component';
 import { BatchParticipantsComponent } from './batch-participants/batch-participants.component';
 import { BatchMonitoringComponent } from './batch-monitoring/batch-monitoring.component';
@@ -21,22 +22,40 @@ type TabOption = 'Venue' | 'Participants' | 'Monitoring'| 'Attendance' | 'Traine
 })
 export class ProgrammeDetailComponent {
 
-  constructor(private helper:HelperService,private route:ActivatedRoute){
-
-  }
+  constructor(private helper:HelperService, private route:ActivatedRoute, private batchdetail: BatchDetailService){}
 
   programmeId='';
+  programmeInfo: any = null;
+  exportingExcel = false;
 
   ngOnInit(){
-    console.log({'IsAssessor':this.helper.IsAssessor()});
     this.route.queryParams.subscribe(params=>{
       this.programmeId = params['batchid'];
     })
   }
+
+  onVenueLoaded(data: any) {
+    this.programmeInfo = data;
+  }
+
   selected: TabOption = 'Venue';
 
-  exportExcel(){
-    
+  exportExcel() {
+    if (!this.programmeId || this.exportingExcel) return;
+    this.exportingExcel = true;
+    this.batchdetail.exportExcel(this.programmeId).subscribe({
+      next: (res) => {
+        const blob = res.body!;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ProgrammeDetails_${this.programmeId}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.exportingExcel = false;
+      },
+      error: () => { this.exportingExcel = false; }
+    });
   }
 
   setSelected(option: TabOption) {
