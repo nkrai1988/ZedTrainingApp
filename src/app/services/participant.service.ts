@@ -16,6 +16,8 @@ export interface MyProgramme {
   state: string;
   status: 'completed' | 'ongoing' | 'upcoming';
   isLastDay: boolean;
+  examStartTime: string;
+  examEndTime: string;
 }
 
 export interface UploadBatch {

@@ -540,6 +540,40 @@ return statusString;
     });
   }
 
+  // ── Open Registration ──────────────────────────────────────────────────────
+  isOpenRegOpen = false;
+  openRegItem: any = null;
+
+  isEnrollmentAutoBlocked(row: any): boolean {
+    if (!row.startDate) return false;
+    const start = new Date(row.startDate);
+    const now = new Date();
+    const hoursLeft = (start.getTime() - now.getTime()) / (1000 * 60 * 60);
+    return hoursLeft >= 0 && hoursLeft < 24;
+  }
+
+  openOpenRegModal(row: any) {
+    this.openRegItem = row;
+    this.isOpenRegOpen = true;
+  }
+
+  closeOpenRegModal() {
+    this.openRegItem = null;
+    this.isOpenRegOpen = false;
+  }
+
+  confirmOpenRegistration() {
+    this.programmeservice.openRegistration(this.openRegItem.batchNo).subscribe({
+      next: () => {
+        this.closeOpenRegModal();
+        this.getProgrammesFromServer();
+        this.successmessage = 'Registrations opened for programme ' + this.openRegItem?.batchNo + ' successfully.';
+        setTimeout(() => { this.successmessage = ''; }, 5000);
+      },
+      error: () => { this.closeOpenRegModal(); }
+    });
+  }
+
   // ── Create Calendar ────────────────────────────────────────────────────────
   isCreateCalendarOpen = false;
   createCalendarItem: any = null;

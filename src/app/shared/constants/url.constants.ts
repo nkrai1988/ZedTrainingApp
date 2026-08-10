@@ -31,6 +31,7 @@ export const APPURLs = {
   qcprogrammeapprove:'programme/approve',
   programmereject:'programme/reject',
   programmeCloseRegistration:'programme/closeregistration',
+  programmeOpenRegistration:'programme/openregistration',
   programmePostpone:'programme/postpone',
   programmeCreateCalendar:'programme/createcalendar',
   statesall:'common/states',

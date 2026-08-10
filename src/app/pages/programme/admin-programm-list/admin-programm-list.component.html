@@ -180,12 +180,17 @@
               {{ row.noc }}
             </p>
             <div class="flex flex-col gap-1 mt-1">
-              <a *ngIf="!row.isRegistrationsClosed && row.status === '1'"
+              <a *ngIf="row.status === '1' && (row.isForceOpen || (!row.isRegistrationsClosed && !isEnrollmentAutoBlocked(row)))"
                 (click)="openCloseRegModal(row)"
                 class="click-link inline-flex items-center gap-1 rounded-full bg-warning-50 px-2.5 py-1 text-xs font-medium text-warning-700 hover:bg-warning-100 cursor-pointer whitespace-nowrap">
                 Close Registrations
               </a>
-              <a *ngIf="row.status === '1' && row.isRegistrationsClosed && row.showExamTime == 1 && helperService.IsCategoryAdmin()"
+              <a *ngIf="row.status === '1' && !row.isForceOpen && (row.isRegistrationsClosed || isEnrollmentAutoBlocked(row)) && helperService.IsCategoryAdmin()"
+                (click)="openOpenRegModal(row)"
+                class="click-link inline-flex items-center gap-1 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 hover:bg-green-100 cursor-pointer whitespace-nowrap">
+                Open Registrations
+              </a>
+              <a *ngIf="row.status === '1' && row.isRegistrationsClosed && helperService.IsCategoryAdmin()"
                 (click)="openExamTimeModal(row)"
                 class="click-link inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 hover:bg-blue-100 cursor-pointer whitespace-nowrap">
                 Set Exam Time
@@ -352,6 +357,31 @@
       </app-button>
       <app-button size="sm" (btnClick)="confirmCloseRegistration()">
         Close Registrations
+      </app-button>
+    </div>
+  </div>
+</app-modal>
+
+<!-- Open Registration Modal -->
+<app-modal
+  [isOpen]="isOpenRegOpen"
+  (close)="closeOpenRegModal()"
+  className="max-w-[480px] m-4"
+>
+  <div *ngIf="openRegItem" class="p-6 sm:p-8">
+    <h4 class="mb-1 text-xl font-semibold text-gray-800 dark:text-white/90">
+      Open Registrations
+    </h4>
+    <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
+      Are you sure you want to force-open registrations for batch <strong>{{ openRegItem.batchNo }}</strong>?
+      This will allow enrollment even if the programme starts within 24 hours.
+    </p>
+    <div class="flex items-center justify-end gap-3">
+      <app-button size="sm" variant="outline" (btnClick)="closeOpenRegModal()">
+        Cancel
+      </app-button>
+      <app-button size="sm" (btnClick)="confirmOpenRegistration()">
+        Open Registrations
       </app-button>
     </div>
   </div>

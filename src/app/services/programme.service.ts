@@ -105,6 +105,10 @@ getQCApprovalList(ptype:string,status:string,agency:string,orgCategoryId?:number
     return this.api.putSimple(APPURLs.programmeCloseRegistration + '?batchNo=' + encodeURIComponent(batchNo), {});
   }
 
+  openRegistration(batchNo: string) {
+    return this.api.putSimple(APPURLs.programmeOpenRegistration + '?batchNo=' + encodeURIComponent(batchNo), {});
+  }
+
   postponeProgramme(batchNo: string, comments: string) {
     return this.api.putSimple(APPURLs.programmePostpone + '?batchNo=' + encodeURIComponent(batchNo) + '&comments=' + encodeURIComponent(comments), {});
   }
